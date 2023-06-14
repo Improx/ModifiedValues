@@ -39,8 +39,17 @@ public class Program
 
 		//This creates a totally new ModifiedFloat with base value 80
 		//and forgetting all previous Modifiers:
-		Person.Speed = 80;
+		Person.Speed = 100;
 		Report("It's a new day, all old effects are gone and we also have brand-new legs with a fast base walking speed.");
+
+		var modCoffee1 = Person.Speed.Mul(1.2f);
+		Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
+
+		var modCoffee2 = Person.Speed.Mul(1.2f);
+		Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
+
+		Person.Speed.BaseValueGetter = () => 80;
+		Report("Legs got tired, affecting the fundamentals of how fast we are. Base speed dropped from 100 to 80, but the coffee cups are still in effect.");
 
 	}
 

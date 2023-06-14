@@ -1,6 +1,6 @@
-namespace ModifiedValues;
+using System.Diagnostics;
 
-using System.Collections.Generic;
+namespace ModifiedValues;
 
 public abstract class ModifiedValue
 {
@@ -25,9 +25,21 @@ public abstract class ModifiedValue
 
 public class ModifiedValue<T> : ModifiedValue
 {
-	public Func<T> BaseValueGetter;
+	private Func<T> _baseValueGetter;
+	public Func<T> BaseValueGetter
+	{
+		get
+		{
+			return _baseValueGetter;
+		}
+		set
+		{
+			_baseValueGetter = value;
+			SetDirty();
+		}
+	}
 
-	private T _dirtyValue;
+	private T _value;
 	public T Value
 	{
 		get
@@ -36,20 +48,23 @@ public class ModifiedValue<T> : ModifiedValue
 			{
 				Update();
 			}
-			return _dirtyValue;
+			return _value;
 		}
 	}
+	public T DirtyValue => _value;
 
 	public ModifiedValue(Func<T> baseValueGetter)
 	{
-		BaseValueGetter = baseValueGetter;
-		_dirtyValue = BaseValueGetter();
+		Debug.Assert(baseValueGetter is not null);
+		_baseValueGetter = baseValueGetter;
+		_value = BaseValueGetter();
 	}
 
 	public ModifiedValue(T baseValue)
 	{
-		BaseValueGetter = () => baseValue;
-		_dirtyValue = BaseValueGetter();
+		Debug.Assert(baseValue is not null);
+		_baseValueGetter = () => baseValue;
+		_value = BaseValueGetter();
 	}
 
 	public Modifier<T> Modify(Func<T, T> operation, int priority = 0, int layer = 0, int order = 0)
@@ -64,8 +79,9 @@ public class ModifiedValue<T> : ModifiedValue
 	{
 		T currentValue = BaseValueGetter();
 		//TODO: Loop through all layers in order
-		//TODO: Loop through all Modifiers in order defined by their Order
-		//TODO: Take into account Modifiers' Priorities
+		//TODO: Go through all modifiers in the layer and find the highest Priority
+		//TODO: Apply all modifiers that have that highest Priority, in defined Order
+		_value = currentValue;
 	}
 
 	public static implicit operator T(ModifiedValue<T> m) => m.Value;

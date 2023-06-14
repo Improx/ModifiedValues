@@ -2,7 +2,7 @@ namespace ModifiedValues;
 
 public class Modifier
 {
-	public ModifiedValue ModifiedValue { get; private set; }
+	public ModifiedValue ModifiedValue { get; private init; }
 	private int _priority = 0;
 	public int Priority
 	{
