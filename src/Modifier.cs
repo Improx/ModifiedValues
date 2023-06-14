@@ -23,36 +23,35 @@ public class Modifier
 			ModifiedValue.SetDirty();
 		}
 	}
-	private int _operationOrder;
-	public int OperationOrder
+	private int _order;
+	public int Order
 	{
-		get { return _operationOrder; }
+		get { return _order; }
 		set
 		{
-			_operationOrder = value;
+			_order = value;
 			ModifiedValue.SetDirty();
 		}
 	}
 
-	protected Modifier(ModifiedValue modifiedValue, int priority, int layer, int operationOrder)
+	protected Modifier(ModifiedValue modifiedValue, int priority, int layer, int order)
 	{
 		ModifiedValue = modifiedValue;
 		_priority = priority;
 		_layer = layer;
-		_operationOrder = operationOrder;
+		_order = order;
 	}
 
 	public void Remove()
 	{
-		//TODO: Actually remove it from ModifiedValue
-		ModifiedValue.SetDirty();
+		ModifiedValue.RemoveModifier(this);
 	}
 }
 
-public class Modifier<TValue, TModifier> : Modifier
+public class Modifier<T> : Modifier
 {
-	private Func<TValue, TValue, TModifier> _operation;
-	public Func<TValue, TValue, TModifier> Operation
+	private Func<T, T> _operation;
+	public Func<T, T> Operation
 	{
 		get { return _operation; }
 		set
@@ -62,8 +61,9 @@ public class Modifier<TValue, TModifier> : Modifier
 		}
 	}
 
-	public Modifier(ModifiedValue modifiedValue, Func<TValue, TValue, TModifier> operation, int priority, int layer, int operationOrder) : base(modifiedValue, priority, layer, operationOrder)
+	public Modifier(ModifiedValue modifiedValue, Func<T, T> operation, int priority, int layer, int order) : base(modifiedValue, priority, layer, order)
 	{
+		//TODO: ModifiedValue should be the only class allowed to call this constructor
 		_operation = operation;
 	}
 }

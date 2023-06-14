@@ -1,15 +1,26 @@
 namespace ModifiedValues;
 
-public class ModifiedValue
+using System.Collections.Generic;
+
+public abstract class ModifiedValue
 {
-	public event EventHandler<EventArgs> ? BecameDirty;
 	public bool IsDirty { get; private set; }
+	public event EventHandler<EventArgs> ? BecameDirty;
+	protected List<Modifier> _modifiers = new List<Modifier>();
+	public IReadOnlyList<Modifier> Modifiers => _modifiers.AsReadOnly();
 
 	public void SetDirty()
 	{
 		IsDirty = true;
 		BecameDirty?.Invoke(this, EventArgs.Empty);
 	}
+
+	public void RemoveModifier(Modifier mod)
+	{
+		_modifiers.Remove(mod);
+		SetDirty();
+	}
+
 }
 
 public class ModifiedValue<T> : ModifiedValue
@@ -39,6 +50,14 @@ public class ModifiedValue<T> : ModifiedValue
 	{
 		BaseValueGetter = () => baseValue;
 		_dirtyValue = BaseValueGetter();
+	}
+
+	public Modifier<T> Modify(Func<T, T> operation, int priority = 0, int layer = 0, int order = 0)
+	{
+		Modifier<T> mod = new Modifier<T>(this, operation, priority, layer, order);
+		_modifiers.Add(mod);
+		SetDirty();
+		return mod;
 	}
 
 	private void Update()
