@@ -145,7 +145,7 @@ public class ModifiedValue<T> : ModifiedValue
 	}
 
 	public static implicit operator T(ModifiedValue<T> m) => m.Value;
-	public static explicit operator ModifiedValue<T>(T baseValue) => new ModifiedValue<T>(baseValue);
+	public static implicit operator ModifiedValue<T>(T baseValue) => new ModifiedValue<T>(baseValue);
 
 	public override string? ToString()
 	{
