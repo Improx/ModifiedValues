@@ -1,6 +1,6 @@
 namespace ModifiedValues;
 
-public class Modifier
+public abstract class Modifier
 {
 	public ModifiedValue ModifiedValue { get; private init; }
 	protected int _priority = 0;
