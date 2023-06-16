@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace ModifiedValues;
 
 public abstract class ModifiedValue
