@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System.Linq;
 
 namespace ModifiedValues;
 
@@ -114,9 +114,27 @@ public class ModifiedValue<T> : ModifiedValue
 	private void Update()
 	{
 		T currentValue = BaseValueGetter();
-		//TODO: Loop through all layers in order
-		//TODO: Go through all modifiers in the layer and find the highest Priority
-		//TODO: Apply all modifiers that have that highest Priority, in defined Order
+		var layers = _modifiers.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
+		foreach (int layer in layers)
+		{
+			var modifiersInLayer = _modifiers.Where(m => m.Layer == layer);
+			int highestPrio = modifiersInLayer.Max(m => m.Priority);
+			//Keep only Modifiers with highest prio and arrange them in Order:
+			modifiersInLayer = modifiersInLayer.Where(m => m.Priority == highestPrio).OrderBy(m => m.Order);
+			T valueAtLayerBeginning = currentValue;
+			foreach (var mod in modifiersInLayer)
+			{
+				Modifier<T> typedMod = (Modifier<T>) mod;
+				if (typedMod.Compound)
+				{
+					currentValue = typedMod.Operation(currentValue);
+				}
+				else
+				{
+					currentValue = typedMod.Operation(valueAtLayerBeginning);
+				}
+			}
+		}
 		_value = currentValue;
 	}
 

@@ -22,8 +22,8 @@ public class Program
 		var modHeadWind = Person.Speed.Mul(0.7f);
 		Report("Headwind is slowing us down to 70% speed.");
 
-		var modCustom = Person.Speed.Modify(CustomOperation);
-		Report("Custom operation.");
+		//var modCustom = Person.Speed.Modify(CustomOperation);
+		//Report("Custom operation.");
 
 		modHeadWind.Remove();
 		Report("Wind ended, phew! Person is back to full speed.");
@@ -40,13 +40,19 @@ public class Program
 		//This creates a totally new ModifiedFloat with base value 80
 		//and forgetting all previous Modifiers:
 		Person.Speed = 100;
-		Report("It's a new day, all old effects are gone and we also have brand-new legs with a fast base walking speed.");
+		Report("It's a new day, all old effects are gone and we also have brand-new legs with a fast base walking speed of 100.");
 
-		var modCoffee1 = Person.Speed.Mul(1.2f);
-		Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
+		// var modCoffee1 = Person.Speed.Mul(1.2f);
+		// Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
 
-		var modCoffee2 = Person.Speed.Mul(1.2f);
-		Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
+		// var modCoffee2 = Person.Speed.Mul(1.2f);
+		// Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
+
+		var modTee1 = Person.Speed.AddFraction(0.2f);
+		Report("Drank a nice cup of tea. Speed increased by 20% additively.");
+
+		var modTee2 = Person.Speed.AddFraction(0.2f);
+		Report("Drank a nice cup of tea. Speed increased by 20% additively.");
 
 		Person.Speed.BaseValue = 80;
 		Report("Legs got tired, affecting the fundamentals of how fast we are. Base speed dropped from 100 to 80, but the coffee cups are still in effect.");

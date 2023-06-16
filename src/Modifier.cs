@@ -46,7 +46,7 @@ public class Modifier
 	/// <value></value>
 	public bool Compound
 	{
-		get { return Compound; }
+		get { return _compound; }
 		set
 		{
 			Compound = value;
