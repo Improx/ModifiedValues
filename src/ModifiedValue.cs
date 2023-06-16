@@ -103,9 +103,9 @@ public class ModifiedValue<T> : ModifiedValue
 		UpdateEveryTime = updateEveryTime;
 	}
 
-	public Modifier<T> Modify(Func<T, T> operation, int priority = 0, int layer = 0, int order = 0)
+	public Modifier<T> Modify(Func<T, T> operation, int priority = 0, int layer = 0, int order = 0, bool compound = false)
 	{
-		Modifier<T> mod = new Modifier<T>(this, operation, priority, layer, order);
+		Modifier<T> mod = new Modifier<T>(this, operation, priority, layer, order, compound);
 		_modifiers.Add(mod);
 		SetDirty();
 		return mod;

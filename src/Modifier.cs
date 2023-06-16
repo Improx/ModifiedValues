@@ -34,12 +34,33 @@ public class Modifier
 		}
 	}
 
-	protected Modifier(ModifiedValue modifiedValue, int priority, int layer, int order)
+	private bool _compound;
+
+	/// <summary>
+	/// If we have multiple Modifiers in the same Layer with the same Priority
+	/// and Order, whether the Operations should use the previous Operation's output or
+	/// the calculated value before applying these Operations.
+	/// One way to think about this: Compound = true means multiplicative stacking and
+	/// Compound = false means additive stacking.
+	/// </summary>
+	/// <value></value>
+	public bool Compound
+	{
+		get { return Compound; }
+		set
+		{
+			Compound = value;
+			ModifiedValue.SetDirty();
+		}
+	}
+
+	protected Modifier(ModifiedValue modifiedValue, int priority = 0, int layer = 0, int order = 0, bool compound = false)
 	{
 		ModifiedValue = modifiedValue;
 		_priority = priority;
 		_layer = layer;
 		_order = order;
+		_compound = compound;
 	}
 
 	public void Remove()
@@ -61,7 +82,7 @@ public class Modifier<T> : Modifier
 		}
 	}
 
-	public Modifier(ModifiedValue modifiedValue, Func<T, T> operation, int priority, int layer, int order) : base(modifiedValue, priority, layer, order)
+	public Modifier(ModifiedValue modifiedValue, Func<T, T> operation, int priority = 0, int layer = 0, int order = 0, bool compound = false) : base(modifiedValue, priority, layer, order, compound)
 	{
 		//TODO: ModifiedValue should be the only class allowed to call this constructor
 		_operation = operation;

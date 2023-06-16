@@ -11,22 +11,22 @@ public class ModifiedFloat : ModifiedValue<float>
 
 	public Modifier<float> Set(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => amount, priority, layer, 0);
+		return Modify((prevValue) => amount, priority, layer, -1000);
 	}
 
 	public Modifier<float> Add(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => prevValue + amount, priority, layer, 1);
+		return Modify((prevValue) => prevValue + amount, priority, layer, 1000);
 	}
 
 	public Modifier<float> AddFraction(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => prevValue + amount * prevValue, priority, layer, 1);
+		return Modify((prevValue) => prevValue + amount * prevValue, priority, layer, 2000, false);
 	}
 
 	public Modifier<float> Mul(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => prevValue * amount, priority, layer, 3);
+		return Modify((prevValue) => prevValue * amount, priority, layer, 3000, true);
 	}
 
 	public Modifier<float> MinCap(float amount, int priority = 0, int layer = 0)
