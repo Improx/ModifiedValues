@@ -123,12 +123,12 @@ public class ModifiedValue<T> : ModifiedValue
 		var layers = _modifiers.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
 		foreach (int layer in layers)
 		{
-			var modifiersInLayer = _modifiers.Where(m => m.Layer == layer);
-			int highestPrio = modifiersInLayer.Max(m => m.Priority);
+			var modsInLayer = _modifiers.Where(m => m.Layer == layer);
+			int highestPrio = modsInLayer.Max(m => m.Priority);
 			//Keep only Modifiers with highest prio and arrange them in Order:
-			modifiersInLayer = modifiersInLayer.Where(m => m.Priority == highestPrio).OrderBy(m => m.Order);
+			modsInLayer = modsInLayer.Where(m => m.Priority == highestPrio).OrderBy(m => m.Order);
 			T valueAtLayerBeginning = currentValue;
-			foreach (var mod in modifiersInLayer)
+			foreach (var mod in modsInLayer)
 			{
 				Modifier<T> typedMod = (Modifier<T>) mod;
 				if (typedMod.Compound)
