@@ -1,4 +1,3 @@
-using ModifiedValues;
 using ModifiedValues.Samples;
 
 public class Program
@@ -22,41 +21,43 @@ public class Program
 		var modHeadWind = Person.Speed.Mul(0.7f);
 		Report("Headwind is slowing us down to 70% speed.");
 
-		//var modCustom = Person.Speed.Modify(CustomOperation);
-		//Report("Custom operation.");
+		var modCustom = Person.Speed.Modify(CustomOperation, order : 999999);
+		Report("Custom operation. If speed is below 2, slow down to 0. Else, set speed to 5.");
+
+		modCustom.Remove();
+		Report("Removed custom operation.");
 
 		modHeadWind.Remove();
 		Report("Wind ended, phew! Person is back to full speed.");
 
-		var modEnergyDrink1 = Person.Speed.AddFraction(100);
-		Report("Consumed an energy drink! Speed increased 100-fold additively.");
+		var modEnergyDrink1 = Person.Speed.AddFraction(0.2f);
+		Report("Consumed an energy drink! Ground speed increased by 20% additively.");
 
-		var modEnergyDrink2 = Person.Speed.AddFraction(100);
-		Report("Consumed an energy drink! Speed increased 100-fold additively.");
+		var modEnergyDrink2 = Person.Speed.AddFraction(0.2f);
+		Report("Consumed an energy drink! Ground speed increased by 20% additively.");
 
-		var modSpeedLimit = Person.Speed.MaxCap(20);
-		Report("Police is watching. Have to slow down to a speed of 20.");
+		var modSpeedLimit = Person.Speed.MaxCap(10);
+		Report("Police is watching. Have to slow down to a speed of 10.");
+
+		var modWings = Person.Speed.Add(500, priority : 1);
+		Report("We got wings, increasing our speed by 500. We are no longer on the ground, so previous mods have no effect anymore. This mod's Priority is higher than the others', so it is applied directly to the base value.");
+
+		var modMotivation = Person.Speed.Mul(1.2f, layer : 1);
+		Report("You feel very motivated, increasing all speed by 20% multiplicatively. This effects acts on top of all old ones, because it is on a higher layer");
 
 		//This creates a totally new ModifiedFloat with base value 80
 		//and forgetting all previous Modifiers:
 		Person.Speed = 100;
 		Report("It's a new day, all old effects are gone and we also have brand-new legs with a fast base walking speed of 100.");
 
-		// var modCoffee1 = Person.Speed.Mul(1.2f);
-		// Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
+		var modCoffee1 = Person.Speed.Mul(1.2f);
+		Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
 
-		// var modCoffee2 = Person.Speed.Mul(1.2f);
-		// Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
-
-		var modTee1 = Person.Speed.AddFraction(0.2f);
-		Report("Drank a nice cup of tea. Speed increased by 20% additively.");
-
-		var modTee2 = Person.Speed.AddFraction(0.2f);
-		Report("Drank a nice cup of tea. Speed increased by 20% additively.");
+		var modCoffee2 = Person.Speed.Mul(1.2f);
+		Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
 
 		Person.Speed.BaseValue = 80;
 		Report("Legs got tired, affecting the fundamentals of how fast we are. Base speed dropped from 100 to 80, but the coffee cups are still in effect.");
-
 	}
 
 	private static float CustomOperation(float prevValue)
@@ -69,7 +70,7 @@ public class Program
 		else
 		{
 			//Else, set speed to exactly 11:
-			return 11;
+			return 5;
 		}
 	}
 

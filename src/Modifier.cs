@@ -3,7 +3,7 @@ namespace ModifiedValues;
 public class Modifier
 {
 	public ModifiedValue ModifiedValue { get; private init; }
-	private int _priority = 0;
+	protected int _priority = 0;
 	public int Priority
 	{
 		get { return _priority; }
@@ -13,7 +13,7 @@ public class Modifier
 			ModifiedValue.SetDirty();
 		}
 	}
-	private int _layer = 0;
+	protected int _layer = 0;
 	public int Layer
 	{
 		get { return _layer; }
@@ -23,7 +23,7 @@ public class Modifier
 			ModifiedValue.SetDirty();
 		}
 	}
-	private int _order;
+	protected int _order;
 	public int Order
 	{
 		get { return _order; }
@@ -34,33 +34,23 @@ public class Modifier
 		}
 	}
 
-	private bool _compound;
+	protected bool _compound;
 
 	/// <summary>
 	/// If we have multiple Modifiers in the same Layer with the same Priority
-	/// and Order, whether the Operations should use the previous Operation's output or
-	/// the calculated value before applying these Operations.
-	/// One way to think about this: Compound = true means multiplicative stacking and
-	/// Compound = false means additive stacking.
+	/// and Order, whether the Operations should stack multiplicatively (true)
+	/// or additively. This is automatically toggled when setting either the
+	/// OperationCompound or OperationNonCompound function.
 	/// </summary>
 	/// <value></value>
-	public bool Compound
-	{
-		get { return _compound; }
-		set
-		{
-			Compound = value;
-			ModifiedValue.SetDirty();
-		}
-	}
+	public bool Compound => _compound;
 
-	protected Modifier(ModifiedValue modifiedValue, int priority = 0, int layer = 0, int order = 0, bool compound = false)
+	protected Modifier(ModifiedValue modifiedValue, int priority = 0, int layer = 0, int order = 0)
 	{
 		ModifiedValue = modifiedValue;
 		_priority = priority;
 		_layer = layer;
 		_order = order;
-		_compound = compound;
 	}
 
 	public void Remove()
@@ -71,20 +61,41 @@ public class Modifier
 
 public class Modifier<T> : Modifier
 {
-	private Func<T, T> _operation;
-	public Func<T, T> Operation
+	private Func<T, T> _operationCompound;
+	public Func<T, T> OperationCompound
 	{
-		get { return _operation; }
+		get { return _operationCompound; }
 		set
 		{
-			_operation = value;
+			_operationCompound = value;
+			_compound = true;
 			ModifiedValue.SetDirty();
 		}
 	}
 
-	public Modifier(ModifiedValue modifiedValue, Func<T, T> operation, int priority = 0, int layer = 0, int order = 0, bool compound = false) : base(modifiedValue, priority, layer, order, compound)
+	private Func<T, T, T> _operationNonCompound;
+	public Func<T, T, T> OperationNonCompound
 	{
-		//TODO: ModifiedValue should be the only class allowed to call this constructor
-		_operation = operation;
+		get { return _operationNonCompound; }
+		set
+		{
+			_operationNonCompound = value;
+			_compound = false;
+			ModifiedValue.SetDirty();
+		}
+	}
+
+	public Modifier(ModifiedValue modifiedValue, Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0) : base(modifiedValue, priority, layer, order)
+	{
+		//TODO: ModifiedValue should be the only class allowed to call this constructor. How?
+		_operationCompound = operationCompound;
+		_compound = true;
+	}
+
+	public Modifier(ModifiedValue modifiedValue, Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0) : base(modifiedValue, priority, layer, order)
+	{
+		//TODO: ModifiedValue should be the only class allowed to call this constructor. How?
+		_operationNonCompound = operationNonCompound;
+		_compound = false;
 	}
 }

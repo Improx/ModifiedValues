@@ -11,42 +11,42 @@ public class ModifiedFloat : ModifiedValue<float>
 
 	public Modifier<float> Set(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => amount, priority, layer, -1000);
+		return Modify((prevValue) => amount, priority, layer, DefaultOrders.Set);
 	}
 
 	public Modifier<float> Add(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => prevValue + amount, priority, layer, 1000);
+		return Modify((prevValue) => prevValue + amount, priority, layer, DefaultOrders.Add);
 	}
 
 	public Modifier<float> AddFraction(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => prevValue + amount * prevValue, priority, layer, 2000, false);
+		return Modify((prevValue, beginningValue) => prevValue + amount * beginningValue, priority, layer, DefaultOrders.AddFraction);
 	}
 
 	public Modifier<float> Mul(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => prevValue * amount, priority, layer, 3000, true);
+		return Modify((prevValue) => prevValue * amount, priority, layer, DefaultOrders.Mul);
 	}
 
 	public Modifier<float> MinCap(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => Math.Max(prevValue, amount), priority, layer, int.MaxValue);
+		return Modify((prevValue) => Math.Max(prevValue, amount), priority, layer, DefaultOrders.Cap);
 	}
 
 	public Modifier<float> MinCapFinal(float amount)
 	{
-		return Modify((prevValue) => Math.Max(prevValue, amount), int.MaxValue, int.MaxValue, int.MaxValue);
+		return Modify((prevValue) => Math.Max(prevValue, amount), int.MaxValue, int.MaxValue, DefaultOrders.Cap);
 	}
 
 	public Modifier<float> MaxCap(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => Math.Min(prevValue, amount), priority, layer, int.MaxValue);
+		return Modify((prevValue) => Math.Min(prevValue, amount), priority, layer, DefaultOrders.Cap);
 	}
 
 	public Modifier<float> MaxCapFinal(float amount)
 	{
-		return Modify((prevValue) => Math.Min(prevValue, amount), int.MaxValue, int.MaxValue, int.MaxValue);
+		return Modify((prevValue) => Math.Min(prevValue, amount), int.MaxValue, int.MaxValue, DefaultOrders.Cap);
 	}
 
 }

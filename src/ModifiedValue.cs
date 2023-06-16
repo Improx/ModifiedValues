@@ -103,9 +103,17 @@ public class ModifiedValue<T> : ModifiedValue
 		UpdateEveryTime = updateEveryTime;
 	}
 
-	public Modifier<T> Modify(Func<T, T> operation, int priority = 0, int layer = 0, int order = 0, bool compound = false)
+	public Modifier<T> Modify(Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0)
 	{
-		Modifier<T> mod = new Modifier<T>(this, operation, priority, layer, order, compound);
+		Modifier<T> mod = new Modifier<T>(this, operationCompound, priority, layer, order);
+		_modifiers.Add(mod);
+		SetDirty();
+		return mod;
+	}
+
+	public Modifier<T> Modify(Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0)
+	{
+		Modifier<T> mod = new Modifier<T>(this, operationNonCompound, priority, layer, order);
 		_modifiers.Add(mod);
 		SetDirty();
 		return mod;
@@ -127,11 +135,11 @@ public class ModifiedValue<T> : ModifiedValue
 				Modifier<T> typedMod = (Modifier<T>) mod;
 				if (typedMod.Compound)
 				{
-					currentValue = typedMod.Operation(currentValue);
+					currentValue = typedMod.OperationCompound(currentValue);
 				}
 				else
 				{
-					currentValue = typedMod.Operation(valueAtLayerBeginning);
+					currentValue = typedMod.OperationNonCompound(currentValue, valueAtLayerBeginning);
 				}
 			}
 		}
