@@ -2,7 +2,10 @@ namespace ModifiedValues;
 
 public class ModifiedFloat : ModifiedValue<float>
 {
-	public ModifiedFloat(float baseValue) : base(baseValue) { }
+
+	public ModifiedFloat(Func<float> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
+
+	public ModifiedFloat(float baseValue, bool updateEveryTime = false) : base(baseValue, updateEveryTime) { }
 
 	public static implicit operator ModifiedFloat(float baseValue) => new ModifiedFloat(baseValue);
 

@@ -48,7 +48,7 @@ public class Program
 		var modCoffee2 = Person.Speed.Mul(1.2f);
 		Report("Drank a nice cup of coffee. Speed increased by 20% multiplicatively.");
 
-		Person.Speed.BaseValueGetter = () => 80;
+		Person.Speed.BaseValue = 80;
 		Report("Legs got tired, affecting the fundamentals of how fast we are. Base speed dropped from 100 to 80, but the coffee cups are still in effect.");
 
 	}

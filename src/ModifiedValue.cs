@@ -4,6 +4,17 @@ namespace ModifiedValues;
 
 public abstract class ModifiedValue
 {
+	/// <summary>
+	/// Every time we check what Value is, we recalculate the value no matter
+	/// whether IsDirty is true or not.
+	/// This may be useful if Modifier operations are not pure functions and have
+	/// external dependencies that may change (not recommended). If you use, non-pure
+	/// Modifier operations, we recommend you call SetDirty() every time an external
+	/// dependency has changed. If you don't want to keep track of all the external
+	/// dependencies, you can just set UpdateEveryTime = true.
+	/// The downside is lower performance.
+	/// </summary>
+	public bool UpdateEveryTime = false;
 	public bool IsDirty { get; private set; }
 	public event EventHandler<EventArgs> ? BecameDirty;
 	protected List<Modifier> _modifiers = new List<Modifier>();
@@ -18,6 +29,12 @@ public abstract class ModifiedValue
 	public void RemoveModifier(Modifier mod)
 	{
 		_modifiers.Remove(mod);
+		SetDirty();
+	}
+
+	public void RemoveAll()
+	{
+		_modifiers.Clear();
 		SetDirty();
 	}
 
@@ -38,13 +55,30 @@ public class ModifiedValue<T> : ModifiedValue
 			SetDirty();
 		}
 	}
-
+	public T BaseValue
+	{
+		get
+		{
+			return BaseValueGetter();
+		}
+		set
+		{
+			BaseValueGetter = () => value;
+		}
+	}
+	private T _prevBaseValue;
 	private T _value;
 	public T Value
 	{
 		get
 		{
-			if (IsDirty)
+			if (!EqualityComparer<T>.Default.Equals(BaseValue, _prevBaseValue))
+			{
+				//Base value has changed since last time we checked for Value
+				_prevBaseValue = BaseValue;
+				SetDirty();
+			}
+			if (IsDirty || UpdateEveryTime)
 			{
 				Update();
 			}
@@ -53,18 +87,20 @@ public class ModifiedValue<T> : ModifiedValue
 	}
 	public T DirtyValue => _value;
 
-	public ModifiedValue(Func<T> baseValueGetter)
+	public ModifiedValue(Func<T> baseValueGetter, bool updateEveryTime = false)
 	{
-		Debug.Assert(baseValueGetter is not null);
 		_baseValueGetter = baseValueGetter;
 		_value = BaseValueGetter();
+		_prevBaseValue = _value;
+		UpdateEveryTime = updateEveryTime;
 	}
 
-	public ModifiedValue(T baseValue)
+	public ModifiedValue(T baseValue, bool updateEveryTime = false)
 	{
-		Debug.Assert(baseValue is not null);
 		_baseValueGetter = () => baseValue;
 		_value = BaseValueGetter();
+		_prevBaseValue = _value;
+		UpdateEveryTime = updateEveryTime;
 	}
 
 	public Modifier<T> Modify(Func<T, T> operation, int priority = 0, int layer = 0, int order = 0)
