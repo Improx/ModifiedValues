@@ -9,9 +9,16 @@ public class ModifiedFloat : ModifiedValue<float>
 
 	public static implicit operator ModifiedFloat(float baseValue) => new ModifiedFloat(baseValue);
 
+	public static Modifier<float> TemplateSet(float amount, int priority = 0, int layer = 0)
+	{
+		return new Modifier<float>((prevValue) => amount, priority, layer, DefaultOrders.Set);
+	}
+
 	public Modifier<float> Set(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => amount, priority, layer, DefaultOrders.Set);
+		var mod = TemplateSet(amount, priority, layer);
+		Attach(mod);
+		return mod;
 	}
 
 	public static Modifier<float> TemplateAdd(float amount, int priority = 0, int layer = 0)
@@ -26,6 +33,11 @@ public class ModifiedFloat : ModifiedValue<float>
 		return mod;
 	}
 
+	public static Modifier<float> TemplateAddFraction(float amount, int priority = 0, int layer = 0)
+	{
+		return new Modifier<float>((prevValue, beginningValue) => prevValue + amount * beginningValue, priority, layer, DefaultOrders.AddFraction);
+	}
+
 	/// <summary>
 	/// Adds this fraction to value that was at the beginning of this layer.
 	/// Stacks additively.
@@ -36,12 +48,21 @@ public class ModifiedFloat : ModifiedValue<float>
 	/// <returns></returns>
 	public Modifier<float> AddFraction(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue, beginningValue) => prevValue + amount * beginningValue, priority, layer, DefaultOrders.AddFraction);
+		var mod = TemplateAddFraction(amount, priority, layer);
+		Attach(mod);
+		return mod;
+	}
+
+	public static Modifier<float> TemplateMul(float amount, int priority = 0, int layer = 0)
+	{
+		return new Modifier<float>((prevValue) => prevValue * amount, priority, layer, DefaultOrders.Mul);
 	}
 
 	public Modifier<float> Mul(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => prevValue * amount, priority, layer, DefaultOrders.Mul);
+		var mod = TemplateMul(amount, priority, layer);
+		Attach(mod);
+		return mod;
 	}
 
 	public Modifier<float> MinCap(float amount, int priority = 0, int layer = 0)

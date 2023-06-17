@@ -177,6 +177,15 @@ public class ModifiedValue<T> : ModifiedValue
 		UpdateEveryTime = updateEveryTime;
 	}
 
+	/// <summary>
+	/// A shorthand for creating a Modifier with the same parameters
+	/// and attaching it to this ModifiedValue.
+	/// </summary>
+	/// <param name="operationCompound"></param>
+	/// <param name="priority"></param>
+	/// <param name="layer"></param>
+	/// <param name="order"></param>
+	/// <returns></returns>
 	public Modifier<T> Modify(Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0)
 	{
 		Modifier<T> mod = new Modifier<T>(operationCompound, priority, layer, order);
@@ -184,6 +193,15 @@ public class ModifiedValue<T> : ModifiedValue
 		return mod;
 	}
 
+	/// <summary>
+	/// A shorthand for creating a Modifier with the same parameters
+	/// and attaching it to this ModifiedValue.
+	/// </summary>
+	/// <param name="operationNonCompound"></param>
+	/// <param name="priority"></param>
+	/// <param name="layer"></param>
+	/// <param name="order"></param>
+	/// <returns></returns>
 	public Modifier<T> Modify(Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0)
 	{
 		Modifier<T> mod = new Modifier<T>(operationNonCompound, priority, layer, order);
