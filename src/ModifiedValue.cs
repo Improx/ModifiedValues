@@ -17,6 +17,7 @@ public abstract class ModifiedValue
 	public event EventHandler<EventArgs> ? BecameDirty;
 	protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
 	public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
+	public IReadOnlyList<Modifier> ActiveModifiers => _modifiers.Where(m => m.Active).ToList().AsReadOnly();
 
 	public void SetDirty()
 	{
@@ -184,10 +185,11 @@ public class ModifiedValue<T> : ModifiedValue
 	private void Update()
 	{
 		T currentValue = BaseValueGetter();
-		var layers = _modifiers.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
+		var activeMods = ActiveModifiers;
+		var layers = activeMods.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
 		foreach (int layer in layers)
 		{
-			var modsInLayer = _modifiers.Where(m => m.Layer == layer);
+			var modsInLayer = activeMods.Where(m => m.Layer == layer);
 			int highestPrio = modsInLayer.Max(m => m.Priority);
 			//Keep only Modifiers with highest prio and arrange them in Order:
 			modsInLayer = modsInLayer.Where(m => m.Priority == highestPrio).OrderBy(m => m.Order);

@@ -4,6 +4,16 @@ public abstract class Modifier
 {
 	public event EventHandler<EventArgs> Changed;
 	public event EventHandler<EventArgs> RemovingFromAll;
+	protected bool _active = true;
+	public bool Active
+	{
+		get { return _active; }
+		set
+		{
+			_active = value;
+			OnChanged();
+		}
+	}
 	protected int _priority = 0;
 	public int Priority
 	{

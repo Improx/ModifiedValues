@@ -30,6 +30,12 @@ public class Program
 		modHeadWind.RemoveFromAll();
 		Report("Wind ended, phew! Person is back to full speed.");
 
+		modRollerScates.Active = false;
+		Report("Rollerscates got broken, so their effects are gone. We are still wearing them so we just set the modifier's Active bool to false, instead of removing it.");
+
+		modRollerScates.Active = true;
+		Report("Rollerscates got fixed!");
+
 		var modEnergyDrink1 = Person.Speed.AddFraction(0.2f);
 		Report("Consumed an energy drink! Ground speed increased by 20% additively. Note that this this fraction increase is in relation to the base value.");
 
