@@ -24,10 +24,10 @@ public class Program
 		var modCustom = Person.Speed.Modify(CustomOperation, order : 999999);
 		Report("Custom operation. If speed is below 2, slow down to 0. Else, set speed to 5.");
 
-		modCustom.RemoveFromAll();
-		Report("Removed custom operation.");
+		modCustom.DetachFromAll();
+		Report("Detached custom operation.");
 
-		modHeadWind.RemoveFromAll();
+		modHeadWind.DetachFromAll();
 		Report("Wind ended, phew! Person is back to full speed.");
 
 		modRollerScates.Active = false;

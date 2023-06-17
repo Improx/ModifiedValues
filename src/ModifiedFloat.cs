@@ -16,7 +16,15 @@ public class ModifiedFloat : ModifiedValue<float>
 
 	public Modifier<float> Add(float amount, int priority = 0, int layer = 0)
 	{
-		return Modify((prevValue) => prevValue + amount, priority, layer, DefaultOrders.Add);
+		//return Modify((prevValue) => prevValue + amount, priority, layer, DefaultOrders.Add);
+		var mod = TemplateAdd(amount, priority, layer);
+		Attach(mod);
+		return mod;
+	}
+
+	public static Modifier<float> TemplateAdd(float amount, int priority = 0, int layer = 0)
+	{
+		return new Modifier<float>((prevValue) => prevValue + amount, priority, layer, DefaultOrders.Add);
 	}
 
 	/// <summary>

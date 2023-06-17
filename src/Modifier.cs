@@ -3,7 +3,8 @@ namespace ModifiedValues;
 public abstract class Modifier
 {
 	public event EventHandler<EventArgs> Changed;
-	public event EventHandler<EventArgs> RemovingFromAll;
+	public event EventHandler<EventArgs> DetachingFromAll;
+	public event EventHandler<ProbingAttachedModValuesEventArgs> ProbingAttachedModValues;
 	protected bool _active = true;
 	public bool Active
 	{
@@ -63,22 +64,38 @@ public abstract class Modifier
 		_order = order;
 	}
 
-	public void RemoveFrom(ModifiedValue modValue)
+	public void DetachFrom(ModifiedValue modValue)
 	{
-		modValue.RemoveModifier(this);
+		modValue.Detach(this);
 	}
 
 	/// <summary>
-	/// Removes this modifier from all ModifiedValues that it was applied to.
+	/// Detaches this modifier from all ModifiedValues that it was applied to.
 	/// </summary>
-	public void RemoveFromAll()
+	public void DetachFromAll()
 	{
-		RemovingFromAll?.Invoke(this, EventArgs.Empty);
+		DetachingFromAll?.Invoke(this, EventArgs.Empty);
 	}
 
 	protected virtual void OnChanged()
 	{
 		Changed?.Invoke(this, EventArgs.Empty);
+	}
+
+	/// <summary>
+	/// Returns a list of all ModifiedValues that this Modifier is attached to.
+	/// </summary>
+	/// <returns></returns>
+	public List<ModifiedValue> GetAttachedModValues()
+	{
+		var eventArgs = new ProbingAttachedModValuesEventArgs();
+		ProbingAttachedModValues?.Invoke(this, eventArgs);
+		return eventArgs.ModValues;
+	}
+
+	public class ProbingAttachedModValuesEventArgs : EventArgs
+	{
+		public List<ModifiedValue> ModValues = new List<ModifiedValue>();
 	}
 }
 
@@ -119,4 +136,5 @@ public class Modifier<T> : Modifier
 		_operationNonCompound = operationNonCompound;
 		_compound = false;
 	}
+
 }

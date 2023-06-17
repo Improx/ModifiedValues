@@ -1,3 +1,5 @@
+namespace ModifiedValues;
+
 public static class DefaultOrders
 {
 	public const int Set = -1000;

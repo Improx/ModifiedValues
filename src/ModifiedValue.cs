@@ -18,6 +18,7 @@ public abstract class ModifiedValue
 	protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
 	public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
 	public IReadOnlyList<Modifier> ActiveModifiers => _modifiers.Where(m => m.Active).ToList().AsReadOnly();
+	public IReadOnlyList<Modifier> InactiveModifiers => _modifiers.Where(m => !m.Active).ToList().AsReadOnly();
 
 	public void SetDirty()
 	{
@@ -30,18 +31,24 @@ public abstract class ModifiedValue
 		SetDirty();
 	}
 
-	private void RemovingModifierEventHandler(object sender, EventArgs e)
+	private void DetachingModifierEventHandler(object sender, EventArgs e)
 	{
-		RemoveModifier((Modifier) sender);
+		Detach((Modifier) sender);
+	}
+
+	private void ProbingAttachedModValuesEventHandler(object sender, Modifier.ProbingAttachedModValuesEventArgs e)
+	{
+		e.ModValues.Add(this);
 	}
 
 	/// <summary>
-	/// Returns true if modifier was applied.
-	/// Returns false if this modifier object was already applied (duplicates not allowed)
+	/// Returns true if modifier was attached.
+	/// Returns false if this modifier object was already attached
+	/// (duplicates not allowed)
 	/// </summary>
 	/// <param name="mod"></param>
 	/// <returns></returns>
-	public bool ApplyModifier(Modifier mod)
+	public bool Attach(Modifier mod)
 	{
 		if (_modifiers.Contains(mod))
 		{
@@ -49,58 +56,60 @@ public abstract class ModifiedValue
 		}
 		_modifiers.Add(mod);
 		mod.Changed += ModifierChangedEventHandler;
-		mod.RemovingFromAll += RemovingModifierEventHandler;
+		mod.DetachingFromAll += DetachingModifierEventHandler;
+		mod.ProbingAttachedModValues += ProbingAttachedModValuesEventHandler;
 		SetDirty();
 		return true;
 	}
 
 	/// <summary>
-	/// Returns true if the Modifier was found and removed.
+	/// Returns true if the Modifier was found and detached.
 	/// </summary>
 	/// <param name="mod"></param>
 	/// <returns></returns>
-	public bool RemoveModifier(Modifier mod)
+	public bool Detach(Modifier mod)
 	{
-		bool removed = _modifiers.Remove(mod);
-		if (removed)
+		bool detached = _modifiers.Remove(mod);
+		if (detached)
 		{
 			mod.Changed -= ModifierChangedEventHandler;
-			mod.RemovingFromAll -= RemovingModifierEventHandler;
+			mod.DetachingFromAll -= DetachingModifierEventHandler;
+			mod.ProbingAttachedModValues -= ProbingAttachedModValuesEventHandler;
 			SetDirty();
 		}
-		return removed;
+		return detached;
 	}
 
 	/// <summary>
-	/// Returns true if had at least one modifier that was removed.
+	/// Returns true if had at least one modifier that was detached.
 	/// </summary>
 	/// <returns></returns>
-	public bool RemoveAll()
+	public bool DetachAll()
 	{
-		return RemoveWhere(m => true);
+		return DetachWhere(m => true);
 	}
 
 	/// <summary>
-	/// Returns true if removed at least one modifier.
+	/// Returns true if detached at least one modifier.
 	/// </summary>
-	/// <param name="predicate"></param>
+	/// <param name="condition"></param>
 	/// <returns></returns>
-	public bool RemoveWhere(Func<Modifier, bool> predicate)
+	public bool DetachWhere(Func<Modifier, bool> condition)
 	{
-		bool removedAtLeastOne = false;
+		bool detachedAtLeastOne = false;
 		foreach (Modifier mod in _modifiers.Reverse())
 		{
 			//Iterating in reverse so that can keep iterating collection
 			//while mods are being removed from it.
-			if (predicate(mod))
+			if (condition(mod))
 			{
-				if (RemoveModifier(mod))
+				if (Detach(mod))
 				{
-					removedAtLeastOne = true;
+					detachedAtLeastOne = true;
 				}
 			}
 		}
-		return removedAtLeastOne;
+		return detachedAtLeastOne;
 	}
 
 }
@@ -171,14 +180,14 @@ public class ModifiedValue<T> : ModifiedValue
 	public Modifier<T> Modify(Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0)
 	{
 		Modifier<T> mod = new Modifier<T>(operationCompound, priority, layer, order);
-		ApplyModifier(mod);
+		Attach(mod);
 		return mod;
 	}
 
 	public Modifier<T> Modify(Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0)
 	{
 		Modifier<T> mod = new Modifier<T>(operationNonCompound, priority, layer, order);
-		ApplyModifier(mod);
+		Attach(mod);
 		return mod;
 	}
 
