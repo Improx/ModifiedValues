@@ -10,7 +10,7 @@ public class Program
 
 		if (Person.Speed == 3)
 		{
-			Console.WriteLine("This condition should pass. Speed value was 3.");
+			Console.WriteLine("The condition <Person.Speed == 3> passed.");
 			Console.WriteLine("Comparisons with floats work because of implicit casting");
 		}
 
@@ -31,7 +31,7 @@ public class Program
 		Report("Wind ended, phew! Person is back to full speed.");
 
 		modRollerScates.Active = false;
-		Report("Rollerscates got broken, so their effects are gone. We are still wearing them so we just set the modifier's Active bool to false, instead of removing it.");
+		Report("Rollerscates got broken, so their effects are gone. We are still wearing them so we just set the modifier's Active bool to false, instead of detaching it.");
 
 		modRollerScates.Active = true;
 		Report("Rollerscates got fixed!");
@@ -40,13 +40,16 @@ public class Program
 		Report("Consumed an energy drink! Ground speed increased by 20% additively. Note that this this fraction increase is in relation to the base value.");
 
 		var modEnergyDrink2 = Person.Speed.AddFraction(0.2f);
-		Report("Consumed an energy drink! Ground speed increased by 20% additively.Note that this this fraction increase is in relation to the base value.");
+		Report("Consumed an energy drink! Ground speed increased by 20% additively. Note that this this fraction increase is in relation to the base value.");
 
 		var modSpeedLimit = Person.Speed.MaxCap(10);
 		Report("Police is watching. Have to slow down to a speed of 10.");
 
 		var modWings = Person.Speed.Add(500, priority : 1);
 		Report("We got wings, increasing our speed by 500. We are no longer on the ground, so previous mods have no effect anymore. This mod's Priority is higher than the others', so it is applied directly to the base value and ignores other mods.");
+
+		var slightSlow = Person.Speed.Add(-3, priority : 1);
+		Report("Decided to slow down by 3 units while flying. This works with the previous mod because it has the same priority.");
 
 		var modMotivation = Person.Speed.Mul(1.2f, layer : 1);
 		Report("You feel very motivated, increasing all speed by 20% multiplicatively. This effects acts on top of all old ones, because it is on a higher layer.");
