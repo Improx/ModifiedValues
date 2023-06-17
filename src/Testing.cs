@@ -45,7 +45,7 @@ public class Program
 		var modMotivation = Person.Speed.Mul(1.2f, layer : 1);
 		Report("You feel very motivated, increasing all speed by 20% multiplicatively. This effects acts on top of all old ones, because it is on a higher layer");
 
-		//This creates a totally new ModifiedFloat with base value 80
+		//This creates a totally new ModifiedFloat with base value 100
 		//and forgetting all previous Modifiers:
 		Person.Speed = 100;
 		Report("It's a new day, all old effects are gone and we also have brand-new legs with a fast base walking speed of 100.");
