@@ -2,7 +2,8 @@ namespace ModifiedValues;
 
 public abstract class Modifier
 {
-	public ModifiedValue ModifiedValue { get; private init; }
+	public event EventHandler<EventArgs> Changed;
+	public event EventHandler<EventArgs> RemovingFromAll;
 	protected int _priority = 0;
 	public int Priority
 	{
@@ -10,7 +11,7 @@ public abstract class Modifier
 		set
 		{
 			_priority = value;
-			ModifiedValue.SetDirty();
+			OnChanged();
 		}
 	}
 	protected int _layer = 0;
@@ -20,7 +21,7 @@ public abstract class Modifier
 		set
 		{
 			_layer = value;
-			ModifiedValue.SetDirty();
+			OnChanged();
 		}
 	}
 	protected int _order;
@@ -30,7 +31,7 @@ public abstract class Modifier
 		set
 		{
 			_order = value;
-			ModifiedValue.SetDirty();
+			OnChanged();
 		}
 	}
 
@@ -45,17 +46,29 @@ public abstract class Modifier
 	/// <value></value>
 	public bool Compound => _compound;
 
-	protected Modifier(ModifiedValue modifiedValue, int priority = 0, int layer = 0, int order = 0)
+	protected Modifier(int priority = 0, int layer = 0, int order = 0)
 	{
-		ModifiedValue = modifiedValue;
 		_priority = priority;
 		_layer = layer;
 		_order = order;
 	}
 
-	public void Remove()
+	public void RemoveFrom(ModifiedValue modValue)
 	{
-		ModifiedValue.RemoveModifier(this);
+		modValue.RemoveModifier(this);
+	}
+
+	/// <summary>
+	/// Removes this modifier from all ModifiedValues that it was applied to.
+	/// </summary>
+	public void RemoveFromAll()
+	{
+		RemovingFromAll?.Invoke(this, EventArgs.Empty);
+	}
+
+	protected virtual void OnChanged()
+	{
+		Changed?.Invoke(this, EventArgs.Empty);
 	}
 }
 
@@ -69,7 +82,7 @@ public class Modifier<T> : Modifier
 		{
 			_operationCompound = value;
 			_compound = true;
-			ModifiedValue.SetDirty();
+			OnChanged();
 		}
 	}
 
@@ -81,20 +94,18 @@ public class Modifier<T> : Modifier
 		{
 			_operationNonCompound = value;
 			_compound = false;
-			ModifiedValue.SetDirty();
+			OnChanged();
 		}
 	}
 
-	public Modifier(ModifiedValue modifiedValue, Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0) : base(modifiedValue, priority, layer, order)
+	public Modifier(Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0) : base(priority, layer, order)
 	{
-		//TODO: ModifiedValue should be the only class allowed to call this constructor. How?
 		_operationCompound = operationCompound;
 		_compound = true;
 	}
 
-	public Modifier(ModifiedValue modifiedValue, Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0) : base(modifiedValue, priority, layer, order)
+	public Modifier(Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0) : base(priority, layer, order)
 	{
-		//TODO: ModifiedValue should be the only class allowed to call this constructor. How?
 		_operationNonCompound = operationNonCompound;
 		_compound = false;
 	}

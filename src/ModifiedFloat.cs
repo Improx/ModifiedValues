@@ -19,6 +19,14 @@ public class ModifiedFloat : ModifiedValue<float>
 		return Modify((prevValue) => prevValue + amount, priority, layer, DefaultOrders.Add);
 	}
 
+	/// <summary>
+	/// Adds this fraction to value that was at the beginning of this layer.
+	/// Stacks additively.
+	/// </summary>
+	/// <param name="amount"></param>
+	/// <param name="priority"></param>
+	/// <param name="layer"></param>
+	/// <returns></returns>
 	public Modifier<float> AddFraction(float amount, int priority = 0, int layer = 0)
 	{
 		return Modify((prevValue, beginningValue) => prevValue + amount * beginningValue, priority, layer, DefaultOrders.AddFraction);

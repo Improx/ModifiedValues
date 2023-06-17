@@ -15,8 +15,8 @@ public abstract class ModifiedValue
 	public bool UpdateEveryTime = false;
 	public bool IsDirty { get; private set; }
 	public event EventHandler<EventArgs> ? BecameDirty;
-	protected List<Modifier> _modifiers = new List<Modifier>();
-	public IReadOnlyList<Modifier> Modifiers => _modifiers.AsReadOnly();
+	protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
+	public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
 
 	public void SetDirty()
 	{
@@ -24,16 +24,82 @@ public abstract class ModifiedValue
 		BecameDirty?.Invoke(this, EventArgs.Empty);
 	}
 
-	public void RemoveModifier(Modifier mod)
+	private void ModifierChangedEventHandler(object sender, EventArgs e)
 	{
-		_modifiers.Remove(mod);
 		SetDirty();
 	}
 
-	public void RemoveAll()
+	private void RemovingModifierEventHandler(object sender, EventArgs e)
 	{
-		_modifiers.Clear();
+		RemoveModifier((Modifier) sender);
+	}
+
+	/// <summary>
+	/// Returns true if modifier was applied.
+	/// Returns false if this modifier object was already applied (duplicates not allowed)
+	/// </summary>
+	/// <param name="mod"></param>
+	/// <returns></returns>
+	public bool ApplyModifier(Modifier mod)
+	{
+		if (_modifiers.Contains(mod))
+		{
+			return false;
+		}
+		_modifiers.Add(mod);
+		mod.Changed += ModifierChangedEventHandler;
+		mod.RemovingFromAll += RemovingModifierEventHandler;
 		SetDirty();
+		return true;
+	}
+
+	/// <summary>
+	/// Returns true if the Modifier was found and removed.
+	/// </summary>
+	/// <param name="mod"></param>
+	/// <returns></returns>
+	public bool RemoveModifier(Modifier mod)
+	{
+		bool removed = _modifiers.Remove(mod);
+		if (removed)
+		{
+			mod.Changed -= ModifierChangedEventHandler;
+			mod.RemovingFromAll -= RemovingModifierEventHandler;
+			SetDirty();
+		}
+		return removed;
+	}
+
+	/// <summary>
+	/// Returns true if had at least one modifier that was removed.
+	/// </summary>
+	/// <returns></returns>
+	public bool RemoveAll()
+	{
+		return RemoveWhere(m => true);
+	}
+
+	/// <summary>
+	/// Returns true if removed at least one modifier.
+	/// </summary>
+	/// <param name="predicate"></param>
+	/// <returns></returns>
+	public bool RemoveWhere(Func<Modifier, bool> predicate)
+	{
+		bool removedAtLeastOne = false;
+		foreach (Modifier mod in _modifiers.Reverse())
+		{
+			//Iterating in reverse so that can keep iterating collection
+			//while mods are being removed from it.
+			if (predicate(mod))
+			{
+				if (RemoveModifier(mod))
+				{
+					removedAtLeastOne = true;
+				}
+			}
+		}
+		return removedAtLeastOne;
 	}
 
 }
@@ -103,17 +169,15 @@ public class ModifiedValue<T> : ModifiedValue
 
 	public Modifier<T> Modify(Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0)
 	{
-		Modifier<T> mod = new Modifier<T>(this, operationCompound, priority, layer, order);
-		_modifiers.Add(mod);
-		SetDirty();
+		Modifier<T> mod = new Modifier<T>(operationCompound, priority, layer, order);
+		ApplyModifier(mod);
 		return mod;
 	}
 
 	public Modifier<T> Modify(Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0)
 	{
-		Modifier<T> mod = new Modifier<T>(this, operationNonCompound, priority, layer, order);
-		_modifiers.Add(mod);
-		SetDirty();
+		Modifier<T> mod = new Modifier<T>(operationNonCompound, priority, layer, order);
+		ApplyModifier(mod);
 		return mod;
 	}
 

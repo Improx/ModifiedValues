@@ -24,26 +24,32 @@ public class Program
 		var modCustom = Person.Speed.Modify(CustomOperation, order : 999999);
 		Report("Custom operation. If speed is below 2, slow down to 0. Else, set speed to 5.");
 
-		modCustom.Remove();
+		modCustom.RemoveFromAll();
 		Report("Removed custom operation.");
 
-		modHeadWind.Remove();
+		modHeadWind.RemoveFromAll();
 		Report("Wind ended, phew! Person is back to full speed.");
 
 		var modEnergyDrink1 = Person.Speed.AddFraction(0.2f);
-		Report("Consumed an energy drink! Ground speed increased by 20% additively.");
+		Report("Consumed an energy drink! Ground speed increased by 20% additively. Note that this this fraction increase is in relation to the base value.");
 
 		var modEnergyDrink2 = Person.Speed.AddFraction(0.2f);
-		Report("Consumed an energy drink! Ground speed increased by 20% additively.");
+		Report("Consumed an energy drink! Ground speed increased by 20% additively.Note that this this fraction increase is in relation to the base value.");
 
 		var modSpeedLimit = Person.Speed.MaxCap(10);
 		Report("Police is watching. Have to slow down to a speed of 10.");
 
 		var modWings = Person.Speed.Add(500, priority : 1);
-		Report("We got wings, increasing our speed by 500. We are no longer on the ground, so previous mods have no effect anymore. This mod's Priority is higher than the others', so it is applied directly to the base value.");
+		Report("We got wings, increasing our speed by 500. We are no longer on the ground, so previous mods have no effect anymore. This mod's Priority is higher than the others', so it is applied directly to the base value and ignores other mods.");
 
 		var modMotivation = Person.Speed.Mul(1.2f, layer : 1);
-		Report("You feel very motivated, increasing all speed by 20% multiplicatively. This effects acts on top of all old ones, because it is on a higher layer");
+		Report("You feel very motivated, increasing all speed by 20% multiplicatively. This effects acts on top of all old ones, because it is on a higher layer.");
+
+		var modMegaEnergyDrink1 = Person.Speed.AddFraction(0.5f, layer : 2);
+		Report("You drink a Mega energy drink, increasing all speed by 50% additively. This effects acts on top of all old ones, because it is on a higher layer.");
+
+		var modMegaEnergyDrink2 = Person.Speed.AddFraction(0.5f, layer : 2);
+		Report("You drink a Mega energy drink, increasing all speed by 50% additively. This effects acts on top of all old ones, because it is on a higher layer.");
 
 		//This creates a totally new ModifiedFloat with base value 100
 		//and forgetting all previous Modifiers:
