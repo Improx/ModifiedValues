@@ -19,7 +19,7 @@ namespace ModifiedValues
 		/// </summary>
 		public bool UpdateEveryTime = false;
 		public bool IsDirty { get; private set; }
-		public event EventHandler<EventArgs> ? BecameDirty;
+		public event EventHandler<EventArgs> BecameDirty;
 		protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
 		public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
 		public IReadOnlyList<Modifier> ActiveModifiers => _modifiers.Where(m => m.Active).ToList().AsReadOnly();
