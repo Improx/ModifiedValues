@@ -1,12 +1,13 @@
-namespace ModifiedValues.Samples;
-
-public class RPGSample
+namespace ModifiedValues.Samples
 {
-	public Person PersonA;
-	public Person PersonB;
-	public void Run()
+	public class RPGSample
 	{
-		PersonA = new Person();
-		PersonB = new Person();
+		public Person PersonA;
+		public Person PersonB;
+		public void Run()
+		{
+			PersonA = new Person();
+			PersonB = new Person();
+		}
 	}
 }

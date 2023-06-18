@@ -1,8 +1,9 @@
-namespace ModifiedValues.Samples;
-
-public class Person
+namespace ModifiedValues.Samples
 {
-	public ModifiedFloat Speed = 3;
-	public ModifiedFloat Strength = 10;
-	public ModifiedFloat Intelligence = 10;
+	public class Person
+	{
+		public ModifiedFloat Speed = 3;
+		public ModifiedFloat Strength = 10;
+		public ModifiedFloat Intelligence = 10;
+	}
 }
