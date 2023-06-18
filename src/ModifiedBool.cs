@@ -9,14 +9,14 @@ public class ModifiedBool : ModifiedValue<bool>
 
 	public static implicit operator ModifiedBool(bool baseValue) => new ModifiedBool(baseValue);
 
-	public static Modifier<bool> TemplateSet(bool amount, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
+	public static Modifier<bool> TemplateSet(bool other, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
 	{
-		return new Modifier<bool>((prevValue) => amount, priority, layer, order);
+		return new Modifier<bool>((prevValue) => other, priority, layer, order);
 	}
 
-	public Modifier<bool> Set(bool amount, int priority = 0, int layer = 0)
+	public Modifier<bool> Set(bool other, int priority = 0, int layer = 0)
 	{
-		var mod = TemplateSet(amount, priority, layer);
+		var mod = TemplateSet(other, priority, layer);
 		Attach(mod);
 		return mod;
 	}

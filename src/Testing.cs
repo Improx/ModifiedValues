@@ -1,3 +1,4 @@
+using ModifiedValues;
 using ModifiedValues.Samples;
 
 public class Program
@@ -73,7 +74,31 @@ public class Program
 
 		Person.Speed.BaseValue = 80;
 		Report("Legs got tired, affecting the fundamentals of how fast we are. Base speed dropped from 100 to 80, but the coffee cups are still in effect.");
+
+		ModifiedEnum<Lol> testEnum = Lol.Everything;
+		if (testEnum == Lol.Everything)
+		{
+			Console.WriteLine("Passed test");
+		}
+		if (testEnum == Lol.Something)
+		{
+			Console.WriteLine("Should not pass this test.");
+		}
+		var set1 = testEnum.Set(Lol.Something);
+		Console.WriteLine(testEnum.Value);
+		if (testEnum == Lol.Something)
+		{
+			Console.WriteLine("Passed test");
+		}
+		testEnum.Set(Lol.None, 1);
+		Console.WriteLine(testEnum.Value);
+		set1.DetachFromAll();
+		Console.WriteLine(testEnum.Value);
+		testEnum.Set(Lol.Everything);
+		Console.WriteLine(testEnum.Value);
 	}
+
+	private enum Lol { None, Something, Everything }
 
 	private static float CustomOperation(float prevValue)
 	{
