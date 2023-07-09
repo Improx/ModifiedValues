@@ -245,7 +245,7 @@ namespace ModifiedValues
 		public static implicit operator T(ModifiedValue<T> m) => m.Value;
 		public static implicit operator ModifiedValue<T>(T baseValue) => new ModifiedValue<T>(baseValue);
 
-		public override string? ToString()
+		public override string ToString()
 		{
 			return (Value is null) ? null : Value.ToString();
 		}

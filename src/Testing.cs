@@ -4,7 +4,7 @@ using ModifiedValues.Samples;
 
 public class Program
 {
-	public static Person? Person;
+	public static Person Person;
 	public static void Main()
 	{
 		Person = new Person();
