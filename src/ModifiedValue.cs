@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace ModifiedValues
 {
-
 	public abstract class ModifiedValue
 	{
+		public bool Init { get; protected set; } = false;
+
 		/// <summary>
 		/// Every time we check what Value is, we recalculate the value no matter
 		/// whether IsDirty is true or not.
@@ -17,8 +19,8 @@ namespace ModifiedValues
 		/// dependencies, you can just set UpdateEveryTime = true.
 		/// The downside is lower performance.
 		/// </summary>
-		public bool UpdateEveryTime = false;
-		public bool IsDirty { get; private set; }
+		[HideInInspector] public bool UpdateEveryTime = false;
+		public bool IsDirty { get; private set; } = true;
 		public event EventHandler<EventArgs> BecameDirty;
 		protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
 		public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
@@ -121,7 +123,9 @@ namespace ModifiedValues
 
 	public class ModifiedValue<T> : ModifiedValue
 	{
-		private Func<T> _baseValueGetter;
+		[SerializeField] private T _savedBaseValue;
+		[SerializeField][HideInInspector] private bool _usingSavedBaseValue = true;
+		private Func<T> _baseValueGetter = () => default(T);
 		public Func<T> BaseValueGetter
 		{
 			get
@@ -131,9 +135,10 @@ namespace ModifiedValues
 			set
 			{
 				_baseValueGetter = value;
-				SetDirty();
+				_usingSavedBaseValue = false;
 			}
 		}
+
 		public T BaseValue
 		{
 			get
@@ -142,11 +147,14 @@ namespace ModifiedValues
 			}
 			set
 			{
-				BaseValueGetter = () => value;
+				_savedBaseValue = value;
+				_usingSavedBaseValue = true;
+				_baseValueGetter = () => _savedBaseValue;
 			}
 		}
-		private T _prevBaseValue;
-		private T _value;
+
+		[SerializeField][HideInInspector] private T _prevBaseValue;
+		[SerializeField][HideInInspector] private T _value;
 		public T Value
 		{
 			get
@@ -159,7 +167,7 @@ namespace ModifiedValues
 				}
 				if (IsDirty || UpdateEveryTime)
 				{
-					Update();
+					UpdateValue();
 				}
 				return _value;
 			}
@@ -169,17 +177,22 @@ namespace ModifiedValues
 		public ModifiedValue(Func<T> baseValueGetter, bool updateEveryTime = false)
 		{
 			_baseValueGetter = baseValueGetter;
+			_usingSavedBaseValue = false;
 			_value = BaseValueGetter();
 			_prevBaseValue = _value;
 			UpdateEveryTime = updateEveryTime;
+			Init = true;
 		}
 
 		public ModifiedValue(T baseValue, bool updateEveryTime = false)
 		{
-			_baseValueGetter = () => baseValue;
+			_savedBaseValue = baseValue;
+			_usingSavedBaseValue = true;
+			_baseValueGetter = () => _savedBaseValue;
 			_value = BaseValueGetter();
 			_prevBaseValue = _value;
 			UpdateEveryTime = updateEveryTime;
+			Init = true;
 		}
 
 		/// <summary>
@@ -214,10 +227,10 @@ namespace ModifiedValues
 			return mod;
 		}
 
-		private void Update()
+		private T CalculateValue(IReadOnlyList<Modifier> activeModifiers)
 		{
 			T currentValue = BaseValueGetter();
-			var activeMods = ActiveModifiers;
+			var activeMods = activeModifiers;
 			var layers = activeMods.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
 			foreach (int layer in layers)
 			{
@@ -239,7 +252,48 @@ namespace ModifiedValues
 					}
 				}
 			}
-			_value = currentValue;
+			return currentValue;
+		}
+
+		private void UpdateValue()
+		{
+			_value = CalculateValue(ActiveModifiers);
+		}
+
+		/// <summary>
+		/// Previews the final value if this collection of modifiers were attached.
+		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
+		/// and a duplicate modifier object would not be attached if it alrady exists.
+		/// </summary>
+		/// <param name="modifiers"></param>
+		/// <returns></returns>
+		public T PreviewValue(IEnumerable<Modifier> modifiers)
+		{
+			return CalculateValue(ActiveModifiers.Union(modifiers.Where(m => m.Active)).ToList());
+		}
+
+		/// <summary>
+		/// Previews the final value if this modifier were attached.
+		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
+		/// and a duplicate modifier object would not be attached if it alrady exists.
+		/// </summary>
+		/// <param name="modifier"></param>
+		/// <returns></returns>
+		public T PreviewValue(Modifier modifier)
+		{
+			return PreviewValue(new List<Modifier>() { modifier });
+		}
+
+		/// <summary>
+		/// Previews the final value if this modifier group were attached.
+		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
+		/// and a duplicate modifier object would not be attached if it alrady exists.
+		/// </summary>
+		/// <param name="modifiers"></param>
+		/// <returns></returns>
+		public T PreviewValue(ModifierGroup modifierGroup)
+		{
+			return PreviewValue(modifierGroup.Modifiers);
 		}
 
 		public static implicit operator T(ModifiedValue<T> m) => m.Value;
@@ -248,6 +302,11 @@ namespace ModifiedValues
 		public override string ToString()
 		{
 			return (Value is null) ? null : Value.ToString();
+		}
+
+		public void UseSavedBaseValue()
+		{
+			BaseValue = default(T);
 		}
 
 	}

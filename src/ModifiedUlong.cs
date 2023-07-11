@@ -2,7 +2,7 @@ using System;
 
 namespace ModifiedValues
 {
-
+	[Serializable]
 	public class ModifiedUlong : ModifiedValue<ulong>
 	{
 

@@ -2,6 +2,7 @@ using System;
 
 namespace ModifiedValues
 {
+	[Serializable]
 	public class ModifiedEnum<T> : ModifiedValue<T> where T : Enum
 	{
 
