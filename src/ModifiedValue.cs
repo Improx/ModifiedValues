@@ -260,41 +260,117 @@ namespace ModifiedValues
 			_value = CalculateValue(ActiveModifiers);
 		}
 
+		#region Preview methods
+
 		/// <summary>
-		/// Previews the final value if this collection of modifiers were attached.
+		/// Previews the final value if this collection of modifiers were attached
+		/// and another were detached.
 		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
-		/// and a duplicate modifier object would not be attached if it alrady exists.
+		/// and a duplicate modifier object would not be attached if it already exists.
 		/// </summary>
-		/// <param name="modifiers"></param>
+		/// <param name="attachModifiers"></param>
+		/// <param name="detachModifiers"></param>
 		/// <returns></returns>
-		public T PreviewValue(IEnumerable<Modifier> modifiers)
+		public T PreviewValue(IEnumerable<Modifier> attachModifiers, IEnumerable<Modifier> detachModifiers)
 		{
-			return CalculateValue(ActiveModifiers.Union(modifiers.Where(m => m.Active)).ToList());
+			return CalculateValue(ActiveModifiers.Union(attachModifiers.Where(m => m.Active)).Except(detachModifiers).ToList());
 		}
 
 		/// <summary>
-		/// Previews the final value if this modifier were attached.
+		/// Previews the final value if this collection of modifiers were attached.
 		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
-		/// and a duplicate modifier object would not be attached if it alrady exists.
+		/// and a duplicate modifier object would not be attached if it already exists.
 		/// </summary>
-		/// <param name="modifier"></param>
+		/// <param name="attachModifiers"></param>
 		/// <returns></returns>
-		public T PreviewValue(Modifier modifier)
+		public T PreviewValue(IEnumerable<Modifier> attachModifiers)
 		{
-			return PreviewValue(new List<Modifier>() { modifier });
+			return PreviewValue(attachModifiers, new List<Modifier>());
+		}
+
+		/// <summary>
+		/// Previews the final value if this collection of existing modifiers were detached.
+		/// </summary>
+		/// <param name="detachModifiers"></param>
+		/// <returns></returns>
+		public T PreviewValueDetach(IEnumerable<Modifier> detachModifiers)
+		{
+			return PreviewValue(new List<Modifier>(), detachModifiers);
 		}
 
 		/// <summary>
 		/// Previews the final value if this modifier group were attached.
 		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
-		/// and a duplicate modifier object would not be attached if it alrady exists.
+		/// and a duplicate modifier object would not be attached if it already exists.
 		/// </summary>
-		/// <param name="modifiers"></param>
+		/// <param name="attachModifierGroup"></param>
 		/// <returns></returns>
-		public T PreviewValue(ModifierGroup modifierGroup)
+		public T PreviewValue(ModifierGroup attachModifierGroup)
 		{
-			return PreviewValue(modifierGroup.Modifiers);
+			return PreviewValue(attachModifierGroup.Modifiers);
 		}
+
+		/// <summary>
+		/// Previews the final value if this modifier group were attached
+		/// and another were detached.
+		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
+		/// and a duplicate modifier object would not be attached if it already exists.
+		/// </summary>
+		/// <param name="attachModifierGroup"></param>
+		/// <param name="detachModifierGroup"></param>
+		/// <returns></returns>
+		public T PreviewValue(ModifierGroup attachModifierGroup, ModifierGroup detachModifierGroup)
+		{
+			return PreviewValue(attachModifierGroup.Modifiers, detachModifierGroup.Modifiers);
+		}
+
+		/// <summary>
+		/// Previews the final value if this modifier group were detached.
+		/// </summary>
+		/// <param name="detachModifierGroup"></param>
+		/// <returns></returns>
+		public T PreviewValueDetach(ModifierGroup detachModifierGroup)
+		{
+			return PreviewValueDetach(detachModifierGroup.Modifiers);
+		}
+
+		/// <summary>
+		/// Previews the final value if this modifier were attached.
+		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
+		/// and a duplicate modifier object would not be attached if it already exists.
+		/// </summary>
+		/// <param name="attachModifier"></param>
+		/// <returns></returns>
+		public T PreviewValue(Modifier attachModifier)
+		{
+			return PreviewValue(new List<Modifier>() { attachModifier });
+		}
+
+		/// <summary>
+		/// Previews the final value if this existing modifier were detached.
+		/// </summary>
+		/// <param name="detachModifier"></param>
+		/// <returns></returns>
+		public T PreviewValueDetach(Modifier detachModifier)
+		{
+			return PreviewValueDetach(new List<Modifier>() { detachModifier });
+		}
+
+		/// <summary>
+		/// Previews the final value if this modifier were attached
+		/// and another existing modifier detached.
+		/// Just like in regular final value calculation, modifier will not have effect if it is not Active
+		/// and a duplicate modifier object would not be attached if it already exists.
+		/// </summary>
+		/// <param name="attachModifier"></param>
+		/// <param name="detachModifier"></param>
+		/// <returns></returns>
+		public T PreviewValue(Modifier attachModifier, Modifier detachModifier)
+		{
+			return PreviewValue(new List<Modifier>() { attachModifier }, new List<Modifier>() { detachModifier });
+		}
+
+		#endregion
 
 		public static implicit operator T(ModifiedValue<T> m) => m.Value;
 		public static implicit operator ModifiedValue<T>(T baseValue) => new ModifiedValue<T>(baseValue);
