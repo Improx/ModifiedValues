@@ -15,6 +15,7 @@ You can create a Modified version of it:
 ModifiedFloat Speed = 10;
 ```
 If the field is public or serialized, it will also appear in the inspector:
+
 ![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector1.PNG "ModifiedValue Speed visible in the inspector")
 
 For convenience, this `Speed` object can be implicitly cast back into a float. Most of your code can treat it as just a regular float value:
@@ -31,6 +32,7 @@ Speed.Add(5f);
 ```
 
 By default, the multiplicative modifier is applied before the additive one. This results in a final speed value of 17. Your code that uses `Speed` will automatically pick up this update. The current value is also visible in the inspector:
+
 ![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
 
 If you want to be able to remove these buffs later, you need to save the modifier objects:
