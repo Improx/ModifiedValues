@@ -1,5 +1,5 @@
 # ModifiedValues
-ModifiedValues is a C# library for Unity that enables modifying numeric values while keeping track of the modifiers affecting it.
+ModifiedValues is a C# library for Unity that enables modifying (numeric and other) values while keeping track of the modifiers affecting it.
 
 ## Example
 
