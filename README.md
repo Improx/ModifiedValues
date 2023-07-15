@@ -41,7 +41,7 @@ If you want to be able to remove these buffs later, you need to save the modifie
 
 ```C#
 var energizedBuff = Speed.Mul(1.2f);
-var rollerScatesBuff = Speed.Add(5f);
+var rollerScatesBuff = Speed.Add(5);
 
 //After some time passes, you want to remove the Energized buff.
 energizedBuff.DetachFromAll();
@@ -53,16 +53,16 @@ Without this library, where `Speed` is just a normal `float`, you would have nee
 
 ```C#
 Speed *= 1.2f;
-Speed += 5f;
+Speed += 5;
 
 //After some time passes, you want to remove the Energized buff.
 //However, we can't just simply divide by 1.2f to get the correct result, because
 //the rollerscates buff is still active
 //We need to keep the additive rollerscates effect like this:
 
-Speed -= 5f;
+Speed -= 5;
 Speed /= 1.2f;
-Speed += 5f;
+Speed += 5;
 
 Debug.Log(Speed); //Will print 12
 ```
