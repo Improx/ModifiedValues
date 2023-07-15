@@ -68,7 +68,7 @@ Speed += 5f;
 
 Debug.Log(Speed); //Will print 12
 ```
-With many buffs, doing this manually would get extremely convoluted. One of the main conveniences of this library is that the buffs don't have to know about each other. For each modifier, you just define how it modifies the value, optionally give it some priority-related parameters (explained further down), and then you can attach and detach these modifiers independently, while keeping the final value always correct.
+With many buffs, doing this manually would get extremely convoluted. One of the main conveniences of this library is that the buffs don't have to know about each other. For each modifier, you just define how it modifies the value, and then you can attach and detach these modifiers independently, while keeping the final value always correct. You also don't need to worry about the temporal order in which you apply modifiers. The ordering, layers and priorities of modifiers are defined in optional parameters (explained further down)
 
 This library provides the following wrapper types with lots of ready functionality, and you can easily create more:
 
@@ -88,3 +88,31 @@ You can wrap other types without needing to create new classes simply by using `
 ModifiedValue<MyType> myValue = new MyType();
 myValue.Modify((v) => v * 1.2f + 5);
 ```
+
+## Priority, Layer and Order
+
+TODO
+IMAGE for explanation
+
+## Handling Modifiers
+
+TODO
+ATTACHING AND DETACHING
+MODIFIERGROUPS
+ADDING ONE MODIFIER TO MULTIPLE MODVALUES
+DIRTY FLAG
+TEMPLATE MODIFIERS (NOT YET ATTACHED TO ANY VALUE)
+CUSTOM OPERATIONS, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME
+COMPOUND AND NONCOMPOUND
+
+## Previewing Values
+
+TODO
+
+## Inspector
+
+TODO
+SETTINGS TO PREVIEW FINAL VALUE
+SAVED VALUE VS GETTER
+
+## TEMPLATE MODIFIERS
