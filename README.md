@@ -40,8 +40,8 @@ By default, the multiplicative modifier is applied before the additive one. This
 If you want to be able to remove these buffs later, you need to save the modifier objects:
 
 ```C#
-var energizedBuff = Speed.Mul(1.2f);
-var rollerScatesBuff = Speed.Add(5);
+Modifier energizedBuff = Speed.Mul(1.2f);
+Modifier rollerScatesBuff = Speed.Add(5);
 
 //After some time passes, you want to remove the Energized buff.
 energizedBuff.DetachFromAll();
