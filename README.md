@@ -1,2 +1,6 @@
 # ModifiedValues
-Unity C# library with a wrapper class for numeric and other types, keeping track of effects that modify the end value.
+ModifiedValues is a C# library for Unity that enables modifying numeric values while keeping track of the modifiers.
+
+###Quick Wxample
+
+You're making a buff system for your game. Instead of having a `float Speed = 10;` variable on your character, you can have a `ModifiedFlot Speed = 10;` object.
