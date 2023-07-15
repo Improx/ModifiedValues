@@ -5,7 +5,7 @@ Minimum requirements:
 * C# version 9
 * DotNet netstandard2.1
 
-## Example
+## Quickstart Example
 
 You're making a buff system for your game. Instead of having a classic float variable on your character
 
