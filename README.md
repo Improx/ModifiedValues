@@ -93,8 +93,23 @@ TODO
 IMAGE for explanation
 Layers for talents, equipment, temporary buffs
 
-OTHER:
+## Initialization
 Implicit casting from value to ModValue to create it. Alternative to constructor. Note that it replaces the old modvalue object if there was one.
+```C#
+ModifiedFloat Speed1 = 5;
+//Is the same as:
+ModifiedFloat Speed2 = new ModifiedFloat(5);
+//Is the same as:
+ModifiedFloat Speed3 = new ModifiedFloat(() => 5);
+```
+BaseValueGetter (can be dynamic. For example it can depend on the value of another ModifiedValue. This external dependency is handled safely.)
+UpdateEveryTime
+
+### Undeclared ModifiedValue objects = bad!
+```C#
+[Serializedfield] private ModifiedFloat Speed; //Set this reference to a new ModifiedFloat before using it!
+```
+Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object.
 
 ## Handling Modifiers
 
@@ -118,8 +133,4 @@ TODO
 SETTINGS TO PREVIEW FINAL VALUE
 SAVED VALUE VS GETTER
 
-### Undeclared ModifiedValue objects = bad!
-```C#
-[Serializedfield] private ModifiedFloat Speed; //Set this reference to a new ModifiedFloat before using it!
-```
-Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`).
+
