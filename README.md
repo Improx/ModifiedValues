@@ -24,7 +24,7 @@ For convenience, this `Speed` object can be implicitly cast back into a float. M
 transform.position += Speed * Time.deltaTime;
 ```
 
-Let's say your character gets an Energized buff that multiplies base speed by 120%. Your character also equips rollerscates, increasing speed by 5. You add a these multiplicative and additive modifiers like this:
+Let's say your character gets an Energized buff that multiplies base speed by 120%. Your character also equips rollerscates, increasing speed by 5. You apply a these multiplicative and additive modifiers like this:
 
 ```C#
 Speed.Mul(1.2f);
@@ -54,7 +54,8 @@ Speed *= 1.2f;
 Speed += 5f;
 
 //After some time passes, you want to remove the Energized buff.
-//However, we can't just simply divide by 1.2f to get the correct result, because the rollerscates buff is still active
+//However, we can't just simply divide by 1.2f to get the correct result, because
+//the rollerscates buff is still active
 //We need to keep the additive rollerscates effect like this:
 
 Speed -= 5f;
@@ -63,19 +64,19 @@ Speed += 5f;
 
 Debug.Log(Speed); //Will print 12
 ```
-As you can see, one of the main conveniences of this library is that the buffs don't have to know about each other. For each modifier, you just define how it modifies the value, optionally give it some priority-related data, and then you can attach and detach these modifiers independently, while keeping the final value always correct.
+With many buffs, doing this manually would get extremely convoluted. One of the main conveniences of this library is that the buffs don't have to know about each other. For each modifier, you just define how it modifies the value, optionally give it some priority-related parameters (explained further down), and then you can attach and detach these modifiers independently, while keeping the final value always correct.
 
 This library provides the following wrapper types with lots of ready functionality, and you can easily create more:
 
-* ModifiedFloat
-* ModifiedDouble
-* ModifiedDecimal
-* ModifiedInt
-* ModifiedUint
-* ModifiedLong
-* ModifiedUlong
-* ModifiedBool
-* ModifiedEnum<YourEnum>
+* `ModifiedFloat`
+* `ModifiedDouble`
+* `ModifiedDecimal`
+* `ModifiedInt`
+* `ModifiedUint`
+* `ModifiedLong`
+* `ModifiedUlong`
+* `ModifiedBool`
+* `ModifiedEnum<YourEnum>`
 
 You can wrap other types without needing to create new classes simply by using `ModifiedValue<MyType>`, it just won't have as much functionality by default. For example `ModifiedFloat` inherits from `ModifiedValue<float>` and adds a bunch of methods on top, such as `Add` and `Mul`. With a generic wrapper, you can still apply modifiers with any custom operations:
 
