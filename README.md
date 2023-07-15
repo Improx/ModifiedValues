@@ -1,5 +1,5 @@
 # ModifiedValues
-ModifiedValues is a C# library for Unity that enables modifying numeric values while keeping track of the modifiers.
+ModifiedValues is a C# library for Unity that enables modifying numeric values while keeping track of the modifiers affecting it.
 
 ### Quick Example
 
@@ -15,3 +15,4 @@ You can create a Modified version of it:
 ModifiedFloat Speed = 10;
 ```
 
+This 
