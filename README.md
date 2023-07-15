@@ -5,13 +5,13 @@ ModifiedValues is a C# library for Unity that enables modifying numeric values w
 
 You're making a buff system for your game. Instead of having a classic float variable on your character
 
-```
+```C#
 float Speed = 10;
 ```
 
 You can create a Modified version of it:
 
-```
+```C#
 ModifiedFloat Speed = 10;
 ```
 
