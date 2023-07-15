@@ -125,6 +125,8 @@ namespace ModifiedValues
 	public class ModifiedValue<T> : ModifiedValue
 	{
 		[SerializeField] private T _savedBaseValue;
+
+		//The custom property drawer uses this
 		[SerializeField][HideInInspector] private bool _usingSavedBaseValue = true;
 		private Func<T> _baseValueGetter = () => default(T);
 		public Func<T> BaseValueGetter
