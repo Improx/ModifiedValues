@@ -1,9 +1,7 @@
 # ModifiedValues
 ModifiedValues is a C# library for Unity that enables modifying (numeric and other) values while keeping track of the modifiers affecting it.
 
-Minimum requirements:
-* C# version 9
-* DotNet netstandard2.1
+Minimum requirement is <strong>Unity 2021.2</strong> (for C# 9 and netstandard2.1).
 
 ## Quickstart Example
 
