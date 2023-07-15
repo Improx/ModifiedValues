@@ -24,6 +24,7 @@ namespace ModifiedValues
 		public event EventHandler<EventArgs> BecameDirty;
 		protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
 		public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
+
 		public IReadOnlyList<Modifier> ActiveModifiers => _modifiers.Where(m => m.Active).ToList().AsReadOnly();
 		public IReadOnlyList<Modifier> InactiveModifiers => _modifiers.Where(m => !m.Active).ToList().AsReadOnly();
 
