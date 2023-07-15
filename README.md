@@ -91,6 +91,7 @@ myValue.Modify((v) => v * 1.2f + 5);
 
 TODO
 IMAGE for explanation
+Layers for talents, equipment, temporary buffs
 
 ## Handling Modifiers
 
