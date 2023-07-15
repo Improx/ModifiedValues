@@ -30,7 +30,7 @@ Let's say your character gets an Energized buff that multiplies base speed by 12
 
 ```C#
 Speed.Mul(1.2f);
-Speed.Add(5f);
+Speed.Add(5);
 ```
 
 By default, the multiplicative modifier is applied before the additive one. This results in a final speed value of 17. Your code that uses `Speed` will automatically pick up this update. The current value is also visible in the inspector:
