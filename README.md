@@ -84,7 +84,7 @@ You can wrap other types without needing to create new classes simply by using `
 
 ```C#
 ModifiedValue<MyType> myValue = new MyType();
-myValue.Modify((v) => v * 1.2f + 5);
+Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
 ```
 
 ## Priority, Layer and Order
