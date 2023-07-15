@@ -1,7 +1,7 @@
 # ModifiedValues
 ModifiedValues is a C# library for Unity that enables modifying numeric values while keeping track of the modifiers affecting it.
 
-### Quick Example
+## Quick Example
 
 You're making a buff system for your game. Instead of having a classic float variable on your character
 
@@ -36,8 +36,26 @@ If you want to be able to remove these buffs later, you need to save the modifie
 var energizedBuff = Speed.Mul(1.2f);
 var rollerScatesBuff = Speed.Add(5f);
 
-//After some passes, you want to remove the Energized buff.
+//After some time passes, you want to remove the Energized buff.
 energizedBuff.DetachFromAll();
 
 Debug.Log(Speed.Value); //Will print 12
 ```
+
+Without this library, where `Speed` is just a normal `float`, you would have needed to do something like this:
+
+```C#
+Speed *= 1.2f;
+Speed += 5f;
+
+//After some time passes, you want to remove the Energized buff.
+//However, we can't just simply divide by 1.2f to get the correct result, because the rollerscates buff is still active
+//We need to keep the additive rollerscates effect like this:
+
+Speed -= 5f;
+Speed /= 1.2f;
+Speed += 5f;
+
+Debug.Log(Speed); //Will print 12
+```
+As you can see, one of the main conveniences of this library is that the buffs don't have to know about each other. For each modifier, you just define how it modifies the value, optionally give it some priority-related data, and then you can attach and detach these modifiers independently, while keeping the final value always correct.
