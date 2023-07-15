@@ -93,6 +93,9 @@ TODO
 IMAGE for explanation
 Layers for talents, equipment, temporary buffs
 
+OTHER:
+Implicit casting from value to ModValue to create it. Alternative to constructor. Note that it replaces the old modvalue object if there was one.
+
 ## Handling Modifiers
 
 TODO
@@ -114,3 +117,6 @@ TODO
 TODO
 SETTINGS TO PREVIEW FINAL VALUE
 SAVED VALUE VS GETTER
+
+### Undeclared ModifiedValue objects = bad!
+Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Do not use such ModifiedValue objects - always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`).
