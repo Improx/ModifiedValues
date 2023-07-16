@@ -8,6 +8,7 @@ public class ModifiedUlongPropertyDrawer : PropertyDrawer
 {
 	private ModifiedUlong _modValue;
 	private UnityEngine.Object _targetObject;
+	private const float _extraTotalHeight = 30;
 
 	// Draw the property inside the given rect
 	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -36,30 +37,30 @@ public class ModifiedUlongPropertyDrawer : PropertyDrawer
 		}
 
 		EditorGUI.BeginProperty(position, label, property);
-
+		Rect fieldRect = position;
+		fieldRect.height -= _extraTotalHeight;
 		if (property.FindPropertyRelative("_usingSavedBaseValue").boolValue)
 		{
-			EditorGUI.PropertyField(position, property.FindPropertyRelative("_savedBaseValue"), label);
+			//Using saved base value
+			EditorGUI.PropertyField(fieldRect, property.FindPropertyRelative("_savedBaseValue"), label);
 		}
 		else
 		{
-			position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+			//Using base value getter
+			fieldRect = EditorGUI.PrefixLabel(fieldRect, GUIUtility.GetControlID(FocusType.Passive), label);
 			GUI.contentColor = new Color(0.7f, 0.77f, 1f);
-			position.height *= 1.7f;
-
-			if (GUI.Button(position, "Base value getter: " + _modValue.BaseValue + "\n Click to use saved base value."))
+			if (GUI.Button(fieldRect, new GUIContent("Base value getter: " + _modValue.BaseValue, "Click to use saved base value instead.")))
 			{
 				_modValue.UseSavedBaseValue();
 			}
-			GUILayout.Space(10);
 			GUI.contentColor = Color.white;
 		}
 
+		//Show current value
 		if (Settings.ShowLatestValue == ShowLatestValue.Always || (Application.isPlaying && Settings.ShowLatestValue == ShowLatestValue.OnlyRuntime))
 		{
 			GUI.contentColor = new Color(0.68f, 0.68f, 0.68f);
-			GUILayout.Label("     Current value: " + _modValue.Value.ToString());
-			GUILayout.Space(5);
+			EditorGUI.LabelField(position, "     Current value: " + _modValue.Value.ToString());
 			GUI.contentColor = Color.white;
 		}
 
@@ -87,5 +88,10 @@ public class ModifiedUlongPropertyDrawer : PropertyDrawer
 		}
 
 		return obj;
+	}
+
+	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+	{
+		return base.GetPropertyHeight(property, label) + _extraTotalHeight;
 	}
 }
