@@ -6,7 +6,9 @@ ModifiedValues is a C# library for Unity that enables modifying (numeric and oth
 
 Minimum requirement is <strong>Unity 2021.2</strong> (for C# 9 and netstandard2.1).
 
-## Quickstart Example
+[HeaderDecorator]: https://placehold.co/15x15/00dd00/00dd00.png
+
+ ## ![][HeaderDecorator] Quickstart Example ![][HeaderDecorator]
 
 You're making a buff system for your game. Instead of having a classic float variable on your character
 
@@ -91,7 +93,7 @@ ModifiedValue<MyType> myValue = new MyType();
 Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
 ```
 
-## Initialization
+## ![][HeaderDecorator] Initialization ![][HeaderDecorator]
 You can create a new ModifiedValue object in many ways. You can create a new object with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
 
 ```C#
@@ -123,7 +125,7 @@ If you want to update a ModifiedValue's base value, you can update its `BaseValu
 ```
 Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object.
 
-## Out-of-the-box Modifiers
+## ![][HeaderDecorator] Out-of-the-box Modifiers ![][HeaderDecorator]
 
 The following modifying methods are readily available for `ModifiedFloat`, `ModifiedDouble` and `ModifiedDecimal`:
 * `Set()`: Forces to this value.
@@ -159,7 +161,7 @@ If many different modifiers are applied that have the same `Priority`and `Layer`
 
 You can also create your own modifying operations either with an inline function `myValue.Modify((v) => v * 1.2f + 5)` or by using a function defined elsewhere: `myValue.Modify(MyCustomOperation)`. More about custom operations explained further down.
 
-## Priority, Layer and Order
+## ![][HeaderDecorator] Priority, Layer and Order ![][HeaderDecorator]
 
 The temporal order in which Modifiers were attached to a ModifiedValue does not matter. Their interrelations are instead defined by optional `priority`, `layer` and `order` parameters:
 
@@ -192,7 +194,7 @@ Layers for talents, equipment, temporary buffs
 
 DIRTY FLAG. Changing prio, layer, order
 
-## Handling Modifiers
+## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
 TODO
 ATTACHING AND DETACHING
@@ -200,14 +202,14 @@ ACTIVE BOOL
 MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
 
-## Custom Operations
+## ![][HeaderDecorator] Custom Operations ![][HeaderDecorator]
 Setting the operation to a new function sets the modifiedvalue to dirty.
 TEMPLATE MODIFIERS (NOT YET ATTACHED TO ANY VALUE)
 CUSTOM OPERATIONS make sure pure function, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
 COMPOUND AND NONCOMPOUND
 the modifier uses either the compound or noncompound operation, whichever was set last. If needed, you can see which one is used by inquiring the `Modifier.Compound` bool.
 
-## Previewing Values
+## ![][HeaderDecorator] Previewing Values ![][HeaderDecorator]
 
 You can preview the value of a ModifiedValue by pretending to attach and/or detach modifiers, without actually affecting the object. A plethora of `PreviewValue` and `PreviewValueDetach` method versions exist for this:
 
@@ -242,7 +244,7 @@ float previewValue = Speed.PreviewValueDetach(modifierGroup2);
 
 Like in regular value calculation, a preview modifier will not have effect on the preview value if it is not Active. A preview modifier will not have effect if it already exists in the ModifiedValue. Also, naturally, pretending to detach a modifier will not have effect if that modifier isn't already contained in the ModifiedValue.
 
-## Inspector
+## ![][HeaderDecorator] Inspector ![][HeaderDecorator]
 
 TODO
 SETTINGS TO PREVIEW FINAL VALUE
@@ -250,7 +252,7 @@ SAVED VALUE VS GETTER
 
 `ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types. However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
 
-## Other Notes
+## ![][HeaderDecorator] Other Notes ![][HeaderDecorator]
 
 In cases where the context is ambiguous, implicit casting of a ModifiedValue object to its wrapped value type may not work. One such example is the switch statement, where you need to specify that you're inquiring the value directly:
 
