@@ -190,7 +190,7 @@ This is how these optional parameters affect the final value calculation:
 * If more than one Modifier have the same highest priority within the same layer, they will all have effect. Their ordering is defined by the order parameters, starting from lowest and ending with highest.
 * If multiple modifiers have the same layer, priority, and order, there is no guarante on the order they will be executed in (will probably be the same order they were attached in). This situation is against the design of this system: make sure that these situations do not happen. That's why it's handy to use pre-defined order constants for different custom operations, like in DefaultOrders.cs for out-of-the-box operations.
 
-A ModifiedValue object uses the dirty flag pattern to re-calculate its value upon inquiry only if something in its modifiers (or the base value) has changed. You can change the Modifier objects' `Priority`, `Layer` and `Order` properties after attaching them, and the ModifiedValue object will be set dirty:
+A ModifiedValue object uses the dirty flag pattern to re-calculate its value upon inquiry only if something in its modifiers (or the base value) has changed. You can change the Modifier objects' `Priority`, `Layer` and `Order` properties after attaching them. The ModifiedValue object will be set dirty and its value will be updated:
 
 ```C#
 Modifier energizedBuff = Speed.Mul(1.2f, priority : 1);
