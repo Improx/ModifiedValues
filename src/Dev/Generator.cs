@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace ModifiedValues
+namespace ModifiedValues.Dev
 {
 	public static class Generator
 	{
