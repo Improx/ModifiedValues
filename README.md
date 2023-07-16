@@ -165,7 +165,7 @@ You can also create your own modifying operations either with an inline function
 
 ## ![][HeaderDecorator] Priority, Layer and Order ![][HeaderDecorator]
 
-The temporal order in which Modifiers were attached to a ModifiedValue does not matter. Their interrelations are instead defined by optional `priority`, `layer` and `order` parameters:
+If used correctly, the temporal order in which Modifiers were attached to a ModifiedValue does not matter. Their interrelations are instead defined by optional `priority`, `layer` and `order` parameters:
 
 ```C#
 //Custom parameters
