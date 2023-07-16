@@ -121,7 +121,7 @@ ModifiedFloat Speed = 5;
 Speed.Add(1);
 Speed = 3; //Speed is now a completely new object, with a base value of 3 and the previous Add modifier removed.
 ```
-If you want to update a ModifiedValue's base value, you can update its `BaseValue` or `BaseValueGetter` function directly.
+If you want to update a ModifiedValue's base value while keeping all modifiers, you can update its `BaseValue` or `BaseValueGetter` function directly.
 
 ### :warning: Uninitialized ModifiedValue references = bad! :warning:
 ```C#
