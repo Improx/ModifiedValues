@@ -28,6 +28,7 @@ For convenience, this `Speed` object can be implicitly cast back into a float. M
 ```C#
 transform.position += Speed * Time.deltaTime;
 ```
+In rare cases where that is not possible, you can get the float value by `Speed.Value`.
 
 Let's say your character gets an Energized buff that multiplies base speed by 120%. Your character also equips rollerscates, increasing speed by 5. You apply a these multiplicative and additive modifiers like this:
 
@@ -91,7 +92,7 @@ Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
 ```
 
 ## Initialization
-You can create a new ModifiedValue object in three ways. You can create a new object with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
+You can create a new ModifiedValue object in many ways. You can create a new object with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
 
 ```C#
 ModifiedFloat Speed1 = 5;
@@ -114,7 +115,7 @@ ModifiedFloat Speed = 5;
 Speed.Add(1);
 Speed = 3; //Speed is now a completely new object, with a base value of 3 and the previous Add modifier removed.
 ```
-If you want to update a ModifiedValue's base value, you can update its `BaseValue` or `BaseValueGetter` directly.
+If you want to update a ModifiedValue's base value, you can update its `BaseValue` or `BaseValueGetter` function directly.
 
 ### Uninitialized ModifiedValue references = bad!
 ```C#
@@ -123,10 +124,6 @@ If you want to update a ModifiedValue's base value, you can update its `BaseValu
 Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object.
 
 ## Out-of-the-box Modifiers
-
-Table of different types and the modifying methods they have, each with explanation
-
-Remember that you can create your own modifying functions (read in next section)
 
 The following modifying methods are readily available for `ModifiedFloat`, `ModifiedDouble` and `ModifiedDecimal`:
 * `Set()`: Forces to this value.
@@ -160,6 +157,8 @@ The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily 
 
 If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
 
+You can also create your own modifying operations either with an inline function `myValue.Modify((v) => v * 1.2f + 5)` or by using a function defined elsewhere: `myValue.Modify(MyCustomOperation)`. More about custom operations explained further down.
+
 ## Priority, Layer and Order
 
 TODO
@@ -173,7 +172,9 @@ ATTACHING AND DETACHING
 ACTIVE BOOL
 MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
-DIRTY FLAG
+
+## Custom Operations
+DIRTY FLAG. Changing prio, layer, order or operation sets the modifiedvalue to dirty.
 TEMPLATE MODIFIERS (NOT YET ATTACHED TO ANY VALUE)
 CUSTOM OPERATIONS, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
 COMPOUND AND NONCOMPOUND
@@ -187,6 +188,8 @@ TODO
 TODO
 SETTINGS TO PREVIEW FINAL VALUE
 SAVED VALUE VS GETTER
+
+`ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types. However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
 
 ## Other Notes
 
