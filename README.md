@@ -116,15 +116,35 @@ Table of different types and the modifying methods they have, each with explanat
 
 Remember that you can create your own modifying functions (read in next section)
 
-The following modifying methods are readily available for `ModifiedFloat`, `ModifiedDouble` and `ModifiedDecimal`.
+The following modifying methods are readily available for `ModifiedFloat`, `ModifiedDouble` and `ModifiedDecimal`:
 * `Set()`: Forces to this value.
 * `AddFraction()`: Adds this fraction of the value (relative to what the value was at the beginning of the layer). Multiple modifiers of this kind stack additively.
 * `Mul()`: Multiplies the value by this amount. Multiple modifiers of this kind stack multiplicatively.
 * `Add()`: Adds this value. Can be negative.
 * `MaxCap()`: Limits value from above.
-* `MaxCapFinal()`: Limits value from above. Is automatically applied with `priority` and `layer` equaling to `int.MaxValue`.
+* `MaxCapFinal()`: Limits value from above. Is applied with priority and layer equaling to int.MaxValue.
 * `MinCap()`: Limits value from below.
-* `MinCapFinal()`: Limits value from below. Is automatically applied with `priority` and `layer` equaling to `int.MaxValue`.
+* `MinCapFinal()`: Limits value from below. Is applied with priority and layer equaling to int.MaxValue.
+
+Available for `ModifiedInt`. `ModifiedUint`, `ModifiedLong` and `ModifiedUlong`:
+* `Set()`
+* `AddMultiple()`: Adds this multiple of the value (relative to what the value was at the beginning of the layer). Multiple modifiers of this kind stack additively.
+* `Mul()`
+* `Add()`
+* `MaxCap()`
+* `MaxCapFinal()`
+* `MinCap()`
+* `MinCapFinal()`
+
+Available for `ModifiedBool`:
+* `Set()`
+* `Not()`: Applies a Not logic gate.
+* `And()`: Applies a And logic gate.
+* `Or()`: Applies a Or logic gate.
+* `Xor()`: Applies a Xor logic gate.
+* `Imply()`: Applies a Imply logic gate.
+
+The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily available.
 
 If many different modifiers are applied that have the same `Priority`and `Layer`, they will all affect the final value, and will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class.
 
