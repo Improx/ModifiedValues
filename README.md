@@ -87,12 +87,6 @@ ModifiedValue<MyType> myValue = new MyType();
 Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
 ```
 
-## Priority, Layer and Order
-
-TODO
-IMAGE for explanation
-Layers for talents, equipment, temporary buffs
-
 ## Initialization
 Implicit casting from value to ModValue to create it. Alternative to constructor. Note that it replaces the old modvalue object if there was one.
 ```C#
@@ -103,13 +97,32 @@ ModifiedFloat Speed2 = new ModifiedFloat(5);
 ModifiedFloat Speed3 = new ModifiedFloat(() => 5);
 ```
 BaseValueGetter (can be dynamic. For example it can depend on the value of another ModifiedValue. This external dependency is handled safely.)
-UpdateEveryTime
 
 ### Undeclared ModifiedValue objects = bad!
 ```C#
 [Serializedfield] private ModifiedFloat Speed; //Set this reference to a new ModifiedFloat before using it!
 ```
 Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object.
+
+## Priority, Layer and Order
+
+TODO
+IMAGE for explanation
+Layers for talents, equipment, temporary buffs
+
+## Out-of-the-box Modifiers
+
+Table of different types and the modifying methods they have, each with explanation
+
+Remember that you can create your own modifying functions (read in next section)
+
+The following modifying methods are readily available for `ModifiedFloat`, `ModifiedDouble` and `ModifiedDecimal`.
+* `Set()`: Forces to this value.
+* `AddFraction()`: Adds this fraction of the value (relative to what the value was at the beginning of the layer). Multiple modifiers of this kind stack additively.
+* `Mul()`: Multiplies the value by this amount. Multiple modifiers of this kind stack multiplicatively.
+* `Add()`: Adds this value. Can be negative.
+
+If many different modifiers are applied that have the same `Priority`and `Layer`, they will all affect the final value, and will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class.
 
 ## Handling Modifiers
 
@@ -120,7 +133,7 @@ MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
 DIRTY FLAG
 TEMPLATE MODIFIERS (NOT YET ATTACHED TO ANY VALUE)
-CUSTOM OPERATIONS, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME
+CUSTOM OPERATIONS, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
 COMPOUND AND NONCOMPOUND
 
 ## Previewing Values
