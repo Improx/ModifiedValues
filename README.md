@@ -121,6 +121,10 @@ The following modifying methods are readily available for `ModifiedFloat`, `Modi
 * `AddFraction()`: Adds this fraction of the value (relative to what the value was at the beginning of the layer). Multiple modifiers of this kind stack additively.
 * `Mul()`: Multiplies the value by this amount. Multiple modifiers of this kind stack multiplicatively.
 * `Add()`: Adds this value. Can be negative.
+* `MaxCap()`: Limits value from above.
+* `MaxCapFinal()`: Limits value from above. Is automatically applied with `priority` and `layer` equaling to `int.MaxValue`.
+* `MinCap()`: Limits value from below.
+* `MinCapFinal()`: Limits value from below. Is automatically applied with `priority` and `layer` equaling to `int.MaxValue`.
 
 If many different modifiers are applied that have the same `Priority`and `Layer`, they will all affect the final value, and will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class.
 
