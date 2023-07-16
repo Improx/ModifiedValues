@@ -282,7 +282,7 @@ If you still want to delete the base value getter function in the inspector, you
 
 ## ![][HeaderDecorator] Other Notes ![][HeaderDecorator]
 
-In cases where the context is ambiguous, implicit casting of a ModifiedValue object to its wrapped value type may not work. One such example is the switch statement, where you need to specify that you're inquiring the value directly:
+In cases where the context is ambiguous, implicit casting of a ModifiedValue object to its wrapped value type may not work. One such example is the switch statement, where you need to directly specify that you're inquiring the ModifiedValue's `Value` instead of the ModifiedValue object itself:
 
 
 ```C#
