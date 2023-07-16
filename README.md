@@ -119,7 +119,7 @@ Speed = 3; //Speed is now a completely new object, with a base value of 3 and th
 ```
 If you want to update a ModifiedValue's base value, you can update its `BaseValue` or `BaseValueGetter` function directly.
 
-### Uninitialized ModifiedValue references = bad!
+### :warning: Uninitialized ModifiedValue references = bad! :warning:
 ```C#
 [Serializedfield] private ModifiedFloat Speed; //Set this reference to a new ModifiedFloat before using it!
 ```
