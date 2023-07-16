@@ -268,10 +268,13 @@ Like was shown in the Quickstart Example section, serialized ModifiedValues are 
 
 ![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
 
-TODO
-SAVED VALUE VS GETTER
+If a ModifiedValue uses a `BaseValueGetter` function instead of a hard base value, then it make's sense that the base value cannot be directly set in the inspector, because the base value depends on whatever the getter returns at any given moment. In such a case the inspector shows that a getter is used, and presents the current base value:
 
-`ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types. However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspectorGetter.PNG "Inspector shows that Speed uses a base value getter").
+
+If you still want to delete the base value getter function in the inspector, you can click on the getter button. A hard value will be used again (defaulting to the wrapped type's default value), and can be changed in the inspector again.
+
+⚠️ `ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types.⚠️ However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
 
 ## ![][HeaderDecorator] Other Notes ![][HeaderDecorator]
 
