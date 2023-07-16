@@ -215,7 +215,7 @@ float previewValue = Speed.PreviewValue(modifierGroup1, modifierGroup2);
 float previewValue = Speed.PreviewValueDetach(modifierGroup2);
 ```
 
-Like in regular value calculation, a preview modifier will not have effect on the preview value if it is not Active. A preview modifier will not have effect if it already exists in the ModifiedValue. Also, naturally, pretending to detach a modifier will not have effect, if that modifier isn't already contained in the ModifiedValue.
+Like in regular value calculation, a preview modifier will not have effect on the preview value if it is not Active. A preview modifier will not have effect if it already exists in the ModifiedValue. Also, naturally, pretending to detach a modifier will not have effect if that modifier isn't already contained in the ModifiedValue.
 
 ## Inspector
 
