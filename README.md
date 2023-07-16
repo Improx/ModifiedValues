@@ -184,7 +184,36 @@ the modifier uses either the compound or noncompound operation, whichever was se
 
 ## Previewing Values
 
-TODO
+You can preview the value of a ModifiedValue by pretending to attach and/or detach modifiers, without actually affecting the object. A plethora of `PreviewValue` and `PreviewValueDetach` method versions exist for this:
+
+```C#
+//Pretend to attach modifier1:
+float previewValue = Speed.PreviewValue(modifier1);
+
+//Pretend to attach modifier1 and detach modifier2
+float previewValue = Speed.PreviewValue(modifier1, modifier2);
+
+//Pretend to detach modifier2
+float previewValue = Speed.PreviewValueDetach(modifier2);
+
+//Pretend to attach a collection of modifiers (modifierCol1)
+float previewValue = Speed.PreviewValue(modifierCol1);
+
+//Pretend to attach a collection of modifiers (modifierCol1) and detach modifierCol2
+float previewValue = Speed.PreviewValue(modifierCol1, modifierCol2);
+
+//Pretend to detach a collection of modifiers (modifierCol2)
+float previewValue = Speed.PreviewValueDetach(modifierCol2);
+
+//Pretend to attach a ModifierGroup modifierGroup1
+float previewValue = Speed.PreviewValue(modifierGroup1);
+
+//Pretend to attach a ModifierGroup modifierGroup1 and detach modifierGroup2
+float previewValue = Speed.PreviewValue(modifierGroup1, modifierGroup2);
+
+//Pretend to detach modifierGroup2
+float previewValue = Speed.PreviewValueDetach(modifierGroup2);
+```
 
 ## Inspector
 
