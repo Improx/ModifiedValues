@@ -161,6 +161,18 @@ You can also create your own modifying operations either with an inline function
 
 ## Priority, Layer and Order
 
+The temporal order in which Modifiers were attached to a ModifiedValue does not matter. Their interrelations are instead defined by optional `priority`, `layer` and `order` parameters:
+
+```C#
+//Custom parameters
+Speed.Mul(1.2f, priority : 3, layer : 2, order : 3);
+
+//By omitting them, priority and layer default to 0, and order defaults to the
+//operation's default order defined in DefaultOrders.cs, if using an out-of-the-box modifier:
+
+Speed.Mul(1.2f); //Priority and layer are 0, and order is DefaultOrders.Mul = 2000
+```
+
 TODO
 IMAGE for explanation
 Layers for talents, equipment, temporary buffs
