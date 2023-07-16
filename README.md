@@ -146,7 +146,7 @@ Available for `ModifiedBool`:
 
 The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily available.
 
-If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: ´Speed.Set(99f, order: 50)`.
+If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
 
 ## Handling Modifiers
 
