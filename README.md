@@ -155,7 +155,7 @@ Available for `ModifiedBool`:
 
 The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily available.
 
-If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
+If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they are presented in the lists above (from top to bottom). This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
 
 You can also create your own modifying operations either with an inline function `myValue.Modify((v) => v * 1.2f + 5)` or by using a function defined elsewhere: `myValue.Modify(MyCustomOperation)`. More about custom operations explained further down.
 
@@ -164,6 +164,8 @@ You can also create your own modifying operations either with an inline function
 TODO
 IMAGE for explanation
 Layers for talents, equipment, temporary buffs
+
+DIRTY FLAG. Changing prio, layer, order
 
 ## Handling Modifiers
 
@@ -174,10 +176,11 @@ MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
 
 ## Custom Operations
-DIRTY FLAG. Changing prio, layer, order or operation sets the modifiedvalue to dirty.
+Setting the operation to a new function sets the modifiedvalue to dirty.
 TEMPLATE MODIFIERS (NOT YET ATTACHED TO ANY VALUE)
-CUSTOM OPERATIONS, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
+CUSTOM OPERATIONS make sure pure function, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
 COMPOUND AND NONCOMPOUND
+the modifier uses either the compound or noncompound operation, whichever was set last.
 
 ## Previewing Values
 
