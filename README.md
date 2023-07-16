@@ -171,6 +171,12 @@ Speed.Mul(1.2f, priority : 3, layer : 2, order : 3);
 //operation's default order defined in DefaultOrders.cs, if using an out-of-the-box modifier:
 
 Speed.Mul(1.2f); //Priority and layer are 0, and order is DefaultOrders.Mul = 2000
+
+//If using a custom operation, order defaults to 0:
+Speed.Modify(CustomOperation); //Priority, layer and order are all 0
+
+//In custom operations we can of course too use non-default parameters, if we want to:
+Speed.Modify(CustomOperation, priority : 5, layer : 0, order : DefaultOrders.Mul - 100);
 ```
 
 TODO
