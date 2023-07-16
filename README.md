@@ -193,6 +193,8 @@ This is how these optional parameters affect the final value calculation:
 A ModifiedValue object uses the dirty flag pattern to re-calculate its value upon inquiry only if something in its modifiers (or the base value) has changed. You can change the Modifier objects' `Priority`, `Layer` and `Order` properties after attaching them. The ModifiedValue object will be set dirty and its value will be updated:
 
 ```C#
+ModifiedFloat Speed = 10;
+
 Modifier energizedBuff = Speed.Mul(1.2f, priority : 1);
 Modifier rollerScatesBuff = Speed.Add(5, priority : 0);
 
