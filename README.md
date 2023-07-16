@@ -216,13 +216,15 @@ Layers for talents, equipment, temporary buffs
 
 TODO
 ATTACHING AND DETACHING
+a modifier can exist while not being attached to anything
+template modifiers
 ACTIVE BOOL
 MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
 
 ## ![][HeaderDecorator] Custom Operations ![][HeaderDecorator]
+TODO
 Setting the operation to a new function sets the modifiedvalue to dirty.
-TEMPLATE MODIFIERS (NOT YET ATTACHED TO ANY VALUE)
 CUSTOM OPERATIONS make sure pure function, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
 COMPOUND AND NONCOMPOUND
 the modifier uses either the compound or noncompound operation, whichever was set last. If needed, you can see which one is used by inquiring the `Modifier.Compound` bool.
