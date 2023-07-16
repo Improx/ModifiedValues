@@ -25,6 +25,7 @@ public class ModifiedIntPropertyDrawer : PropertyDrawer
 				//Unity sneakily created a bad instance of it, bypassing all constructors
 				position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 				GUI.contentColor = new Color(1f, 0.77f, 0.77f);
+				position.height -= _extraTotalHeight;
 				EditorGUI.LabelField(position, "Uninitialized.");
 				GUI.contentColor = Color.white;
 				return;

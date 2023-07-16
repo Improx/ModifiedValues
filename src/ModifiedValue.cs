@@ -233,11 +233,10 @@ namespace ModifiedValues
 		private T CalculateValue(IReadOnlyList<Modifier> activeModifiers)
 		{
 			T currentValue = BaseValueGetter();
-			var activeMods = activeModifiers;
-			var layers = activeMods.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
+			var layers = activeModifiers.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
 			foreach (int layer in layers)
 			{
-				var modsInLayer = activeMods.Where(m => m.Layer == layer);
+				var modsInLayer = activeModifiers.Where(m => m.Layer == layer);
 				int highestPrio = modsInLayer.Max(m => m.Priority);
 				//Keep only Modifiers with highest prio and arrange them in Order:
 				modsInLayer = modsInLayer.Where(m => m.Priority == highestPrio).OrderBy(m => m.Order);
