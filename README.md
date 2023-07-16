@@ -125,10 +125,6 @@ Declaring a serialized ModifiedValue member variable and not assigning anything 
 
 ## Out-of-the-box Modifiers
 
-Table of different types and the modifying methods they have, each with explanation
-
-Remember that you can create your own modifying functions (read in next section)
-
 The following modifying methods are readily available for `ModifiedFloat`, `ModifiedDouble` and `ModifiedDecimal`:
 * `Set()`: Forces to this value.
 * `AddFraction()`: Adds this fraction of the value (relative to what the value was at the beginning of the layer). Multiple modifiers of this kind stack additively.
@@ -161,6 +157,8 @@ The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily 
 
 If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
 
+You can also create your own modifying operations either with an inline function `myValue.Modify((v) => v * 1.2f + 5)` or by using a function defined elsewhere: `myValue.Modify(MyCustomOperation)`. More about custom operations explained further down.
+
 ## Priority, Layer and Order
 
 TODO
@@ -174,7 +172,9 @@ ATTACHING AND DETACHING
 ACTIVE BOOL
 MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
-DIRTY FLAG
+
+## Custom Operations
+DIRTY FLAG. Changing prio, layer, order or operation sets the modifiedvalue to dirty.
 TEMPLATE MODIFIERS (NOT YET ATTACHED TO ANY VALUE)
 CUSTOM OPERATIONS, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
 COMPOUND AND NONCOMPOUND
