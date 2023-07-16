@@ -260,11 +260,11 @@ In cases where the context is ambiguous, implicit casting of a ModifiedValue obj
 ```C#
 ModifiedEnum<MyEnum> Example = MyEnum.First;
 
-switch(Example.Value)
+switch (Example.Value)
 {
-  case (MyEnum.First):
-    //Without the usage of .Value, this line would not execute
-    break;
+    case (MyEnum.First):
+        //Without the usage of .Value, this line would not execute
+        break;
 }
 ```
 
