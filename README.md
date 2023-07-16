@@ -240,3 +240,5 @@ switch(Example.Value)
     break;
 }
 ```
+
+The only things that make this a Unity library are the custom property drawers, the `[SerializeField]` attribute in ModifiedValue.cs, and the small things in the Generator.cs class. If you want to use this as a non-Unity C# library, you can easily do so by removing these Unity things.
