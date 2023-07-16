@@ -6,7 +6,11 @@ ModifiedValues is a C# library for Unity that enables modifying (numeric and oth
 
 Minimum requirement is <strong>Unity 2021.2</strong> (for C# 9 and netstandard2.1).
 
-## Quickstart Example
+This can also be quite easily used as a non-Unity C# library by removing only a few things. See the last section for more info on this.
+
+[HeaderDecorator]: https://placehold.co/15x15/00dd00/00dd00.png
+
+ ## ![][HeaderDecorator] Quickstart Example ![][HeaderDecorator]
 
 You're making a buff system for your game. Instead of having a classic float variable on your character
 
@@ -91,7 +95,7 @@ ModifiedValue<MyType> myValue = new MyType();
 Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
 ```
 
-## Initialization
+## ![][HeaderDecorator] Initialization ![][HeaderDecorator]
 You can create a new ModifiedValue object in many ways. You can create a new object with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
 
 ```C#
@@ -117,13 +121,13 @@ Speed = 3; //Speed is now a completely new object, with a base value of 3 and th
 ```
 If you want to update a ModifiedValue's base value, you can update its `BaseValue` or `BaseValueGetter` function directly.
 
-### Uninitialized ModifiedValue references = bad!
+### :warning: Uninitialized ModifiedValue references = bad! :warning:
 ```C#
 [Serializedfield] private ModifiedFloat Speed; //Set this reference to a new ModifiedFloat before using it!
 ```
 Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object.
 
-## Out-of-the-box Modifiers
+## ![][HeaderDecorator] Out-of-the-box Modifiers ![][HeaderDecorator]
 
 The following modifying methods are readily available for `ModifiedFloat`, `ModifiedDouble` and `ModifiedDecimal`:
 * `Set()`: Forces to this value.
@@ -155,17 +159,59 @@ Available for `ModifiedBool`:
 
 The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily available.
 
-If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
+If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they are presented in the lists above (from top to bottom). This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
 
 You can also create your own modifying operations either with an inline function `myValue.Modify((v) => v * 1.2f + 5)` or by using a function defined elsewhere: `myValue.Modify(MyCustomOperation)`. More about custom operations explained further down.
 
-## Priority, Layer and Order
+## ![][HeaderDecorator] Priority, Layer and Order ![][HeaderDecorator]
+
+If used correctly, the temporal order in which Modifiers were attached to a ModifiedValue does not matter. Their interrelations are instead defined by optional `priority`, `layer` and `order` parameters:
+
+```C#
+//Custom parameters
+Speed.Mul(1.2f, priority : 3, layer : 2, order : 3);
+
+//By omitting them, priority and layer default to 0, and order defaults to the
+//operation's default order defined in DefaultOrders.cs, if using an out-of-the-box modifier:
+
+Speed.Mul(1.2f); //Priority and layer are 0, and order is DefaultOrders.Mul = 2000
+
+//If using a custom operation, order defaults to 0:
+Speed.Modify(CustomOperation); //Priority, layer and order are all 0
+
+//In custom operations we can of course too use non-default parameters, if we want to:
+Speed.Modify(CustomOperation, priority : 5, layer : 0, order : DefaultOrders.Mul - 100);
+```
+
+This is how these optional parameters affect the final value calculation:
+
+* Value is calculated layer by layer, starting with the lowest and ending with the highest.
+* Within each layer, only Modifiers with the highest priority actually have effect.
+* If more than one Modifier have the same highest priority within the same layer, they will all have effect. Their ordering is defined by the order parameters, starting from lowest and ending with highest.
+* If multiple modifiers have the same layer, priority, and order, there is no guarante on the order they will be executed in (will probably be the same order they were attached in). This situation is against the design of this system: make sure that these situations do not happen. That's why it's handy to use pre-defined order constants for different custom operations, like in DefaultOrders.cs for out-of-the-box operations.
+
+A ModifiedValue object uses the dirty flag pattern to re-calculate its value upon inquiry only if something in its modifiers (or the base value) has changed. You can change the Modifier objects' `Priority`, `Layer` and `Order` properties after attaching them. The ModifiedValue object will be set dirty and its value will be updated:
+
+```C#
+ModifiedFloat Speed = 10;
+
+Modifier energizedBuff = Speed.Mul(1.2f, priority : 1);
+Modifier rollerScatesBuff = Speed.Add(5, priority : 0);
+
+Debug.Log(Speed); //Will print 12. Only the Mul modifier has effect, because it has the higher priority in the shared layer.
+
+rollerScatesBuff.Priority = 2;
+
+Debug.Log(Speed); //Will print 15 because now the Add modifier has the higher priority.
+```
 
 TODO
 IMAGE for explanation
 Layers for talents, equipment, temporary buffs
 
-## Handling Modifiers
+DIRTY FLAG. Changing prio, layer, order
+
+## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
 TODO
 ATTACHING AND DETACHING
@@ -173,17 +219,49 @@ ACTIVE BOOL
 MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
 
-## Custom Operations
-DIRTY FLAG. Changing prio, layer, order or operation sets the modifiedvalue to dirty.
+## ![][HeaderDecorator] Custom Operations ![][HeaderDecorator]
+Setting the operation to a new function sets the modifiedvalue to dirty.
 TEMPLATE MODIFIERS (NOT YET ATTACHED TO ANY VALUE)
-CUSTOM OPERATIONS, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
+CUSTOM OPERATIONS make sure pure function, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
 COMPOUND AND NONCOMPOUND
+the modifier uses either the compound or noncompound operation, whichever was set last. If needed, you can see which one is used by inquiring the `Modifier.Compound` bool.
 
-## Previewing Values
+## ![][HeaderDecorator] Previewing Values ![][HeaderDecorator]
 
-TODO
+You can preview the value of a ModifiedValue by pretending to attach and/or detach modifiers, without actually affecting the object. A plethora of `PreviewValue` and `PreviewValueDetach` method versions exist for this:
 
-## Inspector
+```C#
+//Pretend to attach modifier1:
+float previewValue = Speed.PreviewValue(modifier1);
+
+//Pretend to attach modifier1 and detach modifier2
+float previewValue = Speed.PreviewValue(modifier1, modifier2);
+
+//Pretend to detach modifier2
+float previewValue = Speed.PreviewValueDetach(modifier2);
+
+//Pretend to attach a collection of modifiers (modifierCol1)
+float previewValue = Speed.PreviewValue(modifierCol1);
+
+//Pretend to attach a collection of modifiers (modifierCol1) and detach modifierCol2
+float previewValue = Speed.PreviewValue(modifierCol1, modifierCol2);
+
+//Pretend to detach a collection of modifiers (modifierCol2)
+float previewValue = Speed.PreviewValueDetach(modifierCol2);
+
+//Pretend to attach a ModifierGroup modifierGroup1
+float previewValue = Speed.PreviewValue(modifierGroup1);
+
+//Pretend to attach a ModifierGroup modifierGroup1 and detach modifierGroup2
+float previewValue = Speed.PreviewValue(modifierGroup1, modifierGroup2);
+
+//Pretend to detach modifierGroup2
+float previewValue = Speed.PreviewValueDetach(modifierGroup2);
+```
+
+Like in regular value calculation, a preview modifier will not have effect on the preview value if it is not Active. A preview modifier will not have effect if it already exists in the ModifiedValue. Also, naturally, pretending to detach a modifier will not have effect if that modifier isn't already contained in the ModifiedValue.
+
+## ![][HeaderDecorator] Inspector ![][HeaderDecorator]
 
 TODO
 SETTINGS TO PREVIEW FINAL VALUE
@@ -191,7 +269,7 @@ SAVED VALUE VS GETTER
 
 `ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types. However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
 
-## Other Notes
+## ![][HeaderDecorator] Other Notes ![][HeaderDecorator]
 
 In cases where the context is ambiguous, implicit casting of a ModifiedValue object to its wrapped value type may not work. One such example is the switch statement, where you need to specify that you're inquiring the value directly:
 
@@ -199,10 +277,12 @@ In cases where the context is ambiguous, implicit casting of a ModifiedValue obj
 ```C#
 ModifiedEnum<MyEnum> Example = MyEnum.First;
 
-switch(Example.Value)
+switch (Example.Value)
 {
-  case (MyEnum.First):
-    //Without the usage of .Value, this line would not execute
-    break;
+    case (MyEnum.First):
+        //Without the usage of .Value, this line would not execute
+        break;
 }
 ```
+
+The only things that make this a Unity library are the custom property drawers (just delete the Editor folder), the `[SerializeField]` attribute in ModifiedValue.cs, and the small things in the Generator.cs class. If you want to use this as a non-Unity C# library, you can easily do so by removing these Unity things.
