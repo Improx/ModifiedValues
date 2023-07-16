@@ -268,7 +268,7 @@ Like in regular value calculation, a preview modifier will not have effect on th
 
 ## ![][HeaderDecorator] Inspector ![][HeaderDecorator]
 
-Like was shown in the Quickstart Example section, serialized ModifiedValues are displayed in the inspector. It's base value can be modified in the inspector at runtime. The current final value is also displayed, as long as the current setting allows it. The setting can be changed in Settings.cs by changing `ShowLatestValue`. The possible modes are `Never`, `OnlyRuntime` and `Always` (default).
+Like was shown in the Quickstart Example section, serialized ModifiedValues are displayed in the inspector. It's base value can be modified in the inspector at runtime and edit mode. The current final value is also displayed, as long as the current setting allows it. The setting can be changed in Settings.cs by changing `ShowLatestValue`. The possible modes are `Never`, `OnlyRuntime` and `Always` (default).
 
 ![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
 
@@ -276,7 +276,7 @@ If a ModifiedValue uses a `BaseValueGetter` function instead of a saved base val
 
 ![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspectorGetter.PNG "Inspector shows that Speed uses a base value getter").
 
-If you still want to delete the base value getter function in the inspector, you can click on the getter button. A saved value will be used (defaulting to the wrapped type's default value), and can be changed in the inspector again.
+If you still want to delete the base value getter function in the inspector, you can click on the getter button. A saved value will be used (defaulting to the wrapped type's default value), and can be edited in the inspector again.
 
 ⚠️ `ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types.⚠️ However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
 
