@@ -125,7 +125,9 @@ If you want to update a ModifiedValue's base value, you can update its `BaseValu
 ```C#
 [Serializedfield] private ModifiedFloat Speed; //Set this reference to a new ModifiedFloat before using it!
 ```
-Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object.
+Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object. The inspector also alerts if a ModifiedValue is uninitialized:
+
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspectorUninitialized.PNG "Uninitialized ModifiedValue in the inspector")
 
 ## ![][HeaderDecorator] Out-of-the-box Modifiers ![][HeaderDecorator]
 
@@ -185,7 +187,7 @@ Speed.Modify(CustomOperation, priority : 5, layer : 0, order : DefaultOrders.Mul
 
 This is how these optional parameters affect the final value calculation:
 
-* Value is calculated layer by layer, starting with the lowest and ending with the highest.
+* Value is calculated layer by layer, starting with the lowest and ending with the highest. Final value of a layer is fed as input into the next layer.
 * Within each layer, only Modifiers with the highest priority actually have effect.
 * If more than one Modifier have the same highest priority within the same layer, they will all have effect. Their ordering is defined by the order parameters, starting from lowest and ending with highest.
 * If multiple modifiers have the same layer, priority, and order, there is no guarante on the order they will be executed in (will probably be the same order they were attached in). This situation is against the design of this system: make sure that these situations do not happen. That's why it's handy to use pre-defined order constants for different custom operations, like in DefaultOrders.cs for out-of-the-box operations.
@@ -209,7 +211,6 @@ TODO
 IMAGE for explanation
 Layers for talents, equipment, temporary buffs
 
-DIRTY FLAG. Changing prio, layer, order
 
 ## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
@@ -263,11 +264,17 @@ Like in regular value calculation, a preview modifier will not have effect on th
 
 ## ![][HeaderDecorator] Inspector ![][HeaderDecorator]
 
-TODO
-SETTINGS TO PREVIEW FINAL VALUE
-SAVED VALUE VS GETTER
+Like was shown in the Quickstart Example section, serialized ModifiedValues are displayed in the inspector. It's base value can be modified in the inspector at runtime. The current final value is also displayed, as long as the current setting allows it. The setting can be changed in Settings.cs by changing `ShowLatestValue`. The possible modes are `Never`, `OnlyRuntime` and `Always` (default).
 
-`ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types. However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
+
+If a ModifiedValue uses a `BaseValueGetter` function instead of a hard base value, then it make's sense that the base value cannot be directly set in the inspector, because the base value depends on whatever the getter returns at any given moment. In such a case the inspector shows that a getter is used, and presents the current base value:
+
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspectorGetter.PNG "Inspector shows that Speed uses a base value getter").
+
+If you still want to delete the base value getter function in the inspector, you can click on the getter button. A hard value will be used again (defaulting to the wrapped type's default value), and can be changed in the inspector again.
+
+⚠️ `ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types.⚠️ However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
 
 ## ![][HeaderDecorator] Other Notes ![][HeaderDecorator]
 
