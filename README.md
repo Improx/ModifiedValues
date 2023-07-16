@@ -28,6 +28,7 @@ For convenience, this `Speed` object can be implicitly cast back into a float. M
 ```C#
 transform.position += Speed * Time.deltaTime;
 ```
+In rare cases where that is not possible, you can get the float value by `Speed.Value`.
 
 Let's say your character gets an Energized buff that multiplies base speed by 120%. Your character also equips rollerscates, increasing speed by 5. You apply a these multiplicative and additive modifiers like this:
 
