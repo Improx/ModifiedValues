@@ -49,7 +49,7 @@ Modifier rollerScatesBuff = Speed.Add(5);
 //After some time passes, you want to remove the Energized buff.
 energizedBuff.DetachFromAll();
 
-Debug.Log(Speed.Value); //Will print 12
+Debug.Log(Speed); //Will print 12
 ```
 
 Without this library, where `Speed` is just a normal `float`, you would have needed to do something like this:
@@ -91,27 +91,36 @@ Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
 ```
 
 ## Initialization
-Implicit casting from value to ModValue to create it. Alternative to constructor. Note that it replaces the old modvalue object if there was one.
+You can create a new ModifiedValue object in three ways. You can create a new object with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
+
 ```C#
 ModifiedFloat Speed1 = 5;
 //Is the same as:
 ModifiedFloat Speed2 = new ModifiedFloat(5);
 //Is the same as:
 ModifiedFloat Speed3 = new ModifiedFloat(() => 5);
-```
-BaseValueGetter (can be dynamic. For example it can depend on the value of another ModifiedValue. This external dependency is handled safely.)
+//Is the same as:
+ModifiedFloat Speed4 = new ModifiedFloat(ReturnFive);
 
-### Undeclared ModifiedValue objects = bad!
+private float ReturnFive()
+{
+  return 5;
+}
+```
+Note that if at a later stage, you set a ModifiedValue object to a new base value implicitly again, the reference will point to a completely new ModifiedValue object.
+
+```C#
+ModifiedFloat Speed = 5;
+Speed.Add(1);
+Speed = 3; //Speed is now a completely new object, with a base value of 3 and the previous Add modifier removed.
+```
+If you want to update a ModifiedValue's base value, you can update its `BaseValue` or `BaseValueGetter` directly.
+
+### Uninitialized ModifiedValue references = bad!
 ```C#
 [Serializedfield] private ModifiedFloat Speed; //Set this reference to a new ModifiedFloat before using it!
 ```
 Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object.
-
-## Priority, Layer and Order
-
-TODO
-IMAGE for explanation
-Layers for talents, equipment, temporary buffs
 
 ## Out-of-the-box Modifiers
 
@@ -151,6 +160,12 @@ The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily 
 
 If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they were listed above. This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
 
+## Priority, Layer and Order
+
+TODO
+IMAGE for explanation
+Layers for talents, equipment, temporary buffs
+
 ## Handling Modifiers
 
 TODO
@@ -173,4 +188,18 @@ TODO
 SETTINGS TO PREVIEW FINAL VALUE
 SAVED VALUE VS GETTER
 
+## Other Notes
 
+In cases where the context is ambiguous, implicit casting of a ModifiedValue object to its wrapped value type may not work. One such example is the switch statement, where you need to specify that you're inquiring the value directly:
+
+
+```C#
+ModifiedEnum<MyEnum> Example = MyEnum.First;
+
+switch(Example.Value)
+{
+  case (MyEnum.First):
+    //Without the usage of .Value, this line would not execute
+    break;
+}
+```
