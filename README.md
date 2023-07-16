@@ -92,7 +92,7 @@ Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
 ```
 
 ## Initialization
-You can create a new ModifiedValue object in three ways. You can create a new object with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
+You can create a new ModifiedValue object in many ways. You can create a new object with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
 
 ```C#
 ModifiedFloat Speed1 = 5;
@@ -115,7 +115,7 @@ ModifiedFloat Speed = 5;
 Speed.Add(1);
 Speed = 3; //Speed is now a completely new object, with a base value of 3 and the previous Add modifier removed.
 ```
-If you want to update a ModifiedValue's base value, you can update its `BaseValue` or `BaseValueGetter` directly.
+If you want to update a ModifiedValue's base value, you can update its `BaseValue` or `BaseValueGetter` function directly.
 
 ### Uninitialized ModifiedValue references = bad!
 ```C#
