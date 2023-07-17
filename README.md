@@ -223,10 +223,11 @@ Within each layer, only modifiers with the highest priority actually have effect
 
 |               | Priority 0    | Priority 1    |
 | ------------- | ------------- |:-------------:|
-| Layer 1 (Buffs)      | col 3 is      | right-aligned |
-| Layer 1 (Equipment)      | col 2 is      | centered      |
-| Layer 1 (Talents) | zebra stripes | are neat      |
-| Layer 1 (LevelUP) | zebra stripes | are neat      |
+| Layer 4 (Buffs)      | col 3 is      | right-aligned |
+| Layer 3 (Equipment)      | col 2 is      | centered      |
+| Layer 2 (Talents) | zebra stripes | are neat      |
+| Layer 1 (LevelUP) |  |       |
+| (**Base Value**) |
 
 ## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
 
