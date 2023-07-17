@@ -8,7 +8,7 @@ public class ModifiedDecimalPropertyDrawer : PropertyDrawer
 {
 	private ModifiedDecimal _modValue;
 	private UnityEngine.Object _targetObject;
-	private const float _extraTotalHeight = 30;
+	private const float _extraTotalHeight = 36;
 
 	// Draw the property inside the given rect
 	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
