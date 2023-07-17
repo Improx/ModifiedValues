@@ -1,0 +1,20 @@
+{
+	"name": "com.improxgames.modifiedvalues",
+	"version": "0.1.0",
+	"displayName": "ModifiedValues",
+	"description": "A powerful C# library for Unity that enables modifying (numeric and other) values while keeping track and managing the modifiers affecting them.",
+	"unity": "2021.2",
+	"documentationUrl": "https://github.com/Improx/ModifiedValues/blob/main/README.md",
+	"licensesUrl": "https://github.com/Improx/ModifiedValues/blob/main/LICENSE",
+	"keywords": [
+		"buff",
+		"modified",
+		"stats",
+		"effects",
+		"ModifiedFloat"
+	],
+	"author": {
+		"name": "Max Samarin",
+		"email": "max.samarin@improxgames.com"
+	}
+}
