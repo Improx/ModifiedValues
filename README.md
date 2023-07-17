@@ -254,15 +254,42 @@ foreach (ModifiedValue modValue in mod.GetAttachedModValues())
 }
 ```
 
-template modifiers
+Another way to create modifiers that are not attached to anything in the beginning is by utilizing an out-of-the-box modified value class's static Template methods. This is handy when the modifier's operation is one of the readily provided ones, and you want its order to match the provided DefaultORder:
 
-ACTIVE BOOL
+```C#
+Modifier<float> mod1 = ModifiedFloat.TemplateAdd(5);
+//Is the same as:
+Modifier<float> mod2 = new Modifier((v) => v + 5, DefaultOrders.Add);
+```
 
-Being Active has nothing to do with whether the modifier is attached to anything. It only means that whether the modifier should affect the value of ModifiedValues it is attached to. When a new modifier is created, it is Active by default. 
+Each Modifier also has an `Active` bool, which is true by default. If you set it to false, then it will no longer have an effect on attached ModifiedValues, while still remaining attached to them. This is just a handy way constantly needing to attach & detach modifiers if you need to turn then off and on.
 
-MODIFIERGROUPS
-ADDING ONE MODIFIER TO MULTIPLE MODVALUES
-COPYING MODIFIERS
+If you're making a Buff system, it is a common use case that a single buff would affect multiple different stats. As an example, equipping a sword item increases a Character's Damage (ModifiedFloat), JumpCount (ModifiedInt), and Speed (ModifiedFloat). Whenever you equip & unequip the sword, all of these modifiers need to be attached & detached simultaneously. Instead of keeping all Modifieirs in separate member variables or a regular collection, this library provides a handy `ModifierGroup` collection class:
+
+```C#
+public class SwordBuff()
+{
+    ModifierGroup modGroup = new();
+    Character _character;
+
+    public void SwordBuff(Character character)
+    {
+        _character = character;
+        modGroup += _character.Damage.Add(15,7f);
+        modGroup += _character.JumpCount.Add(1);
+        modGroup += _character.Speed.AddFraction(0.1f);
+    }
+
+    public void Remove()
+    {
+        //Detached all modifiers from the character, and clears the ModifierGroup:
+        modGroup.ClearAndDetach();
+    }
+
+}
+```
+
+If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is attached to anything. ModifierGroup is just a collection with the ability to do the same thing for multiple modifiers at once. You can call `modGroup.SetActive()` or `modGroup.SetInactive()` to toggle the Active status of all modifieres, `modGroup.Attach(modValue)` and `modGroup.Detach(modValue)`, and so on.
 
 ## ![][HeaderDecorator] Operation Types ![][HeaderDecorator]
 TODO
