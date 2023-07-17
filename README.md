@@ -242,10 +242,10 @@ Finally, the Buffs layer takes effect. Because the Freeze modifier has a higher 
 
 ## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
 
-A ModifiedValue uses a dirty flag pattern to only update its value if something about its modifiers or base value has changed. The value will be updated on the next time some code inquires for the value right away. However, in some situations you need to know exactly whenever a ModifiedValue became dirty, in order to inquire its new value. Instead of asking for a ModifiedValue's value every frame in case it's changed, you can use its `BecameDirty` event:
+A ModifiedValue uses a dirty flag pattern to only update its value if something about its modifiers or base value has changed. The value will be updated on the next time some code inquires for the value. However, in some situations you need to know exactly whenever a ModifiedValue became dirty, in order to inquire its new value. Instead of asking for a ModifiedValue's value every frame in case it's changed, you can use its `BecameDirty` event:
 
 ```C#
-public class HealthBar() : MonoBehaviour
+public class HealthBar : MonoBehaviour
 {
     TextMeshProUGUI _maxHealthText;
 
@@ -256,8 +256,8 @@ public class HealthBar() : MonoBehaviour
 
     public void Initialize(Character character)
     {
-        _maxHealth = character.MaxHealth;
-        _maxHealth.BecameDirty += (object, eventArgs) => UpdateText(((ModifiedFloat) object).Value);
+        //MaxHealth is a character's ModifiedFloat
+        character.MaxHealth.BecameDirty += (object, eventArgs) => UpdateText(((ModifiedFloat) object).Value);
     }
 
     private void UpdateText(float value)
