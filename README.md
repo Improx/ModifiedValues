@@ -325,7 +325,7 @@ Each Modifier also has an `Active` bool, which is true by default. If you set it
 If you're making a Buff system, it is a common use case that a single buff would affect multiple different stats. As an example, equipping a sword item increases a Character's Damage (ModifiedFloat), JumpCount (ModifiedInt), and Speed (ModifiedFloat). Whenever you equip & unequip the sword, all of these modifiers need to be attached & detached simultaneously. Instead of keeping all Modifieirs in separate member variables or a regular collection, this library provides a handy `ModifierGroup` collection class:
 
 ```C#
-public class SwordBuff()
+public class SwordBuff
 {
     ModifierGroup modGroup = new();
     Character _character;
