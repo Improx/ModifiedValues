@@ -25,7 +25,10 @@ public class ModifiedDecimalPropertyDrawer : PropertyDrawer
 				//Unity sneakily created a bad instance of it, bypassing all constructors
 				position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 				GUI.contentColor = new Color(1f, 0.77f, 0.77f);
-				position.height -= _extraTotalHeight;
+				if (Settings.ShouldShowLatestValue)
+				{
+					position.height -= _extraTotalHeight;
+				}
 				EditorGUI.LabelField(position, "Uninitialized.");
 				GUI.contentColor = Color.white;
 				return;
@@ -39,7 +42,10 @@ public class ModifiedDecimalPropertyDrawer : PropertyDrawer
 
 		EditorGUI.BeginProperty(position, label, property);
 		Rect fieldRect = position;
-		fieldRect.height -= _extraTotalHeight;
+		if (Settings.ShouldShowLatestValue)
+		{
+			fieldRect.height -= _extraTotalHeight;
+		}
 		if (property.FindPropertyRelative("_usingSavedBaseValue").boolValue)
 		{
 			//Using saved base value
@@ -58,7 +64,7 @@ public class ModifiedDecimalPropertyDrawer : PropertyDrawer
 		}
 
 		//Show current value
-		if (Settings.ShowLatestValue == ShowLatestValue.Always || (Application.isPlaying && Settings.ShowLatestValue == ShowLatestValue.OnlyRuntime))
+		if (Settings.ShouldShowLatestValue)
 		{
 			GUI.contentColor = new Color(0.68f, 0.68f, 0.68f);
 			EditorGUI.LabelField(position, "     Current value: " + _modValue.Value.ToString());
@@ -93,6 +99,6 @@ public class ModifiedDecimalPropertyDrawer : PropertyDrawer
 
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
-		return base.GetPropertyHeight(property, label) + _extraTotalHeight;
+		return base.GetPropertyHeight(property, label) + (Settings.ShouldShowLatestValue ? _extraTotalHeight : 0);
 	}
 }
