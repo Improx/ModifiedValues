@@ -223,7 +223,7 @@ Within each layer, only modifiers with the highest priority actually have effect
 
 |               |<strong>Priority 0</strong>|<strong>Priority 1</strong>|
 | ------------- | ------------- |:-------------:|
-| <strong>Layer 4 (Buffs)</strong>      | *Potion* AddFraction(0.05f) & (Blessing) Add(3) | (Freeze) Set(10) |
+| <strong>Layer 4 (Buffs)</strong>      | (Potion) AddFraction(0.05f) & (Blessing) Add(3) | (Freeze) Set(10) |
 | <strong>Layer 3 (Equipment)</strong>  | (Boots) Add(2) &  (Sword) Mul(1.03f)            |                  |
 | <strong>Layer 2 (Talents)</strong>    | AddFraction(0.1) & Add(3)                       |                  |
 | <strong>Layer 1 (LevelUP)</strong>    | Add(2*Level)                                    |                  |
