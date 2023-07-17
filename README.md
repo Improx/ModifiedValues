@@ -216,8 +216,7 @@ Layers for talents, equipment, temporary buffs
 
 ## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
-TODO
-ATTACHING AND DETACHING
+When a Modifier is attached to a ModifiedValue, it means that it affects its value. When creating modifiers with one of the readily provided methods, such as `Speed.Add(5)`, the modifier return by this method is automatically attached to Speed.
 
 It possible to create a Modifier that is not attached to anything, with a consructor. You need to use a more detailed `Modifier<Type>` class, because the construction takes a typed operation as an argument:
 
@@ -227,6 +226,10 @@ Modifier<float> mod = new Modifier((v) => v * v); //Can also set optional priori
 //Later, attaching this modifier to two different ModifiedFloats:
 Speed.Attach(mod);
 Strength.Attach(mod);
+
+//After some time passes, we want to detach the modifier only from the Speed buff
+//while keeping it on Strength:
+Speed.Detach(mod);
 ```
 As the previous example showed, it is also possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identicaly, but independent copies of a modifier, the `Copy()` method may become handy:
 
@@ -289,7 +292,7 @@ public class SwordBuff()
 }
 ```
 
-If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is attached to anything. ModifierGroup is just a collection with the ability to do the same thing for multiple modifiers at once. You can call `modGroup.SetActive()` or `modGroup.SetInactive()` to toggle the Active status of all modifieres, `modGroup.Attach(modValue)` and `modGroup.Detach(modValue)`, and so on.
+If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is attached to anything. ModifierGroup is just a collection with the ability to do the same thing for multiple modifiers at once. You can call `modGroup.SetActive()` or `modGroup.SetInactive()` to toggle the Active status of all modifieres, `modGroup.Attach(modValue)` and `modGroup.Detach(modValue)`, and so on. You add and remove modifiers from a group with the `+=` and `-=` operators.
 
 ## ![][HeaderDecorator] Operation Types ![][HeaderDecorator]
 TODO
@@ -307,6 +310,9 @@ mod.OperationCompound = (v) => v * v * v;
 ```
 
 COMPOUND AND NONCOMPOUND
+
+AddFraction is an example of a non-compound operation. 
+
 the modifier uses either the compound or noncompound operation, whichever was set last. If needed, you can see which one is used by inquiring the `Modifier.Compound` bool.
 
 EXAMPLE about changing compound to non-compound
