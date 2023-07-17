@@ -12,7 +12,11 @@ This can also be quite easily used as a non-Unity C# library by removing only a 
 
 [HeaderDecorator]: https://placehold.co/15x15/00dd00/00dd00.png
 
- ## ![][HeaderDecorator] Quickstart Example ![][HeaderDecorator]
+## ![][HeaderDecorator] Installation ![][HeaderDecorator]
+
+You can install this as a Unity Package by going to Window -> Package Manager, clicking the plus sign, "Add package from git URL" and pasting `https://github.com/Improx/ModifiedValues.git`.
+
+## ![][HeaderDecorator] Quickstart Example ![][HeaderDecorator]
 
 You're making a buff system for your game. Instead of having a classic float variable on your character
 
