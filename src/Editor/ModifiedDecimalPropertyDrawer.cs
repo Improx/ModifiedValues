@@ -25,10 +25,6 @@ public class ModifiedDecimalPropertyDrawer : PropertyDrawer
 				//Unity sneakily created a bad instance of it, bypassing all constructors
 				position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 				GUI.contentColor = new Color(1f, 0.77f, 0.77f);
-				if (Settings.ShouldShowLatestValue)
-				{
-					position.height -= _extraTotalHeight;
-				}
 				EditorGUI.LabelField(position, "Uninitialized.");
 				GUI.contentColor = Color.white;
 				return;
@@ -99,6 +95,7 @@ public class ModifiedDecimalPropertyDrawer : PropertyDrawer
 
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
-		return base.GetPropertyHeight(property, label) + (Settings.ShouldShowLatestValue ? _extraTotalHeight : 0);
+		bool initialized = _modValue is not null && _modValue.Init;
+		return base.GetPropertyHeight(property, label) + (Settings.ShouldShowLatestValue && initialized ? _extraTotalHeight : 0);
 	}
 }
