@@ -216,9 +216,9 @@ Layers for talents, equipment, temporary buffs
 
 ## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
-When a Modifier is attached to a ModifiedValue, it means that it affects its value. When creating modifiers with one of the readily provided methods, such as `Speed.Add(5)`, the modifier return by this method is automatically attached to Speed.
+When a Modifier is attached to a ModifiedValue, it means that it affects its value. When creating modifiers with one of the readily provided methods, such as `Speed.Add(5)`, the modifier returned by this method is automatically attached to Speed.
 
-It possible to create a Modifier that is not attached to anything, with a consructor. You need to use a more detailed `Modifier<Type>` class, because the construction takes a typed operation as an argument:
+It possible to create a Modifier that is not attached to anything, with a constructor. You need to use a more detailed `Modifier<Type>` class, because the construction takes a typed operation as an argument:
 
 ```C#
 Modifier<float> mod = new Modifier((v) => v * v); //Can also set optional priority, layer and order parameters
@@ -231,19 +231,19 @@ Strength.Attach(mod);
 //while keeping it on Strength:
 Speed.Detach(mod);
 ```
-As the previous example showed, it is also possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identicaly, but independent copies of a modifier, the `Copy()` method may become handy:
+As the previous example showed, it is also possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identical, but independent copies of a modifier, the `Copy()` method may become handy:
 
 ```C#
 Modifier<float> mod = new Modifier((v) => v * v);
 
-//Later, attaching this modifier to two different ModifiedFloats:
+//Later, attaching this modifier and its independent copy to two different ModifiedFloats:
 Speed.Attach(mod);
 Strength.Attach(mod.Copy());
 ```
 
 The `Copy()` method creates a new Modifier object with all properties identical to the original, except it will not be attached to anything by default.
 
-You can see all values a modifier is attached to:
+You can see all ModifiedValues a modifier is attached to:
 
 ```C#
 Modifier<float> mod = new Modifier((v) => v * v);
@@ -253,11 +253,12 @@ Strength.Attach(mod);
 
 foreach (ModifiedValue modValue in mod.GetAttachedModValues())
 {
+    //This will happen for Speed and for Strength
     Debug.Log(modValue);
 }
 ```
 
-Another way to create modifiers that are not attached to anything in the beginning is by utilizing an out-of-the-box modified value class's static Template methods. This is handy when the modifier's operation is one of the readily provided ones, and you want its order to match the provided DefaultORder:
+Another way to create modifiers that are not attached to anything in the beginning is by utilizing an out-of-the-box modified value class's static Template methods. This is handy when the modifier's operation is one of the readily provided ones, and you want its order to match the provided DefaultOrder:
 
 ```C#
 Modifier<float> mod1 = ModifiedFloat.TemplateAdd(5);
@@ -265,7 +266,7 @@ Modifier<float> mod1 = ModifiedFloat.TemplateAdd(5);
 Modifier<float> mod2 = new Modifier((v) => v + 5, DefaultOrders.Add);
 ```
 
-Each Modifier also has an `Active` bool, which is true by default. If you set it to false, then it will no longer have an effect on attached ModifiedValues, while still remaining attached to them. This is just a handy way constantly needing to attach & detach modifiers if you need to turn then off and on.
+Each Modifier also has an `Active` bool, which is true by default. If you set it to false, then it will no longer have an effect on attached ModifiedValues, while still remaining attached to them. This is just a handy way of turning modifiers off and on, instead of constantly needing to attach & detach modifiers if you need to .
 
 If you're making a Buff system, it is a common use case that a single buff would affect multiple different stats. As an example, equipping a sword item increases a Character's Damage (ModifiedFloat), JumpCount (ModifiedInt), and Speed (ModifiedFloat). Whenever you equip & unequip the sword, all of these modifiers need to be attached & detached simultaneously. Instead of keeping all Modifieirs in separate member variables or a regular collection, this library provides a handy `ModifierGroup` collection class:
 
@@ -285,7 +286,7 @@ public class SwordBuff()
 
     public void Remove()
     {
-        //Detached all modifiers from the character, and clears the ModifierGroup:
+        //Detach all modifiers from the character, and clears the ModifierGroup:
         modGroup.ClearAndDetach();
     }
 
