@@ -223,6 +223,7 @@ template modifiers
 ACTIVE BOOL
 MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
+COPYING MODIFIERS
 
 ## ![][HeaderDecorator] Custom Operations ![][HeaderDecorator]
 TODO
