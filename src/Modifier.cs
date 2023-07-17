@@ -141,5 +141,25 @@ namespace ModifiedValues
 			_compound = false;
 		}
 
+		/// <summary>
+		/// Returns a copy object of this modifier.
+		/// Everything about it will be the same, except it won't be attached to anything.
+		/// </summary>
+		/// <returns></returns>
+		public Modifier<T> Copy()
+		{
+			Modifier<T> mod;
+			if (Compound)
+			{
+				mod = new Modifier<T>(OperationCompound, Priority, Layer, Order);
+			}
+			else
+			{
+				mod = new Modifier<T>(OperationNonCompound, Priority, Layer, Order);
+			}
+			mod.Active = Active;
+			return mod; 
+		}
+
 	}
 }
