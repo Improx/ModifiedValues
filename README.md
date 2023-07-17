@@ -221,12 +221,12 @@ And then use these constants in the optional layer parameters when creating modi
 
 Within each layer, only modifiers with the highest priority actually have effect. For example, we might have a potion buff that increases speed by 5% and a blessing buff that increases speed by adding 3. However, when another player casts a freeze curse on us, it is designed to set our Speed to 10, no matter what other buffs say. In that case, the freeze curse should use a higher priority than the potion or the blessing buff.
 
-|               | Priority 0    | Priority 1    |
+|               |<strong>Priority 0</strong>|<strong>Priority 1</strong>|
 | ------------- | ------------- |:-------------:|
-| Layer 4 (Buffs)      | (Potion) AddFraction(0.05f) & (Blessing) Add(3)      | (Freeze) Set(10) |
-| Layer 3 (Equipment)      | (Boots) Add(2) &  (Sword) Mul(1.03f)    |       |
-| Layer 2 (Talents) | AddFraction(0.1) & Add(3) |      |
-| Layer 1 (LevelUP) | Add(2*Level) |       |
+| <strong>Layer 4 (Buffs)</strong>      | (Potion) AddFraction(0.05f) & (Blessing) Add(3) | (Freeze) Set(10) |
+| <strong>Layer 3 (Equipment)</strong>  | (Boots) Add(2) &  (Sword) Mul(1.03f)            |                  |
+| <strong>Layer 2 (Talents)</strong>    | AddFraction(0.1) & Add(3)                       |                  |
+| <strong>Layer 1 (LevelUP)</strong>    | Add(2*Level)                                    |                  |
 
 If our base speed value is 10, first, if our character is level 3, our speed becomes 10 + 2 * 3 = 16.
 
