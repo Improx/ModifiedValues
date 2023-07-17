@@ -98,7 +98,7 @@ Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
 ```
 
 ## ![][HeaderDecorator] Initialization ![][HeaderDecorator]
-You can create a new ModifiedValue object in many ways. You can create a new object with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
+You can create a new ModifiedValue object in many ways. You can do it with a contructor, where you pass the base value as a parameter. Implicitly setting a ModifiedValue object to a base value does the same thing. You can also call the constructor with a base value getter function parameter, in which case the base value can have external dependencies (for example, the base value can depend on the value of another ModifiedValue).
 
 ```C#
 ModifiedFloat Speed1 = 5;
@@ -218,19 +218,71 @@ Layers for talents, equipment, temporary buffs
 
 TODO
 ATTACHING AND DETACHING
-a modifier can exist while not being attached to anything
+
+It possible to create a Modifier that is not attached to anything, with a consructor. You need to use a more detailed `Modifier<Type>` class, because the construction takes a typed operation as an argument:
+
+```C#
+Modifier<float> mod = new Modifier((v) => v * v); //Can also set optional priority, layer and order parameters
+
+//Later, attaching this modifier to two different ModifiedFloats:
+Speed.Attach(mod);
+Strength.Attach(mod);
+```
+As the previous example showed, it is also possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identicaly, but independent copies of a modifier, the `Copy()` method may become handy:
+
+```C#
+Modifier<float> mod = new Modifier((v) => v * v);
+
+//Later, attaching this modifier to two different ModifiedFloats:
+Speed.Attach(mod);
+Strength.Attach(mod.Copy());
+```
+
+The `Copy()` method creates a new Modifier object with all properties identical to the original, except it will not be attached to anything by default.
+
+You can see all values a modifier is attached to:
+
+```C#
+Modifier<float> mod = new Modifier((v) => v * v);
+
+Speed.Attach(mod);
+Strength.Attach(mod);
+
+foreach (ModifiedValue modValue in mod.GetAttachedModValues())
+{
+    Debug.Log(modValue);
+}
+```
+
 template modifiers
+
 ACTIVE BOOL
+
+Being Active has nothing to do with whether the modifier is attached to anything. It only means that whether the modifier should affect the value of ModifiedValues it is attached to. When a new modifier is created, it is Active by default. 
+
 MODIFIERGROUPS
 ADDING ONE MODIFIER TO MULTIPLE MODVALUES
 COPYING MODIFIERS
 
-## ![][HeaderDecorator] Custom Operations ![][HeaderDecorator]
+## ![][HeaderDecorator] Operation Types ![][HeaderDecorator]
 TODO
 Setting the operation to a new function sets the modifiedvalue to dirty.
 CUSTOM OPERATIONS make sure pure function, IF EXTERNAL DEPENDENCIES, SET TO UPDATEEVERYTIME in constructor or later
+
+You can update the operation after the modifier has been created, in which case the modifiedvalues it is attached to become dirty. In that case it is not enought to store the modifier in a `Modifier` type reference, but it needs to be stored in a more specific generically typed `Modifier<Type>` reference, where Type is the same type as what the ModifiedValue wraps. This is because the operation of a modifier needs to know the type it is dealing with.
+
+```C#
+//Modifier that squares the value
+Modifier<float> mod = Speed.Modify((v) => v * v); 
+
+//At a later point, changing the operation to one that cubes the value:
+mod.OperationCompound = (v) => v * v * v;
+```
+
 COMPOUND AND NONCOMPOUND
 the modifier uses either the compound or noncompound operation, whichever was set last. If needed, you can see which one is used by inquiring the `Modifier.Compound` bool.
+
+EXAMPLE about changing compound to non-compound
 
 ## ![][HeaderDecorator] Previewing Values ![][HeaderDecorator]
 
