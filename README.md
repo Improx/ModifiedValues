@@ -324,7 +324,7 @@ If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is atta
 
 ## ![][HeaderDecorator] Modifier Operations ![][HeaderDecorator]
 
-As some of the previous sections already showed, in addition to the readily provided operations such as `Add` and `Mul`, you can make your modifiers use any custom operations. You can update the operation after the modifier has been created, in which case the modifiedvalues it is attached to become dirty. In that case it is not enought to store the modifier in a `Modifier` type reference, but it needs to be stored in a more specific generically typed `Modifier<Type>` reference, where Type is the same type as what the ModifiedValue wraps. This is because the operation of a modifier needs to know the type it is dealing with:
+As some of the previous sections already showed, in addition to the readily provided operations such as `Add` and `Mul`, you can make your modifiers use any custom operations. You can update the operation after the modifier has been created, in which case the ModifiedValues it is attached to become dirty. In that case it is not enought to store the modifier in a `Modifier` type reference, but it needs to be stored in a more specific generically typed `Modifier<Type>` reference, where Type is the same type as what the ModifiedValue wraps. This is because the operation of a modifier needs to know the type it is dealing with:
 
 ```C#
 //Modifier that squares the value
@@ -334,7 +334,7 @@ Modifier<float> mod = Speed.Modify((v) => v * v);
 mod.OperationCompound = (v) => v * v * v;
 ```
 
-As a general rule, operations should be pure functions and, thus not have external dependencies. That is because if these external dependencies would change, the ModifiedValue object would not know about it and would not become dirty. If you still want to use external dependencies in an operation, you can either manually track whenever an external dependency changes value and call `modifiedValue.SetDirty()` each time, or you can set `modifiedValue.UpdateEverTime = true`, so that its value would be recalculated on each inquiry, regardless if it's dirty or not. For example:
+As a general rule, operations should be pure functions, and thus, not have external dependencies. That is because if these external dependencies would change, the ModifiedValue object would not know about it and would not become dirty. If you still want to use external dependencies in an operation, you can either manually track whenever an external dependency changes value and call `modifiedValue.SetDirty()` each time, or you can set `modifiedValue.UpdateEverTime = true`, so that its value would be recalculated on each inquiry, regardless if it's dirty or not. For example:
 
 ```C#
 
@@ -343,7 +343,7 @@ Modifier<float> mod = Speed.Modify((v) => v + Time.time);
 Speed.UpdateEveryTime = true;
 ```
 
-A modifier uses either its `OperationCompound` (takes one input) operation or `OperationNonCompound`operation (takes two inputs). The difference is that if multiple modifiers have the same priority and layer, and are thus both in effect, will stack multiplicatively. Non-compound operations, on the other hand, are designed to stack additively. The second input in a non-compound operation is the value at the layer's beginning, before any other operations were applied. Out of the ready modifying methods, `AddFraction` is a non-compound operation:
+A modifier uses either its `OperationCompound` (takes one input) operation or `OperationNonCompound` operation (takes two inputs). The difference is that if multiple compound modifiers have the same priority and layer, and are thus all in effect, will stack multiplicatively. Non-compound operations, on the other hand, are designed to stack additively. The second input in a non-compound operation is the value at the layer's beginning, before any other operations were applied. Out of the ready modifying methods, `AddFraction` is a non-compound operation:
 
 ```C#
 Speed.AddFraction(0.2f);
@@ -365,12 +365,12 @@ Compared to `AddFraction`:
 
 ```C#
 ModifiedFloat Speed = 100;
-Speed.AddFraction(1.2f);
+Speed.AddFraction(0.2f);
 Debug.Log(Speed); //Will print 120
-Speed.AddFraction(1.2f);
+Speed.AddFraction(0.2f);
 Debug.Log(Speed); //Will print 140!!!
 ```
-With custom operations, whether a modifier uses a compount or a non-compound operation depends on whether the operation had one or two inputs during its creation:
+With custom operations, whether a modifier uses a compound or a non-compound operation depends on whether the operation had one or two inputs during its creation:
 
 ```C#
 //Compound operation:
@@ -378,7 +378,7 @@ Speed.Modify((prevValue) => prevValue + amount * prevValue);
 //Non-compound operation:
 Speed.Modify((prevValue, beginningValue) => prevValue + amount * beginningValue);
 ```
-You can change both `OperationCompound` and `OperationNonCompound` function variables after a modifier's creation, regardless of which one it used originally. The modifier uses whichever was set last. If needed, you can see which one is used by inquiring the `Modifier.Compound` bool.
+You can change both `OperationCompound` and `OperationNonCompound` function variables after a modifier's creation, regardless of which one it used originally. The modifier uses whichever was set last. If needed, you can see which one is currently used by inquiring the `Modifier.Compound` bool.
 
 ## ![][HeaderDecorator] Previewing Values ![][HeaderDecorator]
 
