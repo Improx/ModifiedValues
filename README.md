@@ -232,9 +232,9 @@ If our base speed value is 10, first, if our character is level 3, our speed bec
 
 Then let's take a look at our talents. We have two modifiers there, with the same priority, so they both have effect. Their order is defined by the modifier's orders. AddFraction has a smaller order, so it has effect first, adding 10% to the value, so our speed becomes 17.6. Then the other talent adds 3, to a result of 20.6.
 
-Then let's look at our equipment. Again, two modifiers both have effect because they have the same priority. Mul has a lower default order, so it happens before Add. So first, 20.6 * 1.03 => 21.218, and then 21.218 + 2 => 23.218.
+Then let's look at our equipment. We have Boots and Sword equipped. Again, two modifiers both have effect because they have the same priority. Mul has a lower default order, so it happens before Add. So first, 20.6 * 1.03 => 21.218, and then 21.218 + 2 => 23.218.
 
-Finally, the Buffs layer takes effect. Because the Freeze modifier has a higher priority than Potion or Blessing, it will be the only Buff actually having an effect. Because it is a Set operation, is simply sets the current value from 23.218 to 10. Because there are no other Buffs with priority 1, and there are no higher layers, the final value of Speed is 10.
+Finally, the Buffs layer takes effect. Because the Freeze modifier has a higher priority than Potion or Blessing, it will be the only Buff actually having an effect. Because it is a Set operation, it simply sets the current value from 23.218 to 10. Because there are no other Buffs with priority 1, and there are no higher layers, the final value of Speed is 10.
 
 ## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
 
