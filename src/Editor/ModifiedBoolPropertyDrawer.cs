@@ -1,8 +1,9 @@
 using System.Reflection;
-using ModifiedValues;
 using UnityEditor;
 using UnityEngine;
 
+namespace ModifiedValues
+{
 [CustomPropertyDrawer(typeof(ModifiedBool))]
 public class ModifiedBoolPropertyDrawer : PropertyDrawer
 {
@@ -98,4 +99,5 @@ public class ModifiedBoolPropertyDrawer : PropertyDrawer
 		bool initialized = _modValue is not null && _modValue.Init;
 		return base.GetPropertyHeight(property, label) + (Settings.ShouldShowLatestValue && initialized ? _extraTotalHeight : 0);
 	}
+}
 }
