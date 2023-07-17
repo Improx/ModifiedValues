@@ -209,9 +209,24 @@ rollerScatesBuff.Priority = 2;
 Debug.Log(Speed); //Will print 15 because now the Add modifier has the higher priority.
 ```
 
-TODO
-IMAGE for explanation
-Layers for talents, equipment, temporary buffs
+Let us elaborate on how priority, layer, and order work with a concrete example. You're making an RPG game where the character's Speed value is modified by many different kinds of effects. Starting from more permanent and ending with less permanent effect types, these are: 1) Level-up Bonuses, 2) Talent Choices, 3) Worn Equipment and 4) Temporary Buffs (such as potions). For instance, the effects of all temporary buffs are calculated after all Worn Equipment effects are calculated. In other words, the output Speed value calculated at the end of Worn Equipment effects serves as input for the Temporary Buffs effects. It makes sense to design your effect system with these four different layers.
+
+```C#
+const int LayerLevelUp = 1;
+const int LayerTalents = 2;
+const int LayerEquipment = 3;
+const int LayerBuffs = 4;
+```
+And then use these constants in the optional layer parameters when creating modifiers.
+
+Within each layer, only modifiers with the highest priority actually have effect. For example, we might have a potion buff that increases speed by 5% and a blessing buff that increases speed by adding 3. However, when another player casts a freeze curse on us, it is designed to set our Speed to 10, no matter what other buffs say. In that case, the freeze curse should use a higher priority than the potion or the blessing buff.
+
+|               | Priority 0    | Priority 1    |
+| ------------- | ------------- |:-------------:|
+| Layer 1 (Buffs)      | col 3 is      | right-aligned |
+| Layer 1 (Equipment)      | col 2 is      | centered      |
+| Layer 1 (Talents) | zebra stripes | are neat      |
+| Layer 1 (LevelUP) | zebra stripes | are neat      |
 
 ## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
 
