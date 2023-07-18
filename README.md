@@ -275,7 +275,7 @@ When a Modifier is attached to a ModifiedValue, it means that it affects its val
 It possible to create a Modifier that is not attached to anything, with a constructor. You need to use a more detailed `Modifier<Type>` class, because the construction takes a typed operation as an argument:
 
 ```C#
-Modifier<float> mod = new Modifier((v) => v * v); //Can also set optional priority, layer and order parameters
+Modifier<float> mod = new Modifier<float>((v) => v * v); //Can also set optional priority, layer and order parameters
 
 //Later, attaching this modifier to two different ModifiedFloats:
 Speed.Attach(mod);
@@ -328,14 +328,12 @@ If you're making a Buff system, it is a common use case that a single buff would
 public class SwordBuff
 {
     ModifierGroup modGroup = new();
-    Character _character;
 
     public void SwordBuff(Character character)
     {
-        _character = character;
-        modGroup += _character.Damage.Add(15,7f);
-        modGroup += _character.JumpCount.Add(1);
-        modGroup += _character.Speed.AddFraction(0.1f);
+        modGroup += character.Damage.Add(15,7f);
+        modGroup += character.JumpCount.Add(1);
+        modGroup += character.Speed.AddFraction(0.1f);
     }
 
     public void Remove()
@@ -370,7 +368,7 @@ Modifier<float> mod = Speed.Modify((v) => v + Time.time);
 Speed.UpdateEveryTime = true;
 ```
 
-A modifier uses either its `OperationCompound` (takes one input) operation or `OperationNonCompound` operation (takes two inputs). The difference is that if multiple compound modifiers have the same priority and layer, and are thus all in effect, will stack multiplicatively. Non-compound operations, on the other hand, are designed to stack additively. The second input in a non-compound operation is the value at the layer's beginning, before any other operations were applied. Out of the ready modifying methods, `AddFraction` is a non-compound operation:
+A modifier uses either its `OperationCompound` (takes one input) operation or `OperationNonCompound` operation (takes two inputs). The difference is that if multiple compound modifiers have the same priority and layer, and are thus all in effect, they will stack multiplicatively. Non-compound operations, on the other hand, are designed to stack additively. The second input in a non-compound operation is the value at the layer's beginning, before any other operations were applied. Out of the ready modifying methods, `AddFraction` is a non-compound operation:
 
 ```C#
 Speed.AddFraction(0.2f);
@@ -378,7 +376,7 @@ Speed.AddFraction(0.2f);
 Speed.Modify((prevValue, beginningValue) => prevValue + amount * beginningValue, order : DefaultOrders.AddFraction);
 ```
 
-The difference becomes apparent when multiple operations stack. As an example, here's how `Mul` stacks (it is a compound operation):
+The difference becomes apparent when multiple operations stack. As an example, here's how `Mul` stacks (compound operation):
 
 ```C#
 ModifiedFloat Speed = 100;
@@ -388,7 +386,7 @@ Speed.Mul(1.2f);
 Debug.Log(Speed); //Will print 144!!!
 ```
 
-Compared to `AddFraction`:
+Compared to `AddFraction` (non-compound operation):
 
 ```C#
 ModifiedFloat Speed = 100;
@@ -472,4 +470,4 @@ switch (Example.Value)
 }
 ```
 
-* The only things that make this a Unity library are the custom property drawers (just delete the Editor folder), the `[SerializeField]` attribute in ModifiedValue.cs, and the small things in the Generator.cs class. If you want to use this as a non-Unity C# library, you can easily do so by removing these Unity things.
+* With a few changes this library can also be used as a normal C# library without Unity. The only things that make this a Unity library are the custom property drawers (just delete the Editor folder), the `[SerializeField]` attribute in ModifiedValue.cs, and the small things in the Generator.cs class.
