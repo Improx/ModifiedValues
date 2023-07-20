@@ -247,7 +247,7 @@ Then let's take a look at our talents. We have two modifiers there, with the sam
 
 Then let's look at our equipment. We have Boots and Sword equipped. Again, two modifiers both have effect because they have the same priority. Mul has a lower default order, so it happens before Add. So first, 20.6 * 1.03 => 21.218, and then 21.218 + 2 => 23.218.
 
-Finally, the Buffs layer takes effect. Because the Control modifier has a higher priority than Potion or Blessing, it will be the only Buff actually having an effect. Because it is a Set operation, it simply sets the current value from 23.218 to 8. Because there are no other Buffs with priority 1, and there are no higher layers, the final value of Speed is 8.
+Finally, the Buffs layer takes effect. Because the Control modifier has a higher priority than Potion and Blessing, it will be the only Buff actually having an effect. Because it is a Set operation, it simply sets the current value from 23.218 to 8. Because there are no other Buffs with priority 1, and there are no higher layers, the final value of Speed is 8.
 
 ## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
 
