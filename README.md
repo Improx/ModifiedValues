@@ -408,7 +408,6 @@ You can change both `OperationCompound` and `OperationNonCompound` function vari
 In a non-compound operation, it may not always suit your needs that the operation's second argument is the value at the beginning of the layer. In some use cases, you might want to do an operation with respect to the unmodified BaseValue. In that case you can create a compound operation that has an external (but safe) dependency `BaseValue`. Here's an example of "AddFraction" like operation, but that uses BaseValue instead of value at the beginnig of the layer:
 
 ```C#
-//Compound operation:
 Speed.Modify((prevValue) => prevValue + amount * Speed.BaseValue);
 ```
 
