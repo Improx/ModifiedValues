@@ -453,31 +453,31 @@ A plethora of `PreviewValue` and `PreviewValueDetach` method versions exist for 
 
 ```C#
 //Pretend to attach modifier1:
-float previewValue = Speed.PreviewValue(modifier1);
+float previewValue1 = Speed.PreviewValue(modifier1);
 
 //Pretend to attach modifier1 and detach modifier2
-float previewValue = Speed.PreviewValue(modifier1, modifier2);
+float previewValue2 = Speed.PreviewValue(modifier1, modifier2);
 
 //Pretend to detach modifier2
-float previewValue = Speed.PreviewValueDetach(modifier2);
+float previewValue3 = Speed.PreviewValueDetach(modifier2);
 
 //Pretend to attach a collection of modifiers (modifierCol1)
-float previewValue = Speed.PreviewValue(modifierCol1);
+float previewValue4 = Speed.PreviewValue(modifierCol1);
 
 //Pretend to attach a collection of modifiers (modifierCol1) and detach collection modifierCol2
-float previewValue = Speed.PreviewValue(modifierCol1, modifierCol2);
+float previewValue5 = Speed.PreviewValue(modifierCol1, modifierCol2);
 
 //Pretend to detach a collection of modifiers (modifierCol2)
-float previewValue = Speed.PreviewValueDetach(modifierCol2);
+float previewValue6 = Speed.PreviewValueDetach(modifierCol2);
 
 //Pretend to attach a ModifierGroup modifierGroup1
-float previewValue = Speed.PreviewValue(modifierGroup1);
+float previewValue7 = Speed.PreviewValue(modifierGroup1);
 
 //Pretend to attach a ModifierGroup modifierGroup1 and detach modifierGroup2
-float previewValue = Speed.PreviewValue(modifierGroup1, modifierGroup2);
+float previewValue8 = Speed.PreviewValue(modifierGroup1, modifierGroup2);
 
 //Pretend to detach modifierGroup2
-float previewValue = Speed.PreviewValueDetach(modifierGroup2);
+float previewValue9 = Speed.PreviewValueDetach(modifierGroup2);
 ```
 
 Like in regular value calculation, a preview modifier will not have effect on the preview value if it is not Active. A preview modifier will not have effect if it already exists in the ModifiedValue. Also, naturally, pretending to detach a modifier will not have effect if that modifier isn't already contained in the ModifiedValue.
