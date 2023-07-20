@@ -434,7 +434,7 @@ float previewValue = Speed.PreviewValueDetach(modifier2);
 //Pretend to attach a collection of modifiers (modifierCol1)
 float previewValue = Speed.PreviewValue(modifierCol1);
 
-//Pretend to attach a collection of modifiers (modifierCol1) and detach modifierCol2
+//Pretend to attach a collection of modifiers (modifierCol1) and detach collection modifierCol2
 float previewValue = Speed.PreviewValue(modifierCol1, modifierCol2);
 
 //Pretend to detach a collection of modifiers (modifierCol2)
