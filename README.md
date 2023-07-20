@@ -401,7 +401,7 @@ With custom operations, whether a modifier uses a compound or a non-compound ope
 //Compound operation:
 Speed.Modify((prevValue) => prevValue + amount * prevValue);
 //Non-compound operation:
-Speed.Modify((prevValue, beginningValue) => prevValue + amount * beginningValue);
+Speed.Modify((prevValue, layerBeginningValue) => prevValue + amount * layerBeginningValue);
 ```
 You can change both `OperationCompound` and `OperationNonCompound` function variables after a modifier's creation, regardless of which one it used originally. The modifier uses whichever was set last. If needed, you can see which one is currently used by inquiring the `Modifier.Compound` bool.
 
