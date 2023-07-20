@@ -281,7 +281,7 @@ public class Character
 		//Initialization
 		Speed = 10;
 		AttackSpeed = new ModifiedFloat(() => Speed);
-		Speed.BecameDirty += (sender, eventArgs) => Speed.SetDirty();
+		Speed.BecameDirty += (sender, eventArgs) => AttackSpeed.SetDirty();
 	}
 }
 ```
