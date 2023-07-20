@@ -287,7 +287,6 @@ public class Character
 
 Now a UI element can subscribe to `AttackSpeed.BecameDirty` to be able to react whenever AttackSpeed's final value has changed, even if that change was due to its dependency's (Speed's) final value change.
 
-
 ```
 
 ## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
