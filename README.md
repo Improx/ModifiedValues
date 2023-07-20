@@ -272,7 +272,7 @@ public class HealthBar : MonoBehaviour
 
 When a Modifier is attached to a ModifiedValue, it means that it affects its value. When creating modifiers with one of the readily provided methods, such as `Speed.Add(5)`, the modifier returned by this method is automatically attached to Speed.
 
-It possible to create a Modifier that is not attached to anything, with a constructor. You need to use a more detailed `Modifier<Type>` class, because the construction takes a typed operation as an argument:
+It's possible to create a Modifier that is not attached to anything, with a constructor. You need to use a more detailed `Modifier<Type>` class, because the constructor takes a typed operation as an argument:
 
 ```C#
 Modifier<float> mod = new Modifier<float>((v) => v * v); //Can also set optional priority, layer and order parameters
@@ -285,7 +285,7 @@ Strength.Attach(mod);
 //while keeping it on Strength:
 Speed.Detach(mod);
 ```
-As the previous example showed, it is also possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identical, but independent copies of a modifier, the `Copy()` method may become handy:
+As the previous example showed, it is also possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identical, but independent copies of a modifier, the `Copy()` method can be used:
 
 ```C#
 Modifier<float> mod = new Modifier((v) => v * v);
@@ -317,12 +317,12 @@ Another way to create modifiers that are not attached to anything in the beginni
 ```C#
 Modifier<float> mod1 = ModifiedFloat.TemplateAdd(5);
 //Is the same as:
-Modifier<float> mod2 = new Modifier((v) => v + 5, DefaultOrders.Add);
+Modifier<float> mod2 = new Modifier((v) => v + 5, order : DefaultOrders.Add);
 ```
 
-Each Modifier also has an `Active` bool, which is true by default. If you set it to false, then it will no longer have an effect on attached ModifiedValues, while still remaining attached to them. This is just a handy way of turning modifiers off and on, instead of constantly needing to attach & detach modifiers if you need to .
+Each Modifier also has an `Active` bool, which is true by default. If you set it to false, then it will no longer have an effect on attached ModifiedValues, while still remaining attached to them. This is just a handy way of turning modifiers off and on, instead of constantly needing to attach & detach modifiers.
 
-If you're making a Buff system, it is a common use case that a single buff would affect multiple different stats. As an example, equipping a sword item increases a Character's Damage (ModifiedFloat), JumpCount (ModifiedInt), and Speed (ModifiedFloat). Whenever you equip & unequip the sword, all of these modifiers need to be attached & detached simultaneously. Instead of keeping all Modifieirs in separate member variables or a regular collection, this library provides a handy `ModifierGroup` collection class:
+If you're making a buff system, it is a common use case that a single buff would affect multiple different stats. As an example, equipping a sword item increases a Character's Damage (ModifiedFloat), JumpCount (ModifiedInt), and Speed (ModifiedFloat). Whenever you equip & unequip the sword, all of these modifiers need to be attached & detached simultaneously. Instead of keeping all Modifieirs in separate member variables or a regular collection, this library provides a handy `ModifierGroup` collection class:
 
 ```C#
 public class SwordBuff
@@ -349,7 +349,7 @@ If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is atta
 
 ## ![][HeaderDecorator] Modifier Operations ![][HeaderDecorator]
 
-As some of the previous sections already showed, in addition to the readily provided operations such as `Add` and `Mul`, you can make your modifiers use any custom operations. You can update the operation after the modifier has been created, in which case the ModifiedValues it is attached to become dirty. In that case it is not enought to store the modifier in a `Modifier` type reference, but it needs to be stored in a more specific generically typed `Modifier<Type>` reference, where Type is the same type as what the ModifiedValue wraps. This is because the operation of a modifier needs to know the type it is dealing with:
+As some of the previous sections already showed, in addition to the readily provided operations such as `Add` and `Mul`, you can make your modifiers use any custom operations. You can update the operation after the modifier has been created, in which case the ModifiedValues it is attached to become dirty. In that case it is not enought to store the modifier in a `Modifier` type reference, but it needs to be stored (or cast to) in a more specific generically typed `Modifier<Type>` reference, where Type is the same type as what the ModifiedValue wraps. This is because the operation of a modifier needs to know the type it is dealing with:
 
 ```C#
 //Modifier that squares the value
@@ -364,11 +364,11 @@ As a general rule, operations should be pure functions, and thus, not have exter
 ```C#
 
 Modifier<float> mod = Speed.Modify((v) => v + Time.time);
-//Time.time is an external dependency that changes each frame, so we need to do the following:
+//Time.time is an external dependency that changes each frame, so we do the following:
 Speed.UpdateEveryTime = true;
 ```
 
-A modifier uses either its `OperationCompound` (takes one input) operation or `OperationNonCompound` operation (takes two inputs). The difference is that if multiple compound modifiers have the same priority and layer, and are thus all in effect, they will stack multiplicatively. Non-compound operations, on the other hand, are designed to stack additively. The second input in a non-compound operation is the value at the layer's beginning, before any other operations were applied. Out of the ready modifying methods, `AddFraction` is a non-compound operation:
+A modifier uses either its `OperationCompound` (takes one input) operation or `OperationNonCompound` operation (takes two inputs). The difference is that if multiple compound modifiers have the same priority and layer, and are thus all in effect, they will stack multiplicatively. Non-compound operations, on the other hand, are designed to stack additively. The second input in a non-compound operation is the value at the layer's beginning, before any other operations were applied on this layer. Out of the ready modifying methods, `AddFraction` is a non-compound operation:
 
 ```C#
 Speed.AddFraction(0.2f);
