@@ -413,6 +413,8 @@ Speed.Modify((prevValue) => prevValue + amount * Speed.BaseValue);
 
 The `Speed.BaseValue` in this context is not used as a hardcoded value at the moment of the modifier's creation, but is instead evaluated each time the operation is called. This means that if you override Speed's `BaseValue` at some later point to another value, this modifier will keep working correctly, using the updated base value.
 
+The small downside to this trick is that the operation is officially "compound" (because it uses one input), even though your custom operation stacks additively instead of multiplicatively. Regardless, this is an approach that works.
+
 ## ![][HeaderDecorator] Previewing Values ![][HeaderDecorator]
 
 You can preview the value of a ModifiedValue by pretending to attach and/or detach modifiers, without actually affecting the object. A plethora of `PreviewValue` and `PreviewValueDetach` method versions exist for this:
