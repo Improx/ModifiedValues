@@ -239,8 +239,9 @@ Within each layer, only modifiers with the highest priority actually have effect
 | <strong>Layer 3 (Equipment)</strong>  | (Boots) Add(2) &  (Sword) Mul(1.03f)            |                  |
 | <strong>Layer 2 (Talents)</strong>    | AddFraction(0.1) & Add(3)                       |                  |
 | <strong>Layer 1 (LevelUP)</strong>    | Add(2*Level)                                    |                  |
+| <strong>Base Value = 10</strong>    |
 
-If our base speed value is 10, first, if our character is level 3, our speed becomes 10 + 2 * 3 = 16.
+Let's say our base speed value is 10. First, the LevelUP bonuses have effect. As an example, if our character's level 3, our speed becomes 10 + 2 * 3 = 16.
 
 Then let's take a look at our talents. We have two modifiers there, with the same priority, so they both have effect. Their order is defined by the modifier's orders. AddFraction has a smaller order, so it has effect first, adding 10% to the value, so our speed becomes 17.6. Then the other talent adds 3, to a result of 20.6.
 
