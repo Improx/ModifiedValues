@@ -454,7 +454,7 @@ Like in regular value calculation, a preview modifier will not have effect on th
 
 ## ![][HeaderDecorator] Inspector ![][HeaderDecorator]
 
-Like was shown in the Quickstart Example section, serialized ModifiedValues are displayed in the inspector. It's base value can be modified in the inspector at runtime and edit mode. The current final value is also displayed, as long as the current setting allows it. The setting can be changed in Settings.cs by changing `ShowLatestValue`. The possible modes are `Never`, `OnlyRuntime` and `Always` (default).
+Like was shown in the Quickstart Example section, serialized ModifiedValues are displayed in the inspector. Its base value can be modified in the inspector at runtime and edit mode. The current final value is also displayed, as long as the current setting allows it. The setting can be changed in Settings.cs by changing `ShowLatestValue`. The possible modes are `Never`, `OnlyRuntime` and `Always` (default).
 
 ![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
 
