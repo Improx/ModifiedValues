@@ -257,7 +257,7 @@ public class HealthBar : MonoBehaviour
     public void Initialize(Character character)
     {
         //MaxHealth is a character's ModifiedFloat
-        character.MaxHealth.BecameDirty += (object, eventArgs) => UpdateText(((ModifiedFloat) object).Value);
+        character.MaxHealth.BecameDirty += (sender, eventArgs) => UpdateText(((ModifiedFloat) sender).Value);
     }
 
     private void UpdateText(float value)
