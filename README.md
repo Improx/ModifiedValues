@@ -249,6 +249,8 @@ Then let's look at our equipment. We have Boots and Sword equipped. Again, two m
 
 Finally, the Buffs layer takes effect. Because the Control modifier has a higher priority than Potion and Blessing, it will be the only Buff actually having an effect. Because it is a Set operation, it simply sets the current value from 23.218 to 8. Because there are no other Buffs with priority 1, and there are no higher layers, the final value of Speed is 8.
 
+If the Control buff were detached, then the Potion and Blessing buffs would have effect.
+
 ## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
 
 A ModifiedValue uses a dirty flag pattern to only update its value if something about its modifiers or base value has changed. The value will be updated on the next time some code inquires for the value. However, in some situations you need to know exactly whenever a ModifiedValue became dirty, in order to inquire its new value. Instead of asking for a ModifiedValue's value every frame in case it's changed, you can use its `BecameDirty` event:
