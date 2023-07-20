@@ -23,15 +23,15 @@ Make sure to use the `ModifiedValues` namespace.
 You're making a buff system for your game. Instead of having a classic float variable on your character
 
 ```C#
-float Speed = 10;
+public float Speed = 10;
 ```
 
 You can create a Modified version of it:
 
 ```C#
-ModifiedFloat Speed = 10;
+public ModifiedFloat Speed = 10;
 ```
-If the field is public or serialized, it will also appear in the inspector:
+If the field is public or private serialized, it will also appear in the inspector:
 
 ![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector1.PNG "ModifiedValue Speed visible in the inspector")
 
