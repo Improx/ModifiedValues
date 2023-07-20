@@ -373,7 +373,7 @@ A modifier uses either its `OperationCompound` (takes one input) operation or `O
 ```C#
 Speed.AddFraction(0.2f);
 //Is the same as:
-Speed.Modify((prevValue, layerBeginningValue) => prevValue + amount * layerBeginningValue, order : DefaultOrders.AddFraction);
+Speed.Modify((prevValue, layerBeginningValue) => prevValue + 0.2f * layerBeginningValue, order : DefaultOrders.AddFraction);
 ```
 
 The difference becomes apparent when multiple operations stack. As an example, here's how `Mul` stacks (compound operation):
