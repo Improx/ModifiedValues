@@ -18,6 +18,8 @@ You can install this as a Unity Package by going to Window -> Package Manager, c
 
 ## ![][HeaderDecorator] Quickstart Example ![][HeaderDecorator]
 
+Make sure to use the `ModifiedValues` namespace.
+
 You're making a buff system for your game. Instead of having a classic float variable on your character
 
 ```C#
