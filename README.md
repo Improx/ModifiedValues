@@ -417,7 +417,9 @@ The small downside to this trick is that the operation is officially "compound" 
 
 ## ![][HeaderDecorator] Previewing Values ![][HeaderDecorator]
 
-You can preview the value of a ModifiedValue by pretending to attach and/or detach modifiers, without actually affecting the object. A plethora of `PreviewValue` and `PreviewValueDetach` method versions exist for this:
+You can preview the value of a ModifiedValue by pretending to attach and/or detach modifiers, without actually affecting the object. A common use case is in an RPG game, where, before equipping an item, you want to preview its effects on your stats in a tooltip.
+
+A plethora of `PreviewValue` and `PreviewValueDetach` method versions exist for this purpose:
 
 ```C#
 //Pretend to attach modifier1:
