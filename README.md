@@ -268,6 +268,28 @@ public class HealthBar : MonoBehaviour
 }
 ```
 
+If a ModifiedValue's base value depends on another ModifiedValue's final value, then whenever the dependency's final value changes, the depending ModifiedValue will not become dirty, even though its value would be recalculated correctly upon inquiry (upon each inquiry of `Value`, the ModifiedValue checks whether the current base value is different from the last time it was inquired, and if it is, then it sets itself dirty and recalculates the final value). However, without an explicit inquiry of the depending ModifiedValue's `Value`, the UI would not know that the base value (and the final value) has changed. In such a situation, we should set the depending ModifiedValue dirty whenever the dependency ModifiedValue has become dirty. As an example, `AttackSpeed` depends on `Speed`, and we can set up the dirty-setting chain like this:
+
+```C#
+public class Character
+{
+	public ModifiedFloat Speed;
+	public ModifiedFloat AttackSpeed;
+
+	public Character()
+	{
+		//Initialization
+		Speed = 10;
+		AttackSpeed = new ModifiedFloat(() => Speed);
+		Speed.BecameDirty += (sender, eventArgs) => Speed.SetDirty();
+	}
+}
+
+Now a UI element can subscribe to `AttackSpeed.BecameDirty` to be able to react whenever AttackSpeed's final value has changed, even if that change was due to its dependency's (Speed's) final value change.
+
+
+```
+
 ## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
 When a Modifier is attached to a ModifiedValue, it means that it affects its value. When creating modifiers with one of the readily provided methods, such as `Speed.Add(5)`, the modifier returned by this method is automatically attached to Speed.
