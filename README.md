@@ -405,7 +405,7 @@ Speed.Modify((prevValue, beginningValue) => prevValue + amount * beginningValue)
 ```
 You can change both `OperationCompound` and `OperationNonCompound` function variables after a modifier's creation, regardless of which one it used originally. The modifier uses whichever was set last. If needed, you can see which one is currently used by inquiring the `Modifier.Compound` bool.
 
-In a non-compound operation, it may not always suit your needs that the operation's second argument is the value at the beginning of the layers. In some use cases, you might want to do an operation with respect to the BaseValue. In that case you can create a compound operation that has an external (but safe) dependency `BaseValue`. Here's an example of "AddFraction" like operation, but that uses BaseValue instead of value at the beginnig of the layer:
+In a non-compound operation, it may not always suit your needs that the operation's second argument is the value at the beginning of the layer. In some use cases, you might want to do an operation with respect to the unmodified BaseValue. In that case you can create a compound operation that has an external (but safe) dependency `BaseValue`. Here's an example of "AddFraction" like operation, but that uses BaseValue instead of value at the beginnig of the layer:
 
 ```C#
 //Compound operation:
