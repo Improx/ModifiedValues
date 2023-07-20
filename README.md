@@ -231,11 +231,11 @@ const int LayerBuffs = 4;
 ```
 And then use these constants in the optional layer parameters when creating modifiers.
 
-Within each layer, only modifiers with the highest priority actually have effect. For example, we might have a potion buff that increases speed by 5% and a blessing buff that increases speed by adding 3, both with Prioroity 0. However, when another player casts a Control curse on us, it is designed to set our Speed to 10, no matter what other less-important effects say. In that case, the Control curse should use a higher priority (for example Priority 1) than the potion or the blessing buff.
+Within each layer, only modifiers with the highest priority actually have effect. For example, we might have a potion buff that increases speed by 5% and a blessing buff that increases speed by adding 3, both with Prioroity 0. However, when another player casts a Control curse on us, it is designed to set our Speed to 8, no matter what other less-important effects say. In that case, the Control curse should use a higher priority (for example Priority 1) than the potion and the blessing buff.
 
 |               |<strong>Priority 0</strong>|<strong>Priority 1</strong>|
 | ------------- | ------------- |:-------------:|
-| <strong>Layer 4 (Buffs)</strong>      | (Potion) AddFraction(0.05f) & (Blessing) Add(3) | (Control) Set(10) |
+| <strong>Layer 4 (Buffs)</strong>      | (Potion) AddFraction(0.05f) & (Blessing) Add(3) | (Control) Set(8) |
 | <strong>Layer 3 (Equipment)</strong>  | (Boots) Add(2) &  (Sword) Mul(1.03f)            |                  |
 | <strong>Layer 2 (Talents)</strong>    | AddFraction(0.1) & Add(3)                       |                  |
 | <strong>Layer 1 (LevelUP)</strong>    | Add(2*Level)                                    |                  |
@@ -246,7 +246,7 @@ Then let's take a look at our talents. We have two modifiers there, with the sam
 
 Then let's look at our equipment. We have Boots and Sword equipped. Again, two modifiers both have effect because they have the same priority. Mul has a lower default order, so it happens before Add. So first, 20.6 * 1.03 => 21.218, and then 21.218 + 2 => 23.218.
 
-Finally, the Buffs layer takes effect. Because the Control modifier has a higher priority than Potion or Blessing, it will be the only Buff actually having an effect. Because it is a Set operation, it simply sets the current value from 23.218 to 10. Because there are no other Buffs with priority 1, and there are no higher layers, the final value of Speed is 10.
+Finally, the Buffs layer takes effect. Because the Control modifier has a higher priority than Potion or Blessing, it will be the only Buff actually having an effect. Because it is a Set operation, it simply sets the current value from 23.218 to 8. Because there are no other Buffs with priority 1, and there are no higher layers, the final value of Speed is 8.
 
 ## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
 
