@@ -319,7 +319,7 @@ Strength.Attach(mod);
 //while keeping it on Strength:
 Speed.Detach(mod);
 ```
-As the previous example showed, it is also possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identical, but independent copies of a modifier, the `Copy()` method can be used:
+As the previous example showed, it is possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identical, but independent copies of a modifier, the `Copy()` method can be used:
 
 ```C#
 Modifier<float> mod = new Modifier((v) => v * v);
