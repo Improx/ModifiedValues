@@ -1,11 +1,12 @@
 {
-    "name": "ModifiedValues.Dev",
+    "name": "ImproxGames.ModifiedValues.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:d75b5f1e1173ec740a8a97b9d9ca36c3",
-        "GUID:69051819dace22444affbf06a8d1185a"
+        "GUID:d75b5f1e1173ec740a8a97b9d9ca36c3"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
