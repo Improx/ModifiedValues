@@ -35,10 +35,10 @@ namespace ModifiedValues.Dev
 				"Double"
 			};
 
-			string sourceFile = "Assets/ModifiedValues/src/ModifiedFloat.cs";
+			string sourceFile = "Assets/ModifiedValues/Runtime/ModifiedFloat.cs";
 			foreach (string type in types)
 			{
-				string destinationFile = $"Assets/ModifiedValues/src//Modified{type}.cs";
+				string destinationFile = $"Assets/ModifiedValues/Runtime//Modified{type}.cs";
 				try
 				{
 					File.Copy(sourceFile, destinationFile, true);
@@ -63,10 +63,10 @@ namespace ModifiedValues.Dev
 				"Ulong"
 			};
 
-			string sourceFile = "Assets/ModifiedValues/src/ModifiedUint.cs";
+			string sourceFile = "Assets/ModifiedValues/Runtime/ModifiedUint.cs";
 			foreach (string type in types)
 			{
-				string destinationFile = $"Assets/ModifiedValues/src//Modified{type}.cs";
+				string destinationFile = $"Assets/ModifiedValues/Runtime//Modified{type}.cs";
 				try
 				{
 					File.Copy(sourceFile, destinationFile, true);
@@ -101,10 +101,10 @@ namespace ModifiedValues.Dev
 			//Enum not included because ModifiedEnum<T> is a generic
 			//type, and Unity can't make generic drawers
 
-			string sourceFile = "Assets/ModifiedValues/src/Editor/ModifiedFloatPropertyDrawer.cs";
+			string sourceFile = "Assets/ModifiedValues/Editor/ModifiedFloatPropertyDrawer.cs";
 			foreach (string type in types)
 			{
-				string destinationFile = $"Assets/ModifiedValues/src/Editor/Modified{type}PropertyDrawer.cs";
+				string destinationFile = $"Assets/ModifiedValues/Editor/Modified{type}PropertyDrawer.cs";
 				try
 				{
 					File.Copy(sourceFile, destinationFile, true);

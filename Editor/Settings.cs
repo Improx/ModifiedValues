@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ModifiedValues
+namespace ModifiedValues.Editor
 {
 	public static class Settings
 	{
