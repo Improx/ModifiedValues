@@ -108,11 +108,11 @@ You can create a new ModifiedValue object in many ways. You can do it with a con
 
 ```C#
 ModifiedFloat Speed1 = 5;
-//Is the same as:
+//Has the same base value as:
 ModifiedFloat Speed2 = new ModifiedFloat(5);
-//Is the same as:
+//Has the same base value as:
 ModifiedFloat Speed3 = new ModifiedFloat(() => 5);
-//Is the same as:
+//Has the same base value as:
 ModifiedFloat Speed4 = new ModifiedFloat(ReturnFive);
 
 private float ReturnFive()
@@ -120,6 +120,8 @@ private float ReturnFive()
   return 5;
 }
 ```
+A use case for a base value getter function instead of a hard value is when you want the base value to have an external dependency that can change over time.
+
 Note that if at a later stage, you set a ModifiedValue object to a new base value implicitly again, the reference will point to a completely new ModifiedValue object.
 
 ```C#
