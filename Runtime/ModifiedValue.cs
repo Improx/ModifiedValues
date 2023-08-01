@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -374,7 +375,12 @@ namespace ModifiedValues
 
 		#endregion
 
-		public static implicit operator T(ModifiedValue<T> m) => m.Value;
+		public static implicit operator T(ModifiedValue<T> m)
+		{
+			EnsureValid(m);
+			return m.Value;
+		}
+
 		public static implicit operator ModifiedValue<T>(T baseValue) => new ModifiedValue<T>(baseValue);
 
 		public override string ToString()
@@ -385,6 +391,19 @@ namespace ModifiedValues
 		public void UseSavedBaseValue()
 		{
 			BaseValue = default(T);
+		}
+
+		[Conditional("UNITY_EDITOR")]
+		private static void EnsureValid(ModifiedValue<T> m)
+		{
+			if (m is null)
+			{
+				throw new Exception("You attempted implicit casting from a null ModifiedValue reference! Make sure you've initialized it before using it.");
+			}
+			else if (!m.Init)
+			{
+				throw new Exception("You serialized a ModifiedValue but did not set it to an instance! Make sure you've initialized it before using it.");
+			}
 		}
 
 	}
