@@ -8,7 +8,10 @@
 	"licensesUrl": "https://github.com/Improx/ModifiedValues/blob/main/LICENSE",
 	"keywords": [
 		"buff",
+		"debuff",
 		"modified",
+		"modifier",
+		"modifiers",
 		"stats",
 		"effects",
 		"ModifiedFloat"
