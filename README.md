@@ -257,7 +257,7 @@ If the Control buff were detached, then the Potion and Blessing buffs would have
 
 ## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
 
-A ModifiedValue uses a dirty flag pattern to only update its value if something about its modifiers or base value has changed. The value will be updated on the next time some code inquires for the value. However, in some situations you need to know exactly whenever a ModifiedValue became dirty, in order to immediately inquire (and update) its new value. Such a use case is for example a UI displaying the value. Instead of asking for a ModifiedValue's value every frame in case it's changed, you can use its `BecameDirty` event:
+To avoid redundant calculations, a ModifiedValue uses a dirty flag pattern to only update its value if something about its modifiers or base value has changed. The value will be updated on the next time some code inquires for the value. However, in some situations you need to know exactly whenever a ModifiedValue became dirty, in order to immediately inquire (and update) its new value. Such a use case is for example a UI displaying the value. Instead of asking for a ModifiedValue's value every frame in case it's changed, you can use its `BecameDirty` event:
 
 ```C#
 public class HealthBar : MonoBehaviour
