@@ -327,7 +327,7 @@ Speed.Detach(mod);
 As the previous example showed, it is possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identical, but independent copies of a modifier, the `Copy()` method can be used:
 
 ```C#
-Modifier<float> mod = new Modifier((v) => v * v);
+Modifier<float> mod = new Modifier<float>((v) => v * v);
 
 //Later, attaching this modifier and its independent copy to two different ModifiedFloats:
 Speed.Attach(mod);
@@ -339,7 +339,7 @@ The `Copy()` method creates a new Modifier object with all properties identical 
 You can see all ModifiedValues a modifier is attached to:
 
 ```C#
-Modifier<float> mod = new Modifier((v) => v * v);
+Modifier<float> mod = new Modifier<float>((v) => v * v);
 
 Speed.Attach(mod);
 Strength.Attach(mod);
@@ -356,7 +356,7 @@ Another way to create modifiers that are not attached to anything in the beginni
 ```C#
 Modifier<float> mod1 = ModifiedFloat.TemplateAdd(5);
 //Is the same as:
-Modifier<float> mod2 = new Modifier((v) => v + 5, order : DefaultOrders.Add);
+Modifier<float> mod2 = new Modifier<float>((v) => v + 5, order : DefaultOrders.Add);
 ```
 
 Each Modifier also has an `Active` bool, which is true by default. If you set it to false, then it will no longer have an effect on attached ModifiedValues, while still remaining attached to them. This is just a handy way of turning modifiers off and on, instead of constantly needing to attach & detach modifiers.
