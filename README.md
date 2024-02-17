@@ -62,7 +62,7 @@ Modifier rollerScatesBuff = Speed.Add(5);
 //After some time passes, you want to remove the Energized buff.
 energizedBuff.DetachFromAll();
 
-Debug.Log(Speed); //Will print 12
+Debug.Log(Speed); //Will print 15
 ```
 
 Without this library, where `Speed` is just a normal `float`, you would have needed to do something like this:
