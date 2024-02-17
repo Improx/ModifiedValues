@@ -49,7 +49,9 @@ Speed.Mul(1.2f);
 Speed.Add(5);
 ```
 
-By default, the multiplicative modifier is applied before the additive one. This results in a final speed value of 17. Your code that uses `Speed` will automatically pick up this update. The current value is also visible in the inspector:
+By default, the multiplicative modifier is applied before the additive one. This results in a final speed value of 17, even if you wrote the above two lines of code in reversed order.
+
+Your code that uses `Speed` will automatically pick up the updated value. The current value is also visible in the inspector:
 
 ![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
 
