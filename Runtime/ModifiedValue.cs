@@ -20,7 +20,7 @@ namespace ModifiedValues
 		/// The downside is lower performance.
 		/// </summary>
 		[HideInInspector] public bool UpdateEveryTime = false;
-		public bool IsDirty { get; private set; } = true;
+		public bool IsDirty { get; protected set; } = true;
 		public event EventHandler<EventArgs> BecameDirty;
 		protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
 		public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
@@ -41,7 +41,7 @@ namespace ModifiedValues
 
 		private void DetachingModifierEventHandler(object sender, EventArgs e)
 		{
-			Detach((Modifier) sender);
+			Detach((Modifier)sender);
 		}
 
 		private void ProbingAttachedModValuesEventHandler(object sender, Modifier.ProbingAttachedModValuesEventArgs e)
@@ -243,7 +243,7 @@ namespace ModifiedValues
 				T valueAtLayerBeginning = currentValue;
 				foreach (var mod in modsInLayer)
 				{
-					Modifier<T> typedMod = (Modifier<T>) mod;
+					Modifier<T> typedMod = (Modifier<T>)mod;
 					if (typedMod.Compound)
 					{
 						currentValue = typedMod.OperationCompound(currentValue);
@@ -260,6 +260,7 @@ namespace ModifiedValues
 		private void UpdateValue()
 		{
 			_value = CalculateValue(ActiveModifiers);
+			IsDirty = false;
 		}
 
 		#region Preview methods
