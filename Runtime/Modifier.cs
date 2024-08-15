@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace ModifiedValues
 {
-
 	public abstract class Modifier
 	{
 		public event EventHandler<EventArgs> Changed;
@@ -50,17 +49,6 @@ namespace ModifiedValues
 			}
 		}
 
-		protected bool _compound;
-
-		/// <summary>
-		/// If we have multiple Modifiers in the same Layer with the same Priority
-		/// and Order, whether the Operations should stack multiplicatively (true)
-		/// or additively. This is automatically toggled when setting either the
-		/// OperationCompound or OperationNonCompound function.
-		/// </summary>
-		/// <value></value>
-		public bool Compound => _compound;
-
 		protected Modifier(int priority = 0, int layer = 0, int order = 0)
 		{
 			_priority = priority;
@@ -105,40 +93,25 @@ namespace ModifiedValues
 
 	public class Modifier<T> : Modifier
 	{
-		private Func<T, T> _operationCompound;
-		public Func<T, T> OperationCompound
+		private Func<T, T, T, T> _operation;
+
+		/// <summary>
+		/// Input values are: baseValue, layerStartValue, latestValue
+		/// </summary>
+		/// <value></value>
+		public Func<T, T, T, T> Operation
 		{
-			get { return _operationCompound; }
+			get { return _operation; }
 			set
 			{
-				_operationCompound = value;
-				_compound = true;
+				_operation = value;
 				OnChanged();
 			}
 		}
 
-		private Func<T, T, T> _operationNonCompound;
-		public Func<T, T, T> OperationNonCompound
+		public Modifier(Func<T, T, T, T> operation, int priority = 0, int layer = 0, int order = 0) : base(priority, layer, order)
 		{
-			get { return _operationNonCompound; }
-			set
-			{
-				_operationNonCompound = value;
-				_compound = false;
-				OnChanged();
-			}
-		}
-
-		public Modifier(Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0) : base(priority, layer, order)
-		{
-			_operationCompound = operationCompound;
-			_compound = true;
-		}
-
-		public Modifier(Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0) : base(priority, layer, order)
-		{
-			_operationNonCompound = operationNonCompound;
-			_compound = false;
+			_operation = operation;
 		}
 
 		/// <summary>
@@ -148,17 +121,9 @@ namespace ModifiedValues
 		/// <returns></returns>
 		public Modifier<T> Copy()
 		{
-			Modifier<T> mod;
-			if (Compound)
-			{
-				mod = new Modifier<T>(OperationCompound, Priority, Layer, Order);
-			}
-			else
-			{
-				mod = new Modifier<T>(OperationNonCompound, Priority, Layer, Order);
-			}
+			Modifier<T> mod = new Modifier<T>(Operation, Priority, Layer, Order);
 			mod.Active = Active;
-			return mod; 
+			return mod;
 		}
 
 	}

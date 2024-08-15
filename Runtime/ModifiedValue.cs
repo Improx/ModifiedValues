@@ -128,7 +128,7 @@ namespace ModifiedValues
 
 		//The custom property drawer uses this
 		[SerializeField][HideInInspector] private bool _usingSavedBaseValue = true;
-		private Func<T> _baseValueGetter = () => default(T);
+		private Func<T> _baseValueGetter = () => default;
 		public Func<T> BaseValueGetter
 		{
 			get
@@ -202,37 +202,21 @@ namespace ModifiedValues
 		/// A shorthand for creating a Modifier with the same parameters
 		/// and attaching it to this ModifiedValue.
 		/// </summary>
-		/// <param name="operationCompound"></param>
+		/// <param name="operation"></param>
 		/// <param name="priority"></param>
 		/// <param name="layer"></param>
 		/// <param name="order"></param>
 		/// <returns></returns>
-		public Modifier<T> Modify(Func<T, T> operationCompound, int priority = 0, int layer = 0, int order = 0)
+		public Modifier<T> Modify(Func<T, T, T, T> operation, int priority = 0, int layer = 0, int order = 0)
 		{
-			Modifier<T> mod = new Modifier<T>(operationCompound, priority, layer, order);
-			Attach(mod);
-			return mod;
-		}
-
-		/// <summary>
-		/// A shorthand for creating a Modifier with the same parameters
-		/// and attaching it to this ModifiedValue.
-		/// </summary>
-		/// <param name="operationNonCompound"></param>
-		/// <param name="priority"></param>
-		/// <param name="layer"></param>
-		/// <param name="order"></param>
-		/// <returns></returns>
-		public Modifier<T> Modify(Func<T, T, T> operationNonCompound, int priority = 0, int layer = 0, int order = 0)
-		{
-			Modifier<T> mod = new Modifier<T>(operationNonCompound, priority, layer, order);
+			Modifier<T> mod = new Modifier<T>(operation, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
 
 		private T CalculateValue(IReadOnlyList<Modifier> activeModifiers)
 		{
-			T currentValue = BaseValueGetter();
+			T currentValue = BaseValue;
 			var layers = activeModifiers.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
 			foreach (int layer in layers)
 			{
@@ -240,18 +224,11 @@ namespace ModifiedValues
 				int highestPrio = modsInLayer.Max(m => m.Priority);
 				//Keep only Modifiers with highest prio and arrange them in Order:
 				modsInLayer = modsInLayer.Where(m => m.Priority == highestPrio).OrderBy(m => m.Order);
-				T valueAtLayerBeginning = currentValue;
+				T layerStartValue = currentValue;
 				foreach (var mod in modsInLayer)
 				{
 					Modifier<T> typedMod = (Modifier<T>)mod;
-					if (typedMod.Compound)
-					{
-						currentValue = typedMod.OperationCompound(currentValue);
-					}
-					else
-					{
-						currentValue = typedMod.OperationNonCompound(currentValue, valueAtLayerBeginning);
-					}
+					currentValue = typedMod.Operation(BaseValue, layerStartValue, currentValue);
 				}
 			}
 			return currentValue;
