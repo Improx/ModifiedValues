@@ -114,6 +114,21 @@ namespace ModifiedValues
 			_operation = operation;
 		}
 
+		public static Modifier FromBaseValue(Func<T, T> operationFromBaseValue, int priority = 0, int layer = 0, int order = 0)
+		{
+			return new Modifier<T>((baseValue, _, _) => operationFromBaseValue(baseValue), priority, layer, order);
+		}
+
+		public static Modifier FromLayerStartValue(Func<T, T> operationFromlayerStartValue, int priority = 0, int layer = 0, int order = 0)
+		{
+			return new Modifier<T>((_, layerStartValue, _) => operationFromlayerStartValue(layerStartValue), priority, layer, order);
+		}
+
+		public static Modifier FromLatestValue(Func<T, T> operationFromLatestValue, int priority = 0, int layer = 0, int order = 0)
+		{
+			return new Modifier<T>((_, _, latestValue) => operationFromLatestValue(latestValue), priority, layer, order);
+		}
+
 		/// <summary>
 		/// Returns a copy object of this modifier.
 		/// Everything about it will be the same, except it won't be attached to anything.
