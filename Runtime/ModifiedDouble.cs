@@ -42,7 +42,7 @@ namespace ModifiedValues
 		}
 
 		/// <summary>
-		/// Adds this fraction to value that was at the beginning of this layer.
+		/// Adds this fraction of value as it was at the start of this layer.
 		/// Stacks additively.
 		/// </summary>
 		/// <param name="amount"></param>
@@ -52,6 +52,26 @@ namespace ModifiedValues
 		public Modifier<double> AddFraction(double amount, int priority = 0, int layer = 0)
 		{
 			var mod = TemplateAddFraction(amount, priority, layer);
+			Attach(mod);
+			return mod;
+		}
+
+		public static Modifier<double> TemplateAddFractionBase(double amount, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
+		{
+			return Modifier<double>.NewFromBaseAndLatest((baseValue, latestValue) => latestValue + amount * baseValue, priority, layer, order);
+		}
+
+		/// <summary>
+		/// Adds this fraction with respect to the base value.
+		/// Stacks additively.
+		/// </summary>
+		/// <param name="amount"></param>
+		/// <param name="priority"></param>
+		/// <param name="layer"></param>
+		/// <returns></returns>
+		public Modifier<double> AddFractionBase(double amount, int priority = 0, int layer = 0)
+		{
+			var mod = TemplateAddFractionBase(amount, priority, layer);
 			Attach(mod);
 			return mod;
 		}
