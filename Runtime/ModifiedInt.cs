@@ -56,9 +56,9 @@ namespace ModifiedValues
 			return mod;
 		}
 
-		public static Modifier<float> TemplateAddMultipleBase(float amount, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
+		public static Modifier<int> TemplateAddMultipleBase(int amount, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
 		{
-			return Modifier<float>.NewFromBaseAndLatest((baseValue, latestValue) => latestValue + amount * baseValue, priority, layer, order);
+			return Modifier<int>.NewFromBaseAndLatest((baseValue, latestValue) => latestValue + amount * baseValue, priority, layer, order);
 		}
 
 		/// <summary>
@@ -69,7 +69,7 @@ namespace ModifiedValues
 		/// <param name="priority"></param>
 		/// <param name="layer"></param>
 		/// <returns></returns>
-		public Modifier<float> AddMultipleBase(float amount, int priority = 0, int layer = 0)
+		public Modifier<int> AddMultipleBase(int amount, int priority = 0, int layer = 0)
 		{
 			var mod = TemplateAddMultipleBase(amount, priority, layer);
 			Attach(mod);
