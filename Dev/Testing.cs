@@ -24,7 +24,7 @@ namespace ModifiedValues.Dev
 			var modHeadWind = Person.Speed.Mul(0.7f);
 			Report("Headwind is slowing us down to 70% speed.");
 
-			var modCustom = Person.Speed.Modify(CustomOperation, order : 999999);
+			var modCustom = Person.Speed.Modify(CustomOperation, order: 999999);
 			Report("Custom operation. If speed is below 2, slow down to 0. Else, set speed to 5.");
 
 			modCustom.DetachFromAll();
@@ -48,19 +48,19 @@ namespace ModifiedValues.Dev
 			var modSpeedLimit = Person.Speed.MaxCap(10);
 			Report("Police is watching. Have to slow down to a speed of 10.");
 
-			var modWings = Person.Speed.Add(500, priority : 1);
+			var modWings = Person.Speed.Add(500, priority: 1);
 			Report("We got wings, increasing our speed by 500. We are no longer on the ground, so previous mods have no effect anymore. This mod's Priority is higher than the others', so it is applied directly to the base value and ignores other mods.");
 
-			var slightSlow = Person.Speed.Add(-3, priority : 1);
+			var slightSlow = Person.Speed.Add(-3, priority: 1);
 			Report("Decided to slow down by 3 units while flying. This works with the previous mod because it has the same priority.");
 
-			var modMotivation = Person.Speed.Mul(1.2f, layer : 1);
+			var modMotivation = Person.Speed.Mul(1.2f, layer: 1);
 			Report("You feel very motivated, increasing all speed by 20% multiplicatively. This effects acts on top of all old ones, because it is on a higher layer.");
 
-			var modMegaEnergyDrink1 = Person.Speed.AddFraction(0.5f, layer : 2);
+			var modMegaEnergyDrink1 = Person.Speed.AddFraction(0.5f, layer: 2);
 			Report("You drink a Mega energy drink, increasing all speed by 50% additively. This effects acts on top of all old ones, because it is on a higher layer.");
 
-			var modMegaEnergyDrink2 = Person.Speed.AddFraction(0.5f, layer : 2);
+			var modMegaEnergyDrink2 = Person.Speed.AddFraction(0.5f, layer: 2);
 			Report("You drink a Mega energy drink, increasing all speed by 50% additively. This effects acts on top of all old ones, because it is on a higher layer.");
 
 			//This creates a totally new ModifiedFloat with base value 100
@@ -102,9 +102,9 @@ namespace ModifiedValues.Dev
 
 		private enum Lol { None, Something, Everything }
 
-		private static float CustomOperation(float prevValue)
+		private static float CustomOperation(float latestValue)
 		{
-			if (prevValue < 2)
+			if (latestValue < 2)
 			{
 				//Come to a halt, set speed to 0:
 				return 0;

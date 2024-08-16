@@ -209,7 +209,7 @@ namespace ModifiedValues
 		/// <returns></returns>
 		public Modifier<T> Modify(Func<T, T, T, T> operation, int priority = 0, int layer = 0, int order = 0)
 		{
-			Modifier<T> mod = new Modifier<T>(operation, priority, layer, order);
+			Modifier<T> mod = Modifier<T>.New(operation, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}

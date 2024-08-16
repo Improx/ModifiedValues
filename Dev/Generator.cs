@@ -18,7 +18,7 @@ namespace ModifiedValues.Dev
 
 		/// <summary>
 		/// Generates almost all Modified<TYPE> classes.
-		/// Continuous numbers based on float and discrte numbers based on uint
+		/// Continuous numbers based on float and discrete numbers based on uint
 		/// bool and Enum not generated because they don't have enough similarities
 		/// </summary>
 		private static void GenerateClasses()

@@ -14,7 +14,7 @@ namespace ModifiedValues
 
 		public static Modifier<T> TemplateSet(T other, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
 		{
-			return new Modifier<T>((prevValue) => other, priority, layer, order);
+			return Modifier<T>.NewFromIgnored(() => other, priority, layer, order);
 		}
 
 		public Modifier<T> Set(T other, int priority = 0, int layer = 0)

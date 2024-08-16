@@ -14,7 +14,7 @@ namespace ModifiedValues
 
 		public static Modifier<int> TemplateSet(int amount, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
 		{
-			return new Modifier<int>((prevValue) => amount, priority, layer, order);
+			return Modifier<int>.NewFromIgnored(() => amount, priority, layer, order);
 		}
 
 		public Modifier<int> Set(int amount, int priority = 0, int layer = 0)
@@ -26,7 +26,7 @@ namespace ModifiedValues
 
 		public static Modifier<int> TemplateAdd(int amount, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
 		{
-			return new Modifier<int>((prevValue) => prevValue + amount, priority, layer, order);
+			return Modifier<int>.NewFromLatest((latestValue) => latestValue + amount, priority, layer, order);
 		}
 
 		public Modifier<int> Add(int amount, int priority = 0, int layer = 0)
@@ -38,7 +38,7 @@ namespace ModifiedValues
 
 		public static Modifier<int> TemplateAddMultiple(int amount, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
 		{
-			return new Modifier<int>((prevValue, beginningValue) => prevValue + amount * beginningValue, priority, layer, order);
+			return Modifier<int>.NewFromLayerStartAndLatest((layerStartValue, latestValue) => latestValue + amount * layerStartValue, priority, layer, order);
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace ModifiedValues
 
 		public static Modifier<int> TemplateMul(int amount, int priority = 0, int layer = 0, int order = DefaultOrders.Mul)
 		{
-			return new Modifier<int>((prevValue) => prevValue * amount, priority, layer, order);
+			return Modifier<int>.NewFromLatest((latestValue) => latestValue * amount, priority, layer, order);
 		}
 
 		public Modifier<int> Mul(int amount, int priority = 0, int layer = 0)
@@ -70,7 +70,7 @@ namespace ModifiedValues
 
 		public static Modifier<int> TemplateMinCap(int amount, int priority = 0, int layer = 0, int order = DefaultOrders.Cap)
 		{
-			return new Modifier<int>((prevValue) => Math.Max(prevValue, amount), priority, layer, order);
+			return Modifier<int>.NewFromLatest((latestValue) => Math.Max(latestValue, amount), priority, layer, order);
 		}
 
 		public Modifier<int> MinCap(int amount, int priority = 0, int layer = 0)
@@ -89,7 +89,7 @@ namespace ModifiedValues
 
 		public static Modifier<int> TemplateMaxCap(int amount, int priority = 0, int layer = 0, int order = DefaultOrders.Cap)
 		{
-			return new Modifier<int>((prevValue) => Math.Min(prevValue, amount), priority, layer, order);
+			return Modifier<int>.NewFromLatest((latestValue) => Math.Min(latestValue, amount), priority, layer, order);
 		}
 
 		public Modifier<int> MaxCap(int amount, int priority = 0, int layer = 0)
