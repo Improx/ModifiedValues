@@ -102,7 +102,7 @@ You can wrap other types without needing to create new classes simply by using `
 
 ```C#
 ModifiedValue<MyType> myValue = new MyType();
-Modifier mod = myValue.Modify((v) => v * 1.2f + 5);
+Modifier mod = myValue.ModifyLatest((latestValue) => latestValue * 1.2f + 5);
 ```
 
 ## ![][HeaderDecorator] Initialization ![][HeaderDecorator]
@@ -175,7 +175,7 @@ The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily 
 
 If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they are presented in the lists above (from top to bottom). This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
 
-You can also create your own modifying operations either with an inline function `myValue.Modify((v) => v * 1.2f + 5)` or by using a function defined elsewhere: `myValue.Modify(MyCustomOperation)`. More about custom operations explained further down.
+You can also create your own modifying operations either with an inline function `myValue.ModifyFromLatest((v) => v * 1.2f + 5)` or by using a function defined elsewhere: `myValue.ModifyFromLatest(MyCustomOperation)`. More about custom operations explained further down.
 
 ## ![][HeaderDecorator] Priority, Layer and Order ![][HeaderDecorator]
 
@@ -191,10 +191,10 @@ Speed.Mul(1.2f, priority : 3, layer : 2, order : 3);
 Speed.Mul(1.2f); //Priority and layer are 0, and order is DefaultOrders.Mul = 2000
 
 //If using a custom operation, order defaults to 0:
-Speed.Modify(CustomOperation); //Priority, layer and order are all 0
+Speed.ModifyFromLatest(CustomOperation); //Priority, layer and order are all 0
 
 //In custom operations we can of course too use non-default parameters, if we want to:
-Speed.Modify(CustomOperation, priority : 5, layer : 0, order : DefaultOrders.Mul - 100);
+Speed.ModifyFromLatest(CustomOperation, priority : 5, layer : 0, order : DefaultOrders.Mul - 100);
 ```
 
 This is how these optional parameters affect the final value calculation:
@@ -314,7 +314,7 @@ When a Modifier is attached to a ModifiedValue, it means that it affects its val
 It's possible to create a Modifier that is not attached to anything, with a constructor. You need to use a more detailed `Modifier<Type>` class, because the constructor takes a typed operation as an argument:
 
 ```C#
-Modifier<float> mod = new Modifier<float>((v) => v * v); //Can also set optional priority, layer and order parameters
+Modifier<float> mod = Modifier<float>.NewFromLatest((v) => v * v); //Can also set optional priority, layer and order parameters
 
 //Later, attaching this modifier to two different ModifiedFloats:
 Speed.Attach(mod);
@@ -327,7 +327,7 @@ Speed.Detach(mod);
 As the previous example showed, it is possible for a modifier to be attached to more than one ModifiedValue. In such a case, changing the properties of the modifier will affect all ModifiedValues it is attached to. If you want identical, but independent copies of a modifier, the `Copy()` method can be used:
 
 ```C#
-Modifier<float> mod = new Modifier<float>((v) => v * v);
+Modifier<float> mod = Modifier<float>.NewFromLatest((v) => v * v);
 
 //Later, attaching this modifier and its independent copy to two different ModifiedFloats:
 Speed.Attach(mod);
@@ -339,7 +339,7 @@ The `Copy()` method creates a new Modifier object with all properties identical 
 You can see all ModifiedValues a modifier is attached to:
 
 ```C#
-Modifier<float> mod = new Modifier<float>((v) => v * v);
+Modifier<float> mod = Modifier<float>.NewFromLatest((v) => v * v);
 
 Speed.Attach(mod);
 Strength.Attach(mod);
@@ -356,7 +356,7 @@ Another way to create modifiers that are not attached to anything in the beginni
 ```C#
 Modifier<float> mod1 = ModifiedFloat.TemplateAdd(5);
 //Is the same as:
-Modifier<float> mod2 = new Modifier<float>((v) => v + 5, order : DefaultOrders.Add);
+Modifier<float> mod2 = Modifier<float>.NewFromLatest((v) => v + 5, order : DefaultOrders.Add);
 ```
 
 Each Modifier also has an `Active` bool, which is true by default. If you set it to false, then it will no longer have an effect on attached ModifiedValues, while still remaining attached to them. This is just a handy way of turning modifiers off and on, instead of constantly needing to attach & detach modifiers.
@@ -392,27 +392,39 @@ As some of the previous sections already showed, in addition to the readily prov
 
 ```C#
 //Modifier that squares the value
-Modifier<float> mod = Speed.Modify((v) => v * v); 
+Modifier<float> mod = Speed.ModifyFromLatest((v) => v * v); 
 
-//At a later point, changing the operation to one that cubes the value:
-mod.OperationCompound = (v) => v * v * v;
+//At a later point, changing the operation to one that cubes the latest value:
+mod.Operation = (_, _, v) => v * v * v;
 ```
 
 As a general rule, operations should be pure functions, and thus, not have external dependencies. That is because if these external dependencies would change, the ModifiedValue object would not know about it and would not become dirty. If you still want to use external dependencies in an operation, you can either manually track whenever an external dependency changes value and call `modifiedValue.SetDirty()` each time, or you can set `modifiedValue.UpdateEverTime = true`, so that its value would be recalculated on each inquiry, regardless if it's dirty or not. For example:
 
 ```C#
 
-Modifier<float> mod = Speed.Modify((v) => v + Time.time);
+Modifier<float> mod = Speed.ModifyFromLatest((v) => v + Time.time);
 //Time.time is an external dependency that changes each frame, so we do the following:
 Speed.UpdateEveryTime = true;
 ```
+Behind the scenes, a modifier's `Operation` is always a function that takes three inputs: 1) base value, 2) value at the start of the layer, and 3) latest value in the layer, at the moment the modifier takes effect. A modifier's 'Operation' can use all or a subset of those inputs.
 
-A modifier uses either its `OperationCompound` (takes one input) operation or `OperationNonCompound` operation (takes two inputs). The difference is that if multiple compound modifiers have the same priority and layer, and are thus all in effect, they will stack multiplicatively. Non-compound operations, on the other hand, are designed to stack additively. The second input in a non-compound operation is the value at the layer's beginning, before any other operations were applied on this layer. Out of the ready modifying methods, `AddFraction` is a non-compound operation:
+As an example, when you do `Speed.Add(5f)`, behind the scenes, a Modifier<float> is created whose operation is `(_, _, latestValue) => latestValue + 5f`. In that case, the operation only cares about the latest value. That way, multiple additive modifiers can have effect, each adding a number to the output of the previous modifier. If the operation had been `(baseValue, _, _) => baseValue + 5f`, then only the last Modifier would have the effect, because its operation doesn't care about anything else other than the ModifiedValue's base value.
+
+An example of an operation that uses more than one input is `AddFraction`. It adds a fraction to the value based on what the value was at the start of the layer, instead of the latest value. Because of this, many modifiers of this kind would stack multiplicatively.
 
 ```C#
 Speed.AddFraction(0.2f);
 //Is the same as:
-Speed.Modify((latestValue, layerBeginningValue) => latestValue + 0.2f * layerBeginningValue, order : DefaultOrders.AddFraction);
+Speed.ModifyFromLayerStartAndLatest((layerStartValue, latestValue) => latestValue + 0.2f * layerStartValue, order : DefaultOrders.AddFraction);
+//Is the same as:
+Speed.Modify((_, layerStartValue, latestValue) => latestValue + 0.2f * layerStartValue, order : DefaultOrders.AddFraction);
+
+//There is also a version that adds a fraction based on the base value instead:
+Speed.AddFractionBase(0.2f);
+//Is the same as:
+Speed.ModifyFromBaseAndLatest((baseValue, latestValue) => latestValue + 0.2f * baseValue, order : DefaultOrders.AddFraction);
+//Is the same as:
+Speed.Modify((baseValue, _, latestValue) => latestValue + 0.2f * baseValue, order : DefaultOrders.AddFraction);
 ```
 
 The difference becomes apparent when multiple operations stack. As an example, here's how `Mul` stacks (compound operation):
@@ -422,37 +434,63 @@ ModifiedFloat Speed = 100;
 Speed.Mul(1.2f);
 Debug.Log(Speed); //Will print 120
 Speed.Mul(1.2f);
-Debug.Log(Speed); //Will print 144!!!
-```
+Debug.Log(Speed); //Will print 144!
 
-Compared to `AddFraction` (non-compound operation):
-
-```C#
-ModifiedFloat Speed = 100;
-Speed.AddFraction(0.2f);
+ModifiedFloat Speed2 = 100;
+Speed2.AddFraction(0.2f);
 Debug.Log(Speed); //Will print 120
-Speed.AddFraction(0.2f);
-Debug.Log(Speed); //Will print 140!!!
+Speed2.AddFraction(0.2f);
+Debug.Log(Speed); //Will print 140!
 ```
-With custom operations, whether a modifier uses a compound or a non-compound operation depends on whether the operation had one or two inputs during its creation:
+When creating modifiers with custom operations, you can take advantage of various shorthand methods, instead of having to use the full notation of all three inputs:
 
 ```C#
-//Compound operation:
-Speed.Modify((latestValue) => latestValue + amount * latestValue);
-//Non-compound operation:
-Speed.Modify((latestValue, layerBeginningValue) => latestValue + amount * layerBeginningValue);
-```
-You can change both `OperationCompound` and `OperationNonCompound` function variables after a modifier's creation, regardless of which one it used originally. The modifier uses whichever was set last. If needed, you can see which one is currently used by inquiring the `Modifier.Compound` bool.
+//Creating a non-attached modifier that only cares about the base value
+Modifier<float> mod = Modifier<float>.NewFromBase((baseValue) => someOperation(baseValue));
+//Is the same as:
+Modifier<float> mod = Modifier<float>.New((baseValue, _, _) => someOperation(baseValue));
 
-In a non-compound operation, it may not always suit your needs that the operation's second argument is the value at the beginning of the layer. In some use cases, you might want to do an operation with respect to the unmodified BaseValue. In that case you can create a compound operation that has an external (but safe) dependency `BaseValue`. Here's an example of "AddFraction" like operation, but that uses BaseValue instead of value at the beginnig of the layer:
+//Creating a non-attached modifier that only cares about the layer start value
+Modifier<float> mod = Modifier<float>.NewFromLayerStart((layerStartValue) => someOperation(layerStartValue));
+//Is the same as:
+Modifier<float> mod = Modifier<float>.New((_, layerStartValue, _) => someOperation(layerStartValue));
+
+//Creating a non-attached modifier that only cares about the latest value
+Modifier<float> mod = Modifier<float>.NewFromLatest((latestValue) => someOperation(latestValue));
+//Is the same as:
+Modifier<float> mod = Modifier<float>.New((_, _, latestValue) => someOperation(latestValue));
+
+//Creating a non-attached modifier that only cares about the base and layer start values
+Modifier<float> mod = Modifier<float>.NewFromBaseAndLayerStart((baseValue, layerStartValue) => someOperation(baseValue, layerStartValue));
+//Is the same as:
+Modifier<float> mod = Modifier<float>.New((baseValue, layerStartValue, _) => someOperation(baseValue, layerStartValue));
+
+//Creating a non-attached modifier that only cares about the base and layer start values
+Modifier<float> mod = Modifier<float>.NewFromBaseAndLatest((baseValue, latestValue) => someOperation(baseValue, latestValue));
+//Is the same as:
+Modifier<float> mod = Modifier<float>.New((baseValue, _, latestValue) => someOperation(baseValue, latestValue));
+
+//Creating a non-attached modifier that only cares about the base and layer start values
+Modifier<float> mod = Modifier<float>.NewFromLayerStartAndLatest((layerStartValue, latestValue) => someOperation(layerStartValue, latestValue));
+//Is the same as:
+Modifier<float> mod = Modifier<float>.New((_, layerStartValue, latestValue) => someOperation(layerStartValue, latestValue));
+```
+
+Similar shorthand methods also exist when modifying a ModifiedValue directly:
 
 ```C#
-Speed.Modify((latestValue) => latestValue + amount * Speed.BaseValue);
+//Modify with an operation that cares about all three inputs
+Speed.Modify((baseValue, layerStartValue, latestValue) => someOperation(baseValue, layerStartValue, latestValue));
+
+//Or, if your operation only cares about a subset of the inputs, you can use shorthands:
+Speed.ModifyFromBase((baseValue) => someOperation(baseValue));
+Speed.ModifyFromLayerStart((layerStartValue) => someOperation(layerStartValue));
+Speed.ModifyFromLatest((latestValue) => someOperation(latestValue));
+
+Speed.ModifyFromBaseAndLayerStart((baseValue, layerStartValue) => someOperation(baseValue, layerStartValue));
+Speed.ModifyFromBaseAndLatest((baseValue, latestValue) => someOperation(baseValue, latestValue));
+Speed.ModifyFromLayerStartAndLatest((layerStartValue, latestValue) => someOperation(layerStartValue, latestValue));
 ```
-
-The `Speed.BaseValue` in this context is not used as a hardcoded value at the moment of the modifier's creation, but is instead evaluated each time the operation is called. This means that if you override Speed's `BaseValue` at some later point to another value, this modifier will keep working correctly, using the updated base value.
-
-The small downside to this trick is that the operation is officially "compound" (because it uses one input), even though your custom operation stacks additively instead of multiplicatively. Regardless, this is an approach that works.
 
 ## ![][HeaderDecorator] Previewing Values ![][HeaderDecorator]
 
