@@ -214,6 +214,48 @@ namespace ModifiedValues
 			return mod;
 		}
 
+		public Modifier<T> ModifyFromBase(Func<T, T> operationFromBase, int priority = 0, int layer = 0, int order = 0)
+		{
+			Modifier<T> mod = Modifier<T>.NewFromBase(operationFromBase, priority, layer, order);
+			Attach(mod);
+			return mod;
+		}
+
+		public Modifier<T> ModifyFromLayerStart(Func<T, T> operationFromLayerStart, int priority = 0, int layer = 0, int order = 0)
+		{
+			Modifier<T> mod = Modifier<T>.NewFromLayerStart(operationFromLayerStart, priority, layer, order);
+			Attach(mod);
+			return mod;
+		}
+
+		public Modifier<T> ModifyFromLatest(Func<T, T> operationFromLatest, int priority = 0, int layer = 0, int order = 0)
+		{
+			Modifier<T> mod = Modifier<T>.NewFromLatest(operationFromLatest, priority, layer, order);
+			Attach(mod);
+			return mod;
+		}
+
+		public Modifier<T> ModifyFromBaseAndLayerStart(Func<T, T, T> operationFromBaseAndLayerStart, int priority = 0, int layer = 0, int order = 0)
+		{
+			Modifier<T> mod = Modifier<T>.NewFromBaseAndLayerStart(operationFromBaseAndLayerStart, priority, layer, order);
+			Attach(mod);
+			return mod;
+		}
+
+		public Modifier<T> ModifyFromBaseAndLatest(Func<T, T, T> operationFromBaseAndLatest, int priority = 0, int layer = 0, int order = 0)
+		{
+			Modifier<T> mod = Modifier<T>.NewFromBaseAndLatest(operationFromBaseAndLatest, priority, layer, order);
+			Attach(mod);
+			return mod;
+		}
+
+		public Modifier<T> ModifyFromLayerStartAndLatest(Func<T, T, T> operationFromLayerStartAndLatest, int priority = 0, int layer = 0, int order = 0)
+		{
+			Modifier<T> mod = Modifier<T>.NewFromLayerStartAndLatest(operationFromLayerStartAndLatest, priority, layer, order);
+			Attach(mod);
+			return mod;
+		}
+
 		private T CalculateValue(IReadOnlyList<Modifier> activeModifiers)
 		{
 			T currentValue = BaseValue;

@@ -124,41 +124,41 @@ namespace ModifiedValues
 
 		public static Modifier<T> New(Func<T, T, T, T> operation, int priority = 0, int layer = 0, int order = 0)
 		{
-			return new Modifier<T>(operation, priority, layer, order);
+			return New(operation, priority, layer, order);
 		}
 
 		public static Modifier<T> NewFromBase(Func<T, T> operationFromBase, int priority = 0, int layer = 0, int order = 0)
 		{
-			return new Modifier<T>((baseValue, _, _) => operationFromBase(baseValue), priority, layer, order);
+			return New((baseValue, _, _) => operationFromBase(baseValue), priority, layer, order);
 		}
 
 		public static Modifier<T> NewFromLayerStart(Func<T, T> operationFromLayerStart, int priority = 0, int layer = 0, int order = 0)
 		{
-			return new Modifier<T>((_, layerStartValue, _) => operationFromLayerStart(layerStartValue), priority, layer, order);
+			return New((_, layerStartValue, _) => operationFromLayerStart(layerStartValue), priority, layer, order);
 		}
 
 		public static Modifier<T> NewFromLatest(Func<T, T> operationFromLatest, int priority = 0, int layer = 0, int order = 0)
 		{
-			return new Modifier<T>((_, _, latestValue) => operationFromLatest(latestValue), priority, layer, order);
+			return New((_, _, latestValue) => operationFromLatest(latestValue), priority, layer, order);
 		}
 
 		public static Modifier<T> NewFromBaseAndLayerStart(Func<T, T, T> operationFromBaseAndLayerStart, int priority = 0, int layer = 0, int order = 0)
 		{
-			return new Modifier<T>((baseValue, layerStartValue, _) => operationFromBaseAndLayerStart(baseValue, layerStartValue), priority, layer, order);
+			return New((baseValue, layerStartValue, _) => operationFromBaseAndLayerStart(baseValue, layerStartValue), priority, layer, order);
 		}
 
 		public static Modifier<T> NewFromBaseAndLatest(Func<T, T, T> operationFromBaseAndLatest, int priority = 0, int layer = 0, int order = 0)
 		{
-			return new Modifier<T>((baseValue, _, latestValue) => operationFromBaseAndLatest(baseValue, latestValue), priority, layer, order);
+			return New((baseValue, _, latestValue) => operationFromBaseAndLatest(baseValue, latestValue), priority, layer, order);
 		}
 
 		public static Modifier<T> NewFromLayerStartAndLatest(Func<T, T, T> operationFromLayerStartAndLatest, int priority = 0, int layer = 0, int order = 0)
 		{
-			return new Modifier<T>((_, layerStartValue, latestValue) => operationFromLayerStartAndLatest(layerStartValue, latestValue), priority, layer, order);
+			return New((_, layerStartValue, latestValue) => operationFromLayerStartAndLatest(layerStartValue, latestValue), priority, layer, order);
 		}
 		public static Modifier<T> NewFromIgnored(Func<T> operationFromIgnored, int priority = 0, int layer = 0, int order = 0)
 		{
-			return new Modifier<T>((_, _, _) => operationFromIgnored(), priority, layer, order);
+			return New((_, _, _) => operationFromIgnored(), priority, layer, order);
 		}
 
 		public void SetOperationFromBase(Func<T, T> operationFromBase) => Operation = (baseValue, _, _) => operationFromBase(baseValue);

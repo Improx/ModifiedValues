@@ -24,7 +24,7 @@ namespace ModifiedValues.Dev
 			var modHeadWind = Person.Speed.Mul(0.7f);
 			Report("Headwind is slowing us down to 70% speed.");
 
-			var modCustom = Person.Speed.Modify(CustomOperation, order: 999999);
+			var modCustom = Person.Speed.ModifyFromLatest(CustomOperation, order: 999999);
 			Report("Custom operation. If speed is below 2, slow down to 0. Else, set speed to 5.");
 
 			modCustom.DetachFromAll();
