@@ -124,7 +124,7 @@ namespace ModifiedValues
 
 		public static Modifier<T> New(Func<T, T, T, T> operation, int priority = 0, int layer = 0, int order = 0)
 		{
-			return New(operation, priority, layer, order);
+			return new Modifier<T>(operation, priority, layer, order);
 		}
 
 		public static Modifier<T> NewFromBase(Func<T, T> operationFromBase, int priority = 0, int layer = 0, int order = 0)
