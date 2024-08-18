@@ -33,7 +33,7 @@ public ModifiedFloat Speed = 10;
 ```
 If the field is public or private serialized, it will also appear in the inspector:
 
-![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector1.PNG "ModifiedValue Speed visible in the inspector")
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/Images/speedInspector1.PNG "ModifiedValue Speed visible in the inspector")
 
 For convenience, this `Speed` object can be implicitly cast back into a float. Most of your code can treat it as just a regular float value:
 
@@ -53,7 +53,7 @@ By default, the multiplicative modifier is applied before the additive one. This
 
 Your code that uses `Speed` will automatically pick up the updated value. The current value is also visible in the inspector:
 
-![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/Images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
 
 If you want to be able to remove these buffs later, you need to save the modifier objects:
 
@@ -139,7 +139,7 @@ If you want to update a ModifiedValue's base value while keeping all modifiers, 
 ```
 Declaring a serialized ModifiedValue member variable and not assigning anything to it leads to Unity creating a default object out of it, instead of keeping the reference as `null`. In this Unity quirk, the constructor is bypassed and the ModifiedValue is not initialized correctly. Using such ModifiedValue objects will result in errors. Always set it to something when declaring it, or later. If needed, you can check whether a ModifiedValue object was created in this bad way (in that case `ModifiedValue.Init` equals `false`) and replace it with a new object. The inspector also alerts if a ModifiedValue is uninitialized:
 
-![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspectorUninitialized.PNG "Uninitialized ModifiedValue in the inspector")
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/Images/speedInspectorUninitialized.PNG "Uninitialized ModifiedValue in the inspector")
 
 ## ![][HeaderDecorator] Out-of-the-box Modifiers ![][HeaderDecorator]
 
@@ -533,11 +533,11 @@ Like in regular value calculation, a preview modifier will not have effect on th
 
 Like was shown in the Quickstart Example section, serialized ModifiedValues are displayed in the inspector. Its base value can be modified in the inspector at runtime and edit mode. The current final value is also displayed, as long as the current setting allows it. The setting can be changed in Settings.cs by changing `ShowLatestValue`. The possible modes are `Never`, `OnlyRuntime` and `Always` (default).
 
-![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/Images/speedInspector2.PNG "Updated value of Speed visible in the inspector")
 
 If a ModifiedValue uses a `BaseValueGetter` function instead of a saved base value, then it makes sense that the base value cannot be directly set in the inspector, as the base value depends on whatever the getter returns at any given moment. In such a case the inspector shows that a getter is used, and presents the current base value:
 
-![alt text](https://github.com/Improx/ModifiedValues/blob/main/images/speedInspectorGetter.PNG "Inspector shows that Speed uses a base value getter").
+![alt text](https://github.com/Improx/ModifiedValues/blob/main/Images/speedInspectorGetter.PNG "Inspector shows that Speed uses a base value getter").
 
 If you still want to delete the base value getter function in the inspector, you can click on the getter button. A saved value will be used (defaulting to the wrapped type's default value), and can be edited in the inspector again.
 
