@@ -19,7 +19,7 @@ namespace ModifiedValues.Editor
 			if (_modValue is null)
 			{
 				UnityEngine.Object targetObject = property.serializedObject.targetObject;
-				ModifiedInt modValue = (ModifiedInt) GetPropertyInstance(property, targetObject);
+				ModifiedInt modValue = (ModifiedInt)GetPropertyInstance(property, targetObject);
 				if (!modValue.Init)
 				{
 					//This modValue property was declared but not assigned to, so
@@ -73,7 +73,6 @@ namespace ModifiedValues.Editor
 
 		public System.Object GetPropertyInstance(SerializedProperty property, UnityEngine.Object targetObject)
 		{
-
 			string path = property.propertyPath;
 
 			System.Object obj = targetObject;

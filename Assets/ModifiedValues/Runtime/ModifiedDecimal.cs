@@ -8,6 +8,8 @@ namespace ModifiedValues
 
 		public ModifiedDecimal(Func<decimal> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
 
+		public ModifiedDecimal(Func<decimal> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : base(baseValueGetter, dependency, updateEveryTime) { }
+
 		public ModifiedDecimal(decimal baseValue, bool updateEveryTime = false) : base(baseValue, updateEveryTime) { }
 
 		public static implicit operator ModifiedDecimal(decimal baseValue) => new ModifiedDecimal(baseValue);

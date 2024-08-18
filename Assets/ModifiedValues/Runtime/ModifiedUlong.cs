@@ -8,6 +8,8 @@ namespace ModifiedValues
 
 		public ModifiedUlong(Func<ulong> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
 
+		public ModifiedUlong(Func<ulong> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : base(baseValueGetter, dependency, updateEveryTime) { }
+
 		public ModifiedUlong(ulong baseValue, bool updateEveryTime = false) : base(baseValue, updateEveryTime) { }
 
 		public static implicit operator ModifiedUlong(ulong baseValue) => new ModifiedUlong(baseValue);

@@ -8,6 +8,8 @@ namespace ModifiedValues
 
 		public ModifiedInt(Func<int> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
 
+		public ModifiedInt(Func<int> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : base(baseValueGetter, dependency, updateEveryTime) { }
+
 		public ModifiedInt(int baseValue, bool updateEveryTime = false) : base(baseValue, updateEveryTime) { }
 
 		public static implicit operator ModifiedInt(int baseValue) => new ModifiedInt(baseValue);

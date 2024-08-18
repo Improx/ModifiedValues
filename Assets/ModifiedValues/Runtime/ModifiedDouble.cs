@@ -8,6 +8,8 @@ namespace ModifiedValues
 
 		public ModifiedDouble(Func<double> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
 
+		public ModifiedDouble(Func<double> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : base(baseValueGetter, dependency, updateEveryTime) { }
+
 		public ModifiedDouble(double baseValue, bool updateEveryTime = false) : base(baseValue, updateEveryTime) { }
 
 		public static implicit operator ModifiedDouble(double baseValue) => new ModifiedDouble(baseValue);

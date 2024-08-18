@@ -8,6 +8,8 @@ namespace ModifiedValues
 
 		public ModifiedLong(Func<long> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
 
+		public ModifiedLong(Func<long> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : base(baseValueGetter, dependency, updateEveryTime) { }
+
 		public ModifiedLong(long baseValue, bool updateEveryTime = false) : base(baseValue, updateEveryTime) { }
 
 		public static implicit operator ModifiedLong(long baseValue) => new ModifiedLong(baseValue);
