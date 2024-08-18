@@ -286,7 +286,7 @@ MonoBehaviour:
   Lol5:
     UpdateEveryTime: 0
     _savedBaseValue: 0
-    _usingSavedBaseValue: 1
+    _usingSavedBaseValue: 0
     _prevBaseValue: 3
     _value: 3
   Lol6:
@@ -427,7 +427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1457711298
 Transform:
   m_ObjectHideFlags: 0
@@ -459,7 +459,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1973680070
 Transform:
   m_ObjectHideFlags: 0
@@ -487,4 +487,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d24ad74171603d4f881e95d15ff3b3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Haha:
+    UpdateEveryTime: 0
+    _savedBaseValue: 6
+    _usingSavedBaseValue: 1
+    _prevBaseValue: 6
+    _value: 6
   Stats: []

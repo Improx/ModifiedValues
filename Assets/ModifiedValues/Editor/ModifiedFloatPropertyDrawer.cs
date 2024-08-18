@@ -73,24 +73,65 @@ namespace ModifiedValues.Editor
 
 		public System.Object GetPropertyInstance(SerializedProperty property, UnityEngine.Object targetObject)
 		{
-			string path = property.propertyPath;
+			if (property == null || targetObject == null)
+				return null;
 
-			System.Object obj = targetObject;
-			var type = obj.GetType();
+			string path = property.propertyPath.Replace(".Array.data[", "[");
+			object obj = targetObject;
+			string[] elements = path.Split('.');
 
-			var fieldNames = path.Split('.');
-			for (int i = 0; i < fieldNames.Length; i++)
+			foreach (var element in elements)
 			{
-				var info = type.GetField(fieldNames[i], BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				if (info == null)
-					break;
-
-				// Recurse down to the next nested object.
-				obj = info.GetValue(obj);
-				type = info.FieldType;
+				if (element.Contains("["))
+				{
+					string elementName = element.Substring(0, element.IndexOf("["));
+					int index = int.Parse(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
+					obj = GetValue(obj, elementName, index);
+				}
+				else
+				{
+					obj = GetValue(obj, element);
+				}
 			}
 
 			return obj;
+		}
+
+		private static object GetValue(object source, string name)
+		{
+			if (source == null)
+				return null;
+
+			var type = source.GetType();
+			var field = type.GetField(name, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+			if (field == null)
+			{
+				var property = type.GetProperty(name, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
+				if (property == null)
+					return null;
+
+				return property.GetValue(source, null);
+			}
+
+			return field.GetValue(source);
+		}
+
+		private static object GetValue(object source, string name, int index)
+		{
+			var enumerable = GetValue(source, name) as System.Collections.IEnumerable;
+			if (enumerable == null)
+				return null;
+
+			var enm = enumerable.GetEnumerator();
+
+			for (int i = 0; i <= index; i++)
+			{
+				if (!enm.MoveNext())
+					return null;
+			}
+
+			return enm.Current;
 		}
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
