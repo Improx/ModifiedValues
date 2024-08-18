@@ -493,4 +493,15 @@ MonoBehaviour:
     _usingSavedBaseValue: 1
     _prevBaseValue: 6
     _value: 6
-  Stats: []
+  Haha2:
+    UpdateEveryTime: 0
+    _savedBaseValue: 0
+    _usingSavedBaseValue: 1
+    _prevBaseValue: 0
+    _value: 0
+  Stats:
+  - UpdateEveryTime: 0
+    _savedBaseValue: 0
+    _usingSavedBaseValue: 0
+    _prevBaseValue: 0
+    _value: 0

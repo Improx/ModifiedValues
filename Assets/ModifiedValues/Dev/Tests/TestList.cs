@@ -11,12 +11,5 @@ namespace ModifiedValues.Dev.Tests
 		public ModifiedFloat Haha2;
 		public List<ModifiedFloat> Stats = new();
 
-		private void Awake()
-		{
-			Haha2 = Haha;
-
-			Stats.Add(new ModifiedFloat(5));
-			Stats.Add(Haha);
-		}
 	}
 }

@@ -26,7 +26,11 @@ namespace ModifiedValues.Editor
 					//Unity sneakily created a bad instance of it, bypassing all constructors
 					position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 					GUI.contentColor = new Color(1f, 0.77f, 0.77f);
-					EditorGUI.LabelField(position, "Uninitialized.");
+					if (GUI.Button(position, new GUIContent("Uninitialized.", "Click to create with default base value.")))
+					{
+						SetPropertyInstance(property, new ModifiedFloat(default(float)), targetObject);
+						EditorUtility.SetDirty(targetObject);
+					}
 					GUI.contentColor = Color.white;
 					return;
 				}
@@ -133,6 +137,78 @@ namespace ModifiedValues.Editor
 
 			return enm.Current;
 		}
+
+		public static void SetPropertyInstance(SerializedProperty property, ModifiedFloat newValue, UnityEngine.Object targetObject)
+		{
+			if (property == null || targetObject == null)
+				return;
+
+			string path = property.propertyPath.Replace(".Array.data[", "[");
+			object obj = targetObject;
+			string[] elements = path.Split('.');
+
+			for (int i = 0; i < elements.Length - 1; i++)
+			{
+				string element = elements[i];
+
+				if (element.Contains("["))
+				{
+					string elementName = element.Substring(0, element.IndexOf("["));
+					int index = int.Parse(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
+					obj = GetValue(obj, elementName, index);
+				}
+				else
+				{
+					obj = GetValue(obj, element);
+				}
+			}
+
+			string finalElement = elements[elements.Length - 1];
+			if (finalElement.Contains("["))
+			{
+				string elementName = finalElement.Substring(0, finalElement.IndexOf("["));
+				int index = int.Parse(finalElement.Substring(finalElement.IndexOf("[")).Replace("[", "").Replace("]", ""));
+				SetValue(obj, elementName, newValue, index);
+			}
+			else
+			{
+				SetValue(obj, finalElement, newValue);
+			}
+
+			EditorUtility.SetDirty(targetObject);
+		}
+
+		private static void SetValue(object source, string name, object value)
+		{
+			if (source == null)
+				return;
+
+			var type = source.GetType();
+			var field = type.GetField(name, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+			if (field == null)
+			{
+				var property = type.GetProperty(name, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
+				if (property == null)
+					return;
+
+				property.SetValue(source, value, null);
+			}
+			else
+			{
+				field.SetValue(source, value);
+			}
+		}
+
+		private static void SetValue(object source, string name, object value, int index)
+		{
+			var enumerable = GetValue(source, name) as System.Collections.IList;
+			if (enumerable == null)
+				return;
+
+			enumerable[index] = value;
+		}
+
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
