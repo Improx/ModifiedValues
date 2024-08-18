@@ -559,4 +559,4 @@ switch (Example.Value)
 }
 ```
 
-* With a few changes this library can also be used as a normal C# library without Unity, by deleting a few things. The only things that make this a Unity library are the custom property drawers (just delete the Editor folder), the `[SerializeField]` attribute in ModifiedValue.cs, and the small things in the Generator.cs class.
+* With a few changes this library can also be used as a normal C# library without Unity, by deleting a few things. First of all, just use the Assets/ModifiedValues path (which is anyway the package installation folder). The only things that make this a Unity library are the custom property drawers (just delete the Editor folder), the `[SerializeField]` attribute in ModifiedValue.cs, and the small things in the Generator.cs class. Meta files are also part of this repo but redundant if used without Unity.
