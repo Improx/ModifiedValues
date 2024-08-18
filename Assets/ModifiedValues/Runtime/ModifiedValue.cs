@@ -256,10 +256,16 @@ namespace ModifiedValues
 			return mod;
 		}
 
-		private T CalculateValue(IReadOnlyList<Modifier> activeModifiers)
+		/// <summary>
+		/// Value up to and including <see cref="upToLayer">
+		/// </summary>
+		/// <param name="activeModifiers"></param>
+		/// <param name="upToLayer"></param>
+		/// <returns></returns>
+		private T CalculateValue(IReadOnlyList<Modifier> activeModifiers, int upToLayer = int.MaxValue)
 		{
 			T currentValue = BaseValue;
-			var layers = activeModifiers.Select(m => m.Layer).Distinct().OrderBy(layer => layer);
+			var layers = activeModifiers.Select(m => m.Layer).Distinct().Where(layer => layer <= upToLayer).OrderBy(layer => layer);
 			foreach (int layer in layers)
 			{
 				var modsInLayer = activeModifiers.Where(m => m.Layer == layer);
@@ -280,6 +286,16 @@ namespace ModifiedValues
 		{
 			_value = CalculateValue(ActiveModifiers);
 			IsDirty = false;
+		}
+
+		/// <summary>
+		/// Value up to and including <see cref="upToLayer">
+		/// </summary>
+		/// <param name="upToLayer"></param>
+		/// <returns></returns>
+		public T ValueUpToLayer(int upToLayer)
+		{
+			return CalculateValue(ActiveModifiers, upToLayer);
 		}
 
 		#region Preview methods
