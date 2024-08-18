@@ -74,6 +74,17 @@ namespace ModifiedValues
 			return true;
 		}
 
+		/// <summary>
+		/// Returns the number of dependencies removed.
+		/// </summary>
+		/// <returns></returns>
+		public int RemoveAllDependencies()
+		{
+			int count = _dependencies.Count;
+			_dependencies.Clear();
+			return count;
+		}
+
 		private void ModifierChangedEventHandler(object sender, EventArgs e)
 		{
 			SetDirty();
