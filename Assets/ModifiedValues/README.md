@@ -14,7 +14,7 @@ This can also be quite easily used as a non-Unity C# library by removing only a 
 
 ## ![][HeaderDecorator] Installation ![][HeaderDecorator]
 
-You can install this as a Unity Package by going to Window -> Package Manager, clicking the plus sign, "Add package from git URL" and pasting `https://github.com/Improx/ModifiedValues.git`.
+You can install this as a Unity Package by going to Window -> Package Manager, clicking the plus sign, "Add package from git URL" and pasting `https://github.com/Improx/ModifiedValues.git?path=/Assets/ModifiedValues`.
 
 ## ![][HeaderDecorator] Quickstart Example ![][HeaderDecorator]
 
