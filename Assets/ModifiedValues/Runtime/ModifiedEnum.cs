@@ -8,6 +8,8 @@ namespace ModifiedValues
 
 		public ModifiedEnum(Func<T> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
 
+		public ModifiedEnum(Func<T> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : base(baseValueGetter, dependency, updateEveryTime) { }
+
 		public ModifiedEnum(T baseValue, bool updateEveryTime = false) : base(baseValue, updateEveryTime) { }
 
 		public static implicit operator ModifiedEnum<T>(T baseValue) => new ModifiedEnum<T>(baseValue);

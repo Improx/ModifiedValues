@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using ModifiedValues;
 using UnityEngine;
 
-public class Test2 : MonoBehaviour
+namespace ModifiedValues.Dev.Tests
 {
-	public ModifiedFloat UnInit;
-	private void Awake()
+	public class Test2 : MonoBehaviour
 	{
-		var test = new NonSerializedHolder();
-		//float value = test.Speed;
-		//Debug.Log(value);
-		float unInitValue = UnInit;
-		Debug.Log(UnInit);
+		public ModifiedFloat UnInit;
+		private void Awake()
+		{
+			var test = new NonSerializedHolder();
+			//float value = test.Speed;
+			//Debug.Log(value);
+			float unInitValue = UnInit;
+			Debug.Log(UnInit);
+		}
 	}
-}
 
-public class NonSerializedHolder
-{
-	public ModifiedFloat Speed;
+	public class NonSerializedHolder
+	{
+		public ModifiedFloat Speed;
 
+	}
 }

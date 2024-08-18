@@ -22,16 +22,51 @@ namespace ModifiedValues
 		[HideInInspector] public bool UpdateEveryTime = false;
 		public bool IsDirty { get; protected set; } = true;
 		public event EventHandler<EventArgs> BecameDirty;
-		protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
+		protected HashSet<Modifier> _modifiers = new();
 		public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
 
 		public IReadOnlyList<Modifier> ActiveModifiers => _modifiers.Where(m => m.Active).ToList().AsReadOnly();
 		public IReadOnlyList<Modifier> InactiveModifiers => _modifiers.Where(m => !m.Active).ToList().AsReadOnly();
+		private HashSet<ModifiedValue> _dependencies = new();
+		public IReadOnlyList<ModifiedValue> Dependencies => _dependencies.ToList().AsReadOnly();
 
 		public void SetDirty()
 		{
 			IsDirty = true;
 			BecameDirty?.Invoke(this, EventArgs.Empty);
+		}
+
+		/// <summary>
+		/// Add another ModifiefValue as a dependency.
+		/// When the dependency becomes dirty, this becomes dirty as well.
+		/// Useful when the base value getter of this ModifiedValue uses another
+		/// ModifiedValue in its formula. Value will be calculated correctly on inquiry
+		/// because on every Value inquiry, the base value is compared to the previous one.
+		/// However, sometimes we need to know that the valu is changed immediately, for
+		/// example in UI.
+		/// Returns false if dependency was already added in the past.
+		/// </summary>
+		/// <param name="dependency"></param>
+		/// <returns></returns>
+		public bool AddDependency(ModifiedValue dependency)
+		{
+			if (_dependencies.Contains(dependency)) return false;
+			_dependencies.Add(dependency);
+			dependency.BecameDirty += ModifierChangedEventHandler;
+			return true;
+		}
+
+		/// <summary>
+		/// Returns false if dependency wasn't there.
+		/// </summary>
+		/// <param name="dependency"></param>
+		/// <returns></returns>
+		public bool RemoveDependency(ModifiedValue dependency)
+		{
+			if (!Dependencies.Contains(dependency)) return false;
+			_dependencies.Remove(dependency);
+			dependency.BecameDirty -= ModifierChangedEventHandler;
+			return true;
 		}
 
 		private void ModifierChangedEventHandler(object sender, EventArgs e)
@@ -177,6 +212,17 @@ namespace ModifiedValues
 		}
 		public T DirtyValue => _value;
 
+		public ModifiedValue(T baseValue, bool updateEveryTime = false)
+		{
+			_savedBaseValue = baseValue;
+			_usingSavedBaseValue = true;
+			_baseValueGetter = () => _savedBaseValue;
+			_value = BaseValueGetter();
+			_prevBaseValue = _value;
+			UpdateEveryTime = updateEveryTime;
+			Init = true;
+		}
+
 		public ModifiedValue(Func<T> baseValueGetter, bool updateEveryTime = false)
 		{
 			_baseValueGetter = baseValueGetter;
@@ -187,15 +233,9 @@ namespace ModifiedValues
 			Init = true;
 		}
 
-		public ModifiedValue(T baseValue, bool updateEveryTime = false)
+		public ModifiedValue(Func<T> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : this(baseValueGetter, updateEveryTime)
 		{
-			_savedBaseValue = baseValue;
-			_usingSavedBaseValue = true;
-			_baseValueGetter = () => _savedBaseValue;
-			_value = BaseValueGetter();
-			_prevBaseValue = _value;
-			UpdateEveryTime = updateEveryTime;
-			Init = true;
+			AddDependency(dependency);
 		}
 
 		/// <summary>

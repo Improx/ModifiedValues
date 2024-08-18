@@ -8,6 +8,8 @@ namespace ModifiedValues
 
 		public ModifiedBool(Func<bool> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
 
+		public ModifiedBool(Func<bool> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : base(baseValueGetter, dependency, updateEveryTime) { }
+
 		public ModifiedBool(bool baseValue, bool updateEveryTime = false) : base(baseValue, updateEveryTime) { }
 
 		public static implicit operator ModifiedBool(bool baseValue) => new ModifiedBool(baseValue);

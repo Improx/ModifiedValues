@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using ModifiedValues;
 using UnityEngine;
 
-public class ListTest : MonoBehaviour
+namespace ModifiedValues.Dev.Tests
 {
-	public List<ModifiedFloat> Stats = new();
-
-	private void Awake()
+	public class ListTest : MonoBehaviour
 	{
-		Stats.Add(new ModifiedFloat(5));
+		public List<ModifiedFloat> Stats = new();
+
+		private void Awake()
+		{
+			Stats.Add(new ModifiedFloat(5));
+		}
 	}
 }
