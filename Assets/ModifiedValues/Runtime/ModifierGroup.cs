@@ -11,7 +11,7 @@ namespace ModifiedValues
 	/// all of them at once.
 	/// An example use case is a buff that has multiple Modifiers.
 	/// Note: if a Modifier is in a ModifierGroup, it does not automatically
-	/// mean that it is Attached to a ModifiedValue.
+	/// mean that it is Attached to a ModifiedValue, or Active.
 	/// </summary>
 	public class ModifierGroup
 	{
@@ -19,7 +19,6 @@ namespace ModifiedValues
 		public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
 		public IReadOnlyList<Modifier> ActiveModifiers => _modifiers.Where(m => m.Active).ToList().AsReadOnly();
 		public IReadOnlyList<Modifier> InactiveModifiers => _modifiers.Where(m => !m.Active).ToList().AsReadOnly();
-
 		public bool IsEmpty => _modifiers.Count == 0;
 
 		public static ModifierGroup operator +(ModifierGroup group, Modifier mod)
@@ -57,6 +56,9 @@ namespace ModifiedValues
 			return _modifiers.GetEnumerator();
 		}
 
+		/// <summary>
+		/// Sets all contained Modifiers as Active.
+		/// </summary>
 		public void SetActive()
 		{
 			foreach (var mod in _modifiers)
@@ -65,14 +67,21 @@ namespace ModifiedValues
 			}
 		}
 
+		/// <summary>
+		/// Sets all contained Modifiers as not Active.
+		/// </summary>
 		public void SetInactive()
 		{
 			foreach (var mod in _modifiers)
 			{
-				mod.Active = true;
+				mod.Active = false;
 			}
 		}
 
+		/// <summary>
+		/// Attach each contained Modifier to <paramref name="modvalue"/>.
+		/// </summary>
+		/// <param name="modValue"></param>
 		public void Attach(ModifiedValue modValue)
 		{
 			foreach (var mod in _modifiers)
@@ -81,11 +90,26 @@ namespace ModifiedValues
 			}
 		}
 
+		/// <summary>
+		/// Detach each contained Modifier from <paramref name="modvalue"/>.
+		/// </summary>
+		/// <param name="modValue"></param>
 		public void Detach(ModifiedValue modValue)
 		{
 			foreach (var mod in _modifiers)
 			{
 				modValue.Detach(mod);
+			}
+		}
+
+		/// <summary>
+		/// Detach each contained Modifier from all its ModifiedValues.
+		/// </summary>
+		public void DetachFromAll()
+		{
+			foreach (var mod in _modifiers)
+			{
+				mod.DetachFromAll();
 			}
 		}
 
@@ -107,6 +131,7 @@ namespace ModifiedValues
 			{
 				mod.DetachFromAll();
 			}
+			Clear();
 		}
 
 		/// <summary>
@@ -126,7 +151,7 @@ namespace ModifiedValues
 		}
 
 		/// <summary>
-		/// For each Modifier in this collection that matches the condition
+		/// For each Modifier in this collection that matches the condition,
 		/// detach it from all its ModifiedValues.
 		/// </summary>
 		public void DetachWhere(Func<Modifier, bool> condition)
