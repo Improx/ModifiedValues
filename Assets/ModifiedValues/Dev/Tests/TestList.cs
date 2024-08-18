@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ModifiedValues.Dev.Tests
 {
-	public class ListTest : MonoBehaviour
+	public class TestList : MonoBehaviour
 	{
 		public List<ModifiedFloat> Stats = new();
 
