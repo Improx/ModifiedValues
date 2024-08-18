@@ -4,8 +4,8 @@
 	"displayName": "ModifiedValues",
 	"description": "A powerful C# library for Unity that enables modifying (numeric and other) values while keeping track and managing the modifiers affecting them.",
 	"unity": "2021.2",
-	"documentationUrl": "https://github.com/Improx/ModifiedValues/blob/main/Assets/ModifiedValues/README.md",
-	"licensesUrl": "https://github.com/Improx/ModifiedValues/blob/main/Assets/ModifiedValues/LICENSE",
+	"documentationUrl": "https://github.com/Improx/ModifiedValues/blob/main/README.md",
+	"licensesUrl": "https://github.com/Improx/ModifiedValues/blob/main/LICENSE",
 	"keywords": [
 		"buff",
 		"debuff",
