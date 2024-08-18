@@ -30,6 +30,12 @@ namespace ModifiedValues.Dev.Tests
 			Debug.Log("<color=green>Modifying</color>");
 
 			GeneralSpeed.Add(5);
+
+			Debug.Log("<color=green>Testing that a disposed ModifiedValues ubsibscribes from dependency, by setting a new object:</color>");
+			AttackSpeed = new ModifiedFloat(() => GeneralSpeed, GeneralSpeed);
+			AttackSpeed.BecameDirty += (s, e) => Debug.Log("Just modded Attack speed: " + AttackSpeed);
+
+			GeneralSpeed.Add(5);
 		}
 	}
 }
