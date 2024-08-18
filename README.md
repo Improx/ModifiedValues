@@ -257,7 +257,7 @@ Finally, the Buffs layer takes effect. Because the Control modifier has a higher
 
 If the Control buff were detached, then the Potion and Blessing buffs would have effect.
 
-## ![][HeaderDecorator] BecameDirty Event ![][HeaderDecorator]
+## ![][HeaderDecorator] BecameDirty Event and Dependencies ![][HeaderDecorator]
 
 To avoid redundant calculations, a ModifiedValue uses a dirty flag pattern to only update its value if something about its modifiers or base value has changed. The value will be updated on the next time some code inquires for the value. However, in some situations you need to know exactly whenever a ModifiedValue became dirty, in order to immediately inquire (and update) its new value. Such a use case is for example a UI displaying the value. Instead of asking for a ModifiedValue's value every frame in case it's changed, you can use its `BecameDirty` event:
 
@@ -285,7 +285,11 @@ public class HealthBar : MonoBehaviour
 }
 ```
 
-If a ModifiedValue's base value depends on another ModifiedValue's final value, then whenever the dependency's final value changes, the depending ModifiedValue will not become dirty, even though its value would be recalculated correctly upon inquiry (upon each inquiry of `Value`, the ModifiedValue checks whether the current base value is different from the last time it was inquired, and if it is, then it sets itself dirty and recalculates the final value). However, without an explicit inquiry of the depending ModifiedValue's `Value`, the UI would not know that the base value (and the final value) has changed. In such a situation, we should set the depending ModifiedValue dirty whenever the dependency ModifiedValue has become dirty. As an example, `AttackSpeed` depends on `Speed`, and we can set up the dirty-setting chain like this:
+If a ModifiedValue's base value depends on another ModifiedValue's final value, then whenever the dependency's final value changes, the depending ModifiedValue will not become dirty, even though its value would be recalculated correctly upon inquiry (upon each inquiry of `Value`, the ModifiedValue checks whether the current base value is different from the last time it was inquired, and if it is, then it sets itself dirty and recalculates the final value).
+
+However, imagine a situation where a UI needs to know immediately after a ModifiedValue became dirty, to reflect its potentially updated value. If its value has been updated just because its dependency has changed in value, by default, the depending ModifiedValue's BecameDirty event is not invoked. Without an explicit inquiry of the depending ModifiedValue's `Value`, the UI would not know that the base value (and the final value) has changed.
+
+In such a situation, we should set the depending ModifiedValue dirty whenever the dependency ModifiedValue has become dirty. As an example, `AttackSpeed` depends on `Speed`, and we can set up the dependency already in the construction phase, later with a helper method, or completely manually:
 
 ```C#
 public class Character
@@ -297,6 +301,15 @@ public class Character
 	{
 		//Initialization
 		Speed = 10;
+
+		//Constructing AttackSpeed and declaring a dependency with additional parameter:
+		AttackSpeed = new ModifiedFloat(() => Speed, Speed);
+		
+		//Is the same thing as doing:
+		AttackSpeed = new ModifiedFloat(() => Speed);
+		AttackSpeed.AddDependency(Speed);
+
+		//Which is almost the same thing as doing:
 		AttackSpeed = new ModifiedFloat(() => Speed);
 		Speed.BecameDirty += (sender, eventArgs) => AttackSpeed.SetDirty();
 	}
