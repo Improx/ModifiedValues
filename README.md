@@ -316,9 +316,7 @@ public class Character
 }
 ```
 
-Now a UI element can subscribe to `AttackSpeed.BecameDirty` to be able to react whenever AttackSpeed's final value has changed, even if that change was due to its dependency's (Speed's) final value change.
-
-If a BaseValueGetter function is used, then, if the return value of the base value getter has changed, the BecameDirty event will not be called immediately, but only at the beginning of Value inquiry.
+Now a UI element can subscribe to `AttackSpeed.BecameDirty` to be able to react whenever AttackSpeed's final value has changed, even if that change was only due to its dependency's (Speed's) final value change.
 
 ## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
