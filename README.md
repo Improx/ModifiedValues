@@ -318,6 +318,8 @@ public class Character
 
 Now a UI element can subscribe to `AttackSpeed.BecameDirty` to be able to react whenever AttackSpeed's final value has changed, even if that change was only due to its dependency's (Speed's) final value change.
 
+You'll need to be careful to not set up circular dependencies.
+
 ## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
 When a Modifier is attached to a ModifiedValue, it means that it affects its value. When creating modifiers with one of the readily provided methods, such as `Speed.Add(5)`, the modifier returned by this method is automatically attached to Speed.
