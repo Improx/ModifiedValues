@@ -423,7 +423,7 @@ Behind the scenes, a modifier's `Operation` is always a function that takes thre
 
 As an example, when you do `Speed.Add(5f)`, behind the scenes, a Modifier<float> is created whose operation is `(_, _, latestValue) => latestValue + 5f`. In that case, the operation only cares about the latest value. That way, multiple additive modifiers can have effect, each adding a number to the output of the previous modifier. If the operation had been `(baseValue, _, _) => baseValue + 5f`, then only the last Modifier would have the effect, because its operation doesn't care about anything else other than the ModifiedValue's base value.
 
-An example of an operation that uses more than one input is `AddFraction`. It adds a fraction to the value based on what the value was at the start of the layer, instead of the latest value. Because of this, many modifiers of this kind would stack multiplicatively.
+An example of an operation that uses more than one input is `AddFraction`. It adds a fraction to the value based on what the value was at the start of the layer, instead of the latest value. Because of this, many modifiers of this kind would stack additively multiplicatively.
 
 ```C#
 Speed.AddFraction(0.2f);
@@ -440,7 +440,7 @@ Speed.ModifyFromBaseAndLatest((baseValue, latestValue) => latestValue + 0.2f * b
 Speed.Modify((baseValue, _, latestValue) => latestValue + 0.2f * baseValue, order : DefaultOrders.AddFraction);
 ```
 
-The difference becomes apparent when multiple operations stack. As an example, here's how `Mul` stacks (compound operation):
+The difference becomes apparent when multiple operations stack. As an example, here's how `Mul` stacks (multiplicatively):
 
 ```C#
 ModifiedFloat Speed = 100;
