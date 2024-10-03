@@ -59,7 +59,7 @@ If you want to be able to remove these buffs later, you need to save the modifie
 
 ```C#
 Modifier energizedBuff = Speed.Mul(1.2f);
-Modifier rollerScatesBuff = Speed.Add(5);
+Modifier rollerSkatesBuff = Speed.Add(5);
 
 //After some time passes, you want to remove the Energized buff.
 energizedBuff.DetachFromAll();
@@ -75,14 +75,14 @@ Speed += 5;
 
 //After some time passes, you want to remove the Energized buff.
 //However, we can't just simply divide by 1.2f to get the correct result, because
-//the rollerscates buff is still active
-//We need to keep the additive rollerscates effect like this:
+//the rollerskates buff is still active
+//We need to keep the additive rollerskates effect like this:
 
 Speed -= 5;
 Speed /= 1.2f;
 Speed += 5;
 
-Debug.Log(Speed); //Will print 12
+Debug.Log(Speed); //Will print 15
 ```
 With many different kinds of buffs, doing this manually could get extremely convoluted. One of the main conveniences of this library is that the buffs don't have to know about each other. For each modifier, you just define how it modifies the value, and then you can attach and detach these modifiers independently, while keeping the final value always correct. You also don't need to worry about the temporal order in which you apply modifiers. The ordering, layers and priorities of modifiers are defined in optional parameters (explained further down).
 
@@ -210,11 +210,11 @@ A ModifiedValue object uses the dirty flag pattern to re-calculate its value upo
 ModifiedFloat Speed = 10;
 
 Modifier energizedBuff = Speed.Mul(1.2f, priority : 1);
-Modifier rollerScatesBuff = Speed.Add(5, priority : 0);
+Modifier rollerSkatesBuff = Speed.Add(5, priority : 0);
 
 Debug.Log(Speed); //Will print 12. Only the Mul modifier has effect, because it has the higher priority in the shared layer 0.
 
-rollerScatesBuff.Priority = 2;
+rollerSkatesBuff.Priority = 2;
 
 Debug.Log(Speed); //Will print 15 because now the Add modifier has the higher priority.
 
