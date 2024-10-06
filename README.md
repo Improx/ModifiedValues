@@ -419,11 +419,11 @@ Modifier<float> mod = Speed.ModifyFromLatest((v) => v + Time.time);
 //Time.time is an external dependency that changes each frame, so we do the following:
 Speed.UpdateEveryTime = true;
 ```
-Behind the scenes, a modifier's `Operation` is always a function that takes three inputs: 1) base value, 2) value at the start of the layer, and 3) latest value in the layer, at the moment the modifier takes effect. A modifier's 'Operation' can use all or a subset of those inputs.
+Behind the scenes, a modifier's `Operation` is always a function that takes three inputs: 1) base value, 2) value at the start of the layer, and 3) latest value in the layer, at the moment the modifier takes effect. A modifier's `Operation` can use all or a subset of those inputs.
 
 As an example, when you do `Speed.Add(5f)`, behind the scenes, a Modifier<float> is created whose operation is `(_, _, latestValue) => latestValue + 5f`. In that case, the operation only cares about the latest value. That way, multiple additive modifiers can have effect, each adding a number to the output of the previous modifier. If the operation had been `(baseValue, _, _) => baseValue + 5f`, then only the last Modifier would have the effect, because its operation doesn't care about anything else other than the ModifiedValue's base value.
 
-An example of an operation that uses more than one input is `AddFraction`. It adds a fraction to the value based on what the value was at the start of the layer, instead of the latest value. Because of this, many modifiers of this kind would stack additively multiplicatively.
+An example of an operation that uses more than one input is `AddFraction`. It adds a fraction to the value based on what the value was at the start of the layer, instead of the latest value. Because of this, many modifiers of this kind would stack additively instead of multiplicatively.
 
 ```C#
 Speed.AddFraction(0.2f);
