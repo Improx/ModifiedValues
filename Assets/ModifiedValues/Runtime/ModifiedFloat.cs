@@ -141,5 +141,13 @@ namespace ModifiedValues
 			return mod;
 		}
 
+		public Modifier<float> MaxCapFinalDynamic(ModifiedValue<float> amountDynamic)
+		{
+			var mod = TemplateMaxCapDynamic(amountDynamic, int.MaxValue, int.MaxValue);
+			Attach(mod);
+			AddDependency(amountDynamic);
+			return mod;
+		}
+
 	}
 }

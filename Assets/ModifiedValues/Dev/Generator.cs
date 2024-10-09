@@ -21,7 +21,8 @@ namespace ModifiedValues.Dev
 		/// Continuous numbers are based on float
 		/// Discrete numbers based on uint (not int, because replacing the word
 		/// "int" would mess with method arguments)
-		/// bool and Enum not generated because they don't have enough similarities
+		/// bool and Enum not generated because they don't have enough
+		/// similarities, so those need to be updated manually.
 		/// </summary>
 		private static void GenerateClasses()
 		{

@@ -9,6 +9,8 @@ public class TestModifyWithModifiedValue : MonoBehaviour
 	public ModifiedFloat MaxHP_Bad = 100;
 	public ModifiedFloat HP = 10;
 	public ModifiedFloat MaxHP = 100;
+	public ModifiedDouble HP_Double = 10;
+	public ModifiedDouble MaxHP_Double = 100;
 
 	private void Awake()
 	{
@@ -24,5 +26,10 @@ public class TestModifyWithModifiedValue : MonoBehaviour
 		Debug.Log(HP);
 		MaxHP.Set(8);
 		Debug.Log(HP);
+
+		HP_Double.MaxCapDynamic(MaxHP_Double);
+		Debug.Log(HP_Double);
+		MaxHP_Double.Set(8);
+		Debug.Log(HP_Double);
 	}
 }
