@@ -47,7 +47,7 @@ namespace ModifiedValues
 		/// Useful when the base value getter of this ModifiedValue uses another
 		/// ModifiedValue in its formula. Value will be calculated correctly on inquiry
 		/// because on every Value inquiry, the base value is compared to the previous one.
-		/// However, sometimes we need to know that the valu is changed immediately, for
+		/// However, sometimes we need to know that the value is changed immediately, for
 		/// example in UI.
 		/// Returns false if dependency was already added in the past.
 		/// </summary>
