@@ -29,6 +29,9 @@ namespace ModifiedValues.Dev
 			GenerateDiscreteNumberClasses();
 		}
 
+		/// <summary>
+		/// Using ModifiedFloat.cs file as the template
+		/// </summary>
 		private static void GenerateContinuousNumberClasses()
 		{
 			List<string> types = new List<string>
@@ -56,6 +59,10 @@ namespace ModifiedValues.Dev
 			}
 		}
 
+		/// <summary>
+		/// Using ModifiedUint.cs file as the template, not ModifiedInt
+		/// because replacing the "int" word would mess up code regarding layer, priority, order parameters.
+		/// </summary>
 		private static void GenerateDiscreteNumberClasses()
 		{
 			List<string> types = new List<string>
