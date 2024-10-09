@@ -5,31 +5,14 @@ using ModifiedValues;
 
 public class TestModifyWithModifiedValue : MonoBehaviour
 {
-	public ModifiedFloat HP_Bad = 10;
-	public ModifiedFloat MaxHP_Bad = 100;
-	public ModifiedFloat HP = 10;
-	public ModifiedFloat MaxHP = 100;
-	public ModifiedDouble HP_Double = 10;
-	public ModifiedDouble MaxHP_Double = 100;
+	public ModifiedFloat A = 10;
+	public ModifiedFloat B = 100;
 
 	private void Awake()
 	{
-		//This is not expected to work:
-		HP_Bad.MaxCap(MaxHP_Bad);
-		HP_Bad.AddDependency(MaxHP_Bad);
-		Debug.Log(HP_Bad);
-		MaxHP_Bad.Set(8);
-		Debug.Log(HP_Bad);
-
-		//But this is expected to work:
-		HP.MaxCapDynamic(MaxHP);
-		Debug.Log(HP);
-		MaxHP.Set(8);
-		Debug.Log(HP);
-
-		HP_Double.MaxCapDynamic(MaxHP_Double);
-		Debug.Log(HP_Double);
-		MaxHP_Double.Set(8);
-		Debug.Log(HP_Double);
+		A.MulDynamic(B);
+		Debug.Log(A);
+		B.Set(4);
+		Debug.Log(A);
 	}
 }
