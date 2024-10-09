@@ -128,5 +128,18 @@ namespace ModifiedValues
 			return mod;
 		}
 
+		public static Modifier<float> TemplateMaxCapDynamic(ModifiedValue<float> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Cap)
+		{
+			return Modifier<float>.NewFromLatest((latestValue) => Math.Min(latestValue, amountDynamic), priority, layer, order);
+		}
+
+		public Modifier<float> MaxCapDynamic(ModifiedValue<float> amountDynamic, int priority = 0, int layer = 0)
+		{
+			var mod = TemplateMaxCapDynamic(amountDynamic, priority, layer);
+			Attach(mod);
+			AddDependency(amountDynamic);
+			return mod;
+		}
+
 	}
 }
