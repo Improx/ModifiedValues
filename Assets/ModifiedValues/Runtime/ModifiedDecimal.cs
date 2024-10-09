@@ -5,7 +5,6 @@ namespace ModifiedValues
 	[Serializable]
 	public class ModifiedDecimal : ModifiedValue<decimal>
 	{
-
 		public ModifiedDecimal(Func<decimal> baseValueGetter, bool updateEveryTime = false) : base(baseValueGetter, updateEveryTime) { }
 
 		public ModifiedDecimal(Func<decimal> baseValueGetter, ModifiedValue dependency, bool updateEveryTime = false) : base(baseValueGetter, dependency, updateEveryTime) { }
@@ -26,6 +25,19 @@ namespace ModifiedValues
 			return mod;
 		}
 
+		public static Modifier<decimal> TemplateSetDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
+		{
+			return Modifier<decimal>.NewFromIgnored(() => amountDynamic, priority, layer, order);
+		}
+
+		public Modifier<decimal> SetDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0)
+		{
+			var mod = TemplateSetDynamic(amountDynamic, priority, layer);
+			Attach(mod);
+			AddDependency(amountDynamic);
+			return mod;
+		}
+
 		public static Modifier<decimal> TemplateAdd(decimal amount, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
 		{
 			return Modifier<decimal>.NewFromLatest((latestValue) => latestValue + amount, priority, layer, order);
@@ -35,6 +47,19 @@ namespace ModifiedValues
 		{
 			var mod = TemplateAdd(amount, priority, layer);
 			Attach(mod);
+			return mod;
+		}
+
+		public static Modifier<decimal> TemplateAddDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
+		{
+			return Modifier<decimal>.NewFromLatest((latestValue) => latestValue + amountDynamic, priority, layer, order);
+		}
+
+		public Modifier<decimal> AddDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0)
+		{
+			var mod = TemplateAddDynamic(amountDynamic, priority, layer);
+			Attach(mod);
+			AddDependency(amountDynamic);
 			return mod;
 		}
 
@@ -58,6 +83,27 @@ namespace ModifiedValues
 			return mod;
 		}
 
+		public static Modifier<decimal> TemplateAddFractionDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
+		{
+			return Modifier<decimal>.NewFromLayerStartAndLatest((layerStartValue, latestValue) => latestValue + amountDynamic * layerStartValue, priority, layer, order);
+		}
+
+		/// <summary>
+		/// Adds this fraction of value as it was at the start of this layer.
+		/// Stacks additively.
+		/// </summary>
+		/// <param name="amountDynamic"></param>
+		/// <param name="priority"></param>
+		/// <param name="layer"></param>
+		/// <returns></returns>
+		public Modifier<decimal> AddFractionDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0)
+		{
+			var mod = TemplateAddFractionDynamic(amountDynamic, priority, layer);
+			Attach(mod);
+			AddDependency(amountDynamic);
+			return mod;
+		}
+
 		public static Modifier<decimal> TemplateAddFractionBase(decimal amount, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
 		{
 			return Modifier<decimal>.NewFromBaseAndLatest((baseValue, latestValue) => latestValue + amount * baseValue, priority, layer, order);
@@ -78,6 +124,27 @@ namespace ModifiedValues
 			return mod;
 		}
 
+		public static Modifier<decimal> TemplateAddFractionBaseDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
+		{
+			return Modifier<decimal>.NewFromBaseAndLatest((baseValue, latestValue) => latestValue + amountDynamic * baseValue, priority, layer, order);
+		}
+
+		/// <summary>
+		/// Adds this fraction with respect to the base value.
+		/// Stacks additively.
+		/// </summary>
+		/// <param name="amountDynamic"></param>
+		/// <param name="priority"></param>
+		/// <param name="layer"></param>
+		/// <returns></returns>
+		public Modifier<decimal> AddFractionBaseDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0)
+		{
+			var mod = TemplateAddFractionBaseDynamic(amountDynamic, priority, layer);
+			Attach(mod);
+			AddDependency(amountDynamic);
+			return mod;
+		}
+
 		public static Modifier<decimal> TemplateMul(decimal amount, int priority = 0, int layer = 0, int order = DefaultOrders.Mul)
 		{
 			return Modifier<decimal>.NewFromLatest((latestValue) => latestValue * amount, priority, layer, order);
@@ -87,6 +154,19 @@ namespace ModifiedValues
 		{
 			var mod = TemplateMul(amount, priority, layer);
 			Attach(mod);
+			return mod;
+		}
+
+		public static Modifier<decimal> TemplateMulDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Mul)
+		{
+			return Modifier<decimal>.NewFromLatest((latestValue) => latestValue * amountDynamic, priority, layer, order);
+		}
+
+		public Modifier<decimal> MulDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0)
+		{
+			var mod = TemplateMulDynamic(amountDynamic, priority, layer);
+			Attach(mod);
+			AddDependency(amountDynamic);
 			return mod;
 		}
 
@@ -106,6 +186,27 @@ namespace ModifiedValues
 		{
 			var mod = TemplateMinCap(amount, int.MaxValue, int.MaxValue);
 			Attach(mod);
+			return mod;
+		}
+
+		public static Modifier<decimal> TemplateMinCapDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Cap)
+		{
+			return Modifier<decimal>.NewFromLatest((latestValue) => Math.Max(latestValue, amountDynamic), priority, layer, order);
+		}
+
+		public Modifier<decimal> MinCapDynamic(ModifiedValue<decimal> amountDynamic, int priority = 0, int layer = 0)
+		{
+			var mod = TemplateMinCapDynamic(amountDynamic, priority, layer);
+			Attach(mod);
+			AddDependency(amountDynamic);
+			return mod;
+		}
+
+		public Modifier<decimal> MinCapFinalDynamic(ModifiedValue<decimal> amountDynamic)
+		{
+			var mod = TemplateMinCapDynamic(amountDynamic, int.MaxValue, int.MaxValue);
+			Attach(mod);
+			AddDependency(amountDynamic);
 			return mod;
 		}
 
