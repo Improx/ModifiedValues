@@ -397,7 +397,26 @@ public class SwordBuff
 }
 ```
 
-If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is attached to anything. ModifierGroup is just a collection with the ability to do the same thing for multiple modifiers at once. You can call `modGroup.SetActive()` or `modGroup.SetInactive()` to toggle the Active status of all modifieres, `modGroup.Attach(modValue)` and `modGroup.Detach(modValue)`, and so on. You add and remove modifiers from a group with the `+=` and `-=` operators.
+If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is attached to anything. ModifierGroup is just a collection with the ability to do the same thing for multiple modifiers at once. You can call `modGroup.SetActive()` or `modGroup.SetInactive()` to toggle the Active status of all modifieres, `modGroup.Attach(modValue)` and `modGroup.Detach(modValue)`, and so on. You add and remove modifiers from a group with the `+=` and `-=` operators, or add with an `Add()` method.
+
+`ModifierGroup` can be iterated through with an `foreach (Modifier mod in modGroup)` clause
+
+Some more convenient syntax for `ModifierGroup`:
+```C#
+
+//Can create a new ModifierGroup with elements inside curly brackets:
+ModifierGroup modGroup = new() {character.JumpCount.Add(1)};
+
+//Can iterate through ModifierGroup like this:
+foreach (Modifier mod in modGroup)
+{
+	//Do something
+}
+
+//ForEach method also exists:
+modGroup.ForEach(someAction);
+
+```
 
 ## ![][HeaderDecorator] Modifier Operations ![][HeaderDecorator]
 
