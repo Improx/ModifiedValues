@@ -573,7 +573,7 @@ If a ModifiedValue uses a `BaseValueGetter` function instead of a saved base val
 
 If you still want to delete the base value getter function in the inspector, you can click on the getter button. A saved value will be used (defaulting to the wrapped type's default value), and can be edited in the inspector again.
 
-⚠️ `ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types.⚠️ However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
+⚠️ `ModifiedEnum<YourEnum>` does not have a custom property drawer and and will have limited visibility in the inspector (only the base value is shown and can be changed in the inspector). That's because Unity property drawers do not support generic types. However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`, so that then you can also see the current value int he inspector in addition to the base value. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
 
 ## ![][HeaderDecorator] Other Notes ![][HeaderDecorator]
 
