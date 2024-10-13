@@ -98,9 +98,10 @@ This library provides the following wrapper types with lots of ready functionali
 * `ModifiedLong`
 * `ModifiedUlong`
 * `ModifiedBool`
-* `ModifiedEnum<YourEnum>`
 
-You can wrap other types without needing to create new classes simply by using `ModifiedValue<MyType>`, it just won't have as much functionality by default. For example `ModifiedFloat` too inherits from `ModifiedValue<float>` and adds a bunch of methods on top, such as `Add` and `Mul`. With a generic wrapper, you can still apply modifiers with any custom operations:
+You can wrap other types without needing to create new classes simply by using `ModifiedValue<MyType>`, it just won't have as much functionality by default. For example `ModifiedFloat` just inherits from `ModifiedValue<float>` and adds a bunch of methods on top, such as `Add` and `Mul`. You are of course free to use `ModifiedValue<float>`, but `ModifiedFloat` just has so many ready helper methods. See section "Out-of-the-box Modifiers" below for a full list of helper methods to cover the most common use cases.
+
+With a generic wrapper for any type, you can  apply modifiers with any custom operations. The ModifiedValues system is not limited to cover only the above-mentioned types, but you can create ModifiedValues and Modifiers wrapping any type you want (that don't even need to be numeric):
 
 ```C#
 ModifiedValue<MyType> myValue = new MyType();
