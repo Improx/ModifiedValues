@@ -2,7 +2,7 @@
 	"name": "com.improxgames.modifiedvalues",
 	"version": "1.2.0",
 	"displayName": "ModifiedValues",
-	"description": "A powerful C# library for Unity that enables modifying (numeric and other) values while keeping track and managing the modifiers affecting them.",
+	"description": "A powerful C# library for Unity that enables modifying (numeric and other) values while keeping track and managing the modifiers affecting them. Great for games with buffs/debuffs, stats, statuses, perks, equipment etc.",
 	"unity": "2021.2",
 	"documentationUrl": "https://github.com/Improx/ModifiedValues/blob/main/README.md",
 	"licensesUrl": "https://github.com/Improx/ModifiedValues/blob/main/LICENSE",
