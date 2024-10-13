@@ -14,18 +14,6 @@ namespace ModifiedValues
 
 		public static implicit operator ModifiedUlong(ulong baseValue) => new ModifiedUlong(baseValue);
 
-		public static Modifier<ulong> TemplateSet(ulong amount, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
-		{
-			return Modifier<ulong>.NewFromIgnored(() => amount, priority, layer, order);
-		}
-
-		public Modifier<ulong> Set(ulong amount, int priority = 0, int layer = 0)
-		{
-			var mod = TemplateSet(amount, priority, layer);
-			Attach(mod);
-			return mod;
-		}
-
 		public static Modifier<ulong> TemplateAdd(ulong amount, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
 		{
 			return Modifier<ulong>.NewFromLatest((latestValue) => latestValue + amount, priority, layer, order);

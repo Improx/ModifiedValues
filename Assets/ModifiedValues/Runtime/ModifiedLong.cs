@@ -14,18 +14,6 @@ namespace ModifiedValues
 
 		public static implicit operator ModifiedLong(long baseValue) => new ModifiedLong(baseValue);
 
-		public static Modifier<long> TemplateSet(long amount, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
-		{
-			return Modifier<long>.NewFromIgnored(() => amount, priority, layer, order);
-		}
-
-		public Modifier<long> Set(long amount, int priority = 0, int layer = 0)
-		{
-			var mod = TemplateSet(amount, priority, layer);
-			Attach(mod);
-			return mod;
-		}
-
 		public static Modifier<long> TemplateAdd(long amount, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
 		{
 			return Modifier<long>.NewFromLatest((latestValue) => latestValue + amount, priority, layer, order);

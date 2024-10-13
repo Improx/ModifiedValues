@@ -14,18 +14,6 @@ namespace ModifiedValues
 
 		public static implicit operator ModifiedUint(uint baseValue) => new ModifiedUint(baseValue);
 
-		public static Modifier<uint> TemplateSet(uint amount, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
-		{
-			return Modifier<uint>.NewFromIgnored(() => amount, priority, layer, order);
-		}
-
-		public Modifier<uint> Set(uint amount, int priority = 0, int layer = 0)
-		{
-			var mod = TemplateSet(amount, priority, layer);
-			Attach(mod);
-			return mod;
-		}
-
 		public static Modifier<uint> TemplateAdd(uint amount, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
 		{
 			return Modifier<uint>.NewFromLatest((latestValue) => latestValue + amount, priority, layer, order);

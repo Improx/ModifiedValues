@@ -178,7 +178,10 @@ namespace ModifiedValues
 	{
 		[SerializeField] private T _savedBaseValue;
 
-		//The custom property drawer uses this
+		/// <summary>
+		/// The custom property drawer uses this variable, so ignore compiler warning about this not being used.
+		/// </summary>
+		/// <returns></returns>
 		[SerializeField][HideInInspector] private bool _usingSavedBaseValue = true;
 		private Func<T> _baseValueGetter = () => default;
 		public Func<T> BaseValueGetter

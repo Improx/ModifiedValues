@@ -14,18 +14,6 @@ namespace ModifiedValues
 
 		public static implicit operator ModifiedBool(bool baseValue) => new ModifiedBool(baseValue);
 
-		public static Modifier<bool> TemplateSet(bool other, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
-		{
-			return Modifier<bool>.NewFromIgnored(() => other, priority, layer, order);
-		}
-
-		public Modifier<bool> Set(bool other, int priority = 0, int layer = 0)
-		{
-			var mod = TemplateSet(other, priority, layer);
-			Attach(mod);
-			return mod;
-		}
-
 		public static Modifier<bool> TemplateNot(int priority = 0, int layer = 0, int order = DefaultOrders.Not)
 		{
 			return Modifier<bool>.NewFromLatest((latestValue) => !latestValue, priority, layer, order);
