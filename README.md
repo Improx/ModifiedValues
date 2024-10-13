@@ -47,11 +47,11 @@ In rare cases where that is not possible, you can get the float value by `Speed.
 Let's say your character gets an Energized buff that multiplies base speed by 120%. Your character also equips rollerscates, increasing speed by 5. You apply these multiplicative and additive modifiers like this:
 
 ```C#
-Speed.Mul(1.2f);
 Speed.Add(5);
+Speed.Mul(1.2f);
 ```
 
-By default, the multiplicative modifier is applied before the additive one. This results in a final speed value of 17, even if you wrote the above two lines of code in reversed order.
+By default, in this library the multiplicative modifier is applied before the additive one (although you can easily change this based on your needs, read below about Layer, Priority and Order). The above code results in a final speed value of 17, regardless of the order those two lines of code are written.
 
 Your code that uses `Speed` will automatically pick up the updated value. The current value is also visible in the inspector:
 
