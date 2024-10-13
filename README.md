@@ -323,6 +323,42 @@ Now a UI element can subscribe to `AttackSpeed.BecameDirty` to be able to react 
 
 You'll need to be careful to not set up circular dependencies.
 
+## ![][HeaderDecorator] Dynamic Modifiers ![][HeaderDecorator]
+
+Sometimes you want to apply a Modifier that uses its own ModifiedValue as an operation parameter, which can change value over time. For example:
+
+```C#
+
+public ModifiedFloat Speed = 10;
+public ModifiedFloat MaxSpeed = 20;
+
+Speed.MaxCap(MaxSpeed);
+Debug.Log(Speed);
+//Will print 10
+MaxSpeed.Set(8);
+Debug.Log(Speed);
+//Will still print 10, because when you called MaxCap(MaxSpeed),
+//it cast MaxSpeed into a float at that moment, and that value will be used in
+//the operation.
+
+```
+
+If you want to make sure that the Speed  will react if the MaxSpeed  changes, then you will need to explicitly use a "Dynamic" version of the modifier method:
+
+```C#
+
+public ModifiedFloat Speed = 10;
+public ModifiedFloat MaxSpeed = 20;
+
+Speed.MaxCapDynamic(MaxSpeed);
+Debug.Log(Speed); //Will print 10
+MaxSpeed.Set(8);
+Debug.Log(Speed); //Will print 8
+
+```
+
+All of the out-of-the-box modifying functions, such as `Add`, `Mul`, etc. have a dynamic version: `AddDynamic`, `MulDynamic`, etc. These methods take as parameter a ModifiedValue instead of a raw value, so it will not cast it into the raw value when creating the operation. Behind the scenes, the Dynamic methods also call `AddDependency(otherModifiedValue)` to ensure that whenever MaxSpeed becomes dirty, Speed would become Dirty as well.
+
 ## ![][HeaderDecorator] Handling Modifiers ![][HeaderDecorator]
 
 When a Modifier is attached to a ModifiedValue, it means that it affects its value. When creating modifiers with one of the readily provided methods, such as `Speed.Add(5)`, the modifier returned by this method is automatically attached to Speed.
