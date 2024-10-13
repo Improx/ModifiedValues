@@ -77,7 +77,7 @@ namespace ModifiedValues.Dev
 			Person.Speed.BaseValue = 80;
 			Report("Legs got tired, affecting the fundamentals of how fast we are. Base speed dropped from 100 to 80, but the coffee cups are still in effect.");
 
-			ModifiedEnum<Lol> testEnum = Lol.Everything;
+			ModifiedValue<Lol> testEnum = Lol.Everything;
 			if (testEnum == Lol.Everything)
 			{
 				Console.WriteLine("Passed test");

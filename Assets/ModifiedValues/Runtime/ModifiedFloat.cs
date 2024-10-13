@@ -13,31 +13,6 @@ namespace ModifiedValues
 
 		public static implicit operator ModifiedFloat(float baseValue) => new ModifiedFloat(baseValue);
 
-		public static Modifier<float> TemplateSet(float amount, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
-		{
-			return Modifier<float>.NewFromIgnored(() => amount, priority, layer, order);
-		}
-
-		public Modifier<float> Set(float amount, int priority = 0, int layer = 0)
-		{
-			var mod = TemplateSet(amount, priority, layer);
-			Attach(mod);
-			return mod;
-		}
-
-		public static Modifier<float> TemplateSetDynamic(ModifiedValue<float> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
-		{
-			return Modifier<float>.NewFromIgnored(() => amountDynamic, priority, layer, order);
-		}
-
-		public Modifier<float> SetDynamic(ModifiedValue<float> amountDynamic, int priority = 0, int layer = 0)
-		{
-			var mod = TemplateSetDynamic(amountDynamic, priority, layer);
-			Attach(mod);
-			AddDependency(amountDynamic);
-			return mod;
-		}
-
 		public static Modifier<float> TemplateAdd(float amount, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
 		{
 			return Modifier<float>.NewFromLatest((latestValue) => latestValue + amount, priority, layer, order);

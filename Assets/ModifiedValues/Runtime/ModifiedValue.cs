@@ -173,6 +173,7 @@ namespace ModifiedValues
 
 	}
 
+	[Serializable]
 	public class ModifiedValue<T> : ModifiedValue
 	{
 		[SerializeField] private T _savedBaseValue;
@@ -477,6 +478,30 @@ namespace ModifiedValues
 		public void UseSavedBaseValue()
 		{
 			BaseValue = default;
+		}
+
+		public static Modifier<T> TemplateSet(T other, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
+		{
+			return Modifier<T>.NewFromIgnored(() => other, priority, layer, order);
+		}
+
+		public Modifier<T> Set(T other, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
+		{
+			var mod = TemplateSet(other, priority, layer, order);
+			Attach(mod);
+			return mod;
+		}
+		public static Modifier<T> TemplateSetDynamic(ModifiedValue<T> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
+		{
+			return Modifier<T>.NewFromIgnored(() => amountDynamic, priority, layer, order);
+		}
+
+		public Modifier<T> SetDynamic(ModifiedValue<T> amountDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Set)
+		{
+			var mod = TemplateSetDynamic(amountDynamic, priority, layer, order);
+			Attach(mod);
+			AddDependency(amountDynamic);
+			return mod;
 		}
 
 	}
