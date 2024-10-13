@@ -38,6 +38,19 @@ namespace ModifiedValues
 			return mod;
 		}
 
+		public static Modifier<bool> TemplateAndDynamic(ModifiedValue<bool> otherDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.And)
+		{
+			return Modifier<bool>.NewFromLatest((latestValue) => latestValue && otherDynamic, priority, layer, order);
+		}
+
+		public Modifier<bool> AndDynamic(ModifiedValue<bool> otherDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
+		{
+			var mod = TemplateAndDynamic(otherDynamic, priority, layer, order);
+			Attach(mod);
+			AddDependency(otherDynamic);
+			return mod;
+		}
+
 		public static Modifier<bool> TemplateOr(bool other, int priority = 0, int layer = 0, int order = DefaultOrders.Or)
 		{
 			return Modifier<bool>.NewFromLatest((latestValue) => latestValue || other, priority, layer, order);
@@ -47,6 +60,19 @@ namespace ModifiedValues
 		{
 			var mod = TemplateOr(other, priority, layer, order);
 			Attach(mod);
+			return mod;
+		}
+
+		public static Modifier<bool> TemplateOrDynamic(ModifiedValue<bool> otherDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Or)
+		{
+			return Modifier<bool>.NewFromLatest((latestValue) => latestValue || otherDynamic, priority, layer, order);
+		}
+
+		public Modifier<bool> OrDynamic(ModifiedValue<bool> otherDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Or)
+		{
+			var mod = TemplateOrDynamic(otherDynamic, priority, layer, order);
+			Attach(mod);
+			AddDependency(otherDynamic);
 			return mod;
 		}
 
@@ -62,6 +88,19 @@ namespace ModifiedValues
 			return mod;
 		}
 
+		public static Modifier<bool> TemplateXorDynamic(ModifiedValue<bool> otherDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Xor)
+		{
+			return Modifier<bool>.NewFromLatest((latestValue) => latestValue ^ otherDynamic, priority, layer, order);
+		}
+
+		public Modifier<bool> XorDynamic(ModifiedValue<bool> otherDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Xor)
+		{
+			var mod = TemplateXorDynamic(otherDynamic, priority, layer, order);
+			Attach(mod);
+			AddDependency(otherDynamic);
+			return mod;
+		}
+
 		public static Modifier<bool> TemplateImply(bool other, int priority = 0, int layer = 0, int order = DefaultOrders.Imply)
 		{
 			return Modifier<bool>.NewFromLatest((latestValue) => !latestValue || other, priority, layer, order);
@@ -71,6 +110,19 @@ namespace ModifiedValues
 		{
 			var mod = TemplateImply(other, priority, layer, order);
 			Attach(mod);
+			return mod;
+		}
+
+		public static Modifier<bool> TemplateImplyDynamic(ModifiedValue<bool> otherDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Imply)
+		{
+			return Modifier<bool>.NewFromLatest((latestValue) => !latestValue || otherDynamic, priority, layer, order);
+		}
+
+		public Modifier<bool> ImplyDynamic(ModifiedValue<bool> otherDynamic, int priority = 0, int layer = 0, int order = DefaultOrders.Imply)
+		{
+			var mod = TemplateImplyDynamic(otherDynamic, priority, layer, order);
+			Attach(mod);
+			AddDependency(otherDynamic);
 			return mod;
 		}
 

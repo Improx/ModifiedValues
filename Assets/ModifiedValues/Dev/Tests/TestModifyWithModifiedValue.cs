@@ -7,12 +7,14 @@ public class TestModifyWithModifiedValue : MonoBehaviour
 {
 	public ModifiedFloat A = 10;
 	public ModifiedFloat B = 100;
+	public ModifiedBool C = false;
+	public ModifiedBool D = false;
 
 	private void Awake()
 	{
-		A.MulDynamic(B);
-		Debug.Log(A);
-		B.Set(4);
-		Debug.Log(A);
+		C.OrDynamic(D);
+		Debug.Log(C);
+		D.Set(true);
+		Debug.Log(C);
 	}
 }
