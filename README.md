@@ -174,7 +174,7 @@ Available for `ModifiedBool`:
 * `Xor()`: Applies a Xor logic gate.
 * `Imply()`: Applies a Imply logic gate.
 
-The generic `ModifiedEnum<YourEnum>` type only has the `Set()` Modifier readily available.
+Note: ALL `ModifiedValue<T>` types have the `Set()` Modifier readily available, not just in the abovementioned predefined helper classes.
 
 If many different modifiers are applied that have the same `Priority`and `Layer`, they will all have effect. They will be applied in the same order as they are presented in the lists above (from top to bottom). This ordering is also visible in the `DefaultOrders.cs` class. If you are not happy with some of the default ordering, you can always use a custom order in a modifier. For example: `Speed.Set(99f, order: 50)`.
 
@@ -576,7 +576,7 @@ If a ModifiedValue uses a `BaseValueGetter` function instead of a saved base val
 
 If you still want to delete the base value getter function in the inspector, you can click on the getter button. A saved value will be used (defaulting to the wrapped type's default value), and can be edited in the inspector again.
 
-⚠️ `ModifiedEnum<YourEnum>` does not have a custom property drawer and and will have limited visibility in the inspector (only the base value is shown and can be changed in the inspector). That's because Unity property drawers do not support generic types. However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`, so that then you can also see the current value int he inspector in addition to the base value. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
+⚠️ If not using one of the readily available classes such as  `ModifiedFloar`, but instead using `ModifiedValue<YourType>`, it will have limited functionality in the inspector, because a generic class cannot have a custom property drawer. In these cases only the saved base value will be visible and settable in the inspector. For most use cases this should be ok. Basically, you will only be missing seeing the changing current value at runtime in the inspector. That's because Unity property drawers do not support generic types. However, for a specific YourType, you can easily create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedValue<YourType>`, so that then you can also see the current value in the inspector in addition to the base value..
 
 ## ![][HeaderDecorator] Other Notes ![][HeaderDecorator]
 
@@ -584,7 +584,9 @@ If you still want to delete the base value getter function in the inspector, you
 
 
 ```C#
-ModifiedEnum<MyEnum> Example = MyEnum.First;
+public MyEnum {First, Second};
+
+ModifiedValue<MyEnum> Example = MyEnum.First;
 
 switch (Example.Value)
 {
