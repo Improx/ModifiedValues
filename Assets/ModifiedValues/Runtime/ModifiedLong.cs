@@ -19,9 +19,9 @@ namespace ModifiedValues
 			return Modifier<long>.NewFromLatest((latestValue) => latestValue + amount, priority, layer, order);
 		}
 
-		public Modifier<long> Add(long amount, int priority = 0, int layer = 0)
+		public Modifier<long> Add(long amount, int priority = 0, int layer = 0, int order = DefaultOrders.Add)
 		{
-			var mod = TemplateAdd(amount, priority, layer);
+			var mod = TemplateAdd(amount, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -39,9 +39,9 @@ namespace ModifiedValues
 		/// <param name="priority"></param>
 		/// <param name="layer"></param>
 		/// <returns></returns>
-		public Modifier<long> AddMultiple(long amount, int priority = 0, int layer = 0)
+		public Modifier<long> AddMultiple(long amount, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
 		{
-			var mod = TemplateAddMultiple(amount, priority, layer);
+			var mod = TemplateAddMultiple(amount, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -59,9 +59,9 @@ namespace ModifiedValues
 		/// <param name="priority"></param>
 		/// <param name="layer"></param>
 		/// <returns></returns>
-		public Modifier<long> AddMultipleBase(long amount, int priority = 0, int layer = 0)
+		public Modifier<long> AddMultipleBase(long amount, int priority = 0, int layer = 0, int order = DefaultOrders.AddFraction)
 		{
-			var mod = TemplateAddMultipleBase(amount, priority, layer);
+			var mod = TemplateAddMultipleBase(amount, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -71,9 +71,9 @@ namespace ModifiedValues
 			return Modifier<long>.NewFromLatest((latestValue) => latestValue * amount, priority, layer, order);
 		}
 
-		public Modifier<long> Mul(long amount, int priority = 0, int layer = 0)
+		public Modifier<long> Mul(long amount, int priority = 0, int layer = 0, int order = DefaultOrders.Mul)
 		{
-			var mod = TemplateMul(amount, priority, layer);
+			var mod = TemplateMul(amount, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -83,9 +83,9 @@ namespace ModifiedValues
 			return Modifier<long>.NewFromLatest((latestValue) => Math.Max(latestValue, amount), priority, layer, order);
 		}
 
-		public Modifier<long> MinCap(long amount, int priority = 0, int layer = 0)
+		public Modifier<long> MinCap(long amount, int priority = 0, int layer = 0, int order = DefaultOrders.Cap)
 		{
-			var mod = TemplateMinCap(amount, priority, layer);
+			var mod = TemplateMinCap(amount, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -102,9 +102,9 @@ namespace ModifiedValues
 			return Modifier<long>.NewFromLatest((latestValue) => Math.Min(latestValue, amount), priority, layer, order);
 		}
 
-		public Modifier<long> MaxCap(long amount, int priority = 0, int layer = 0)
+		public Modifier<long> MaxCap(long amount, int priority = 0, int layer = 0, int order = DefaultOrders.Cap)
 		{
-			var mod = TemplateMaxCap(amount, priority, layer);
+			var mod = TemplateMaxCap(amount, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}

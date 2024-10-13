@@ -19,9 +19,9 @@ namespace ModifiedValues
 			return Modifier<bool>.NewFromLatest((latestValue) => !latestValue, priority, layer, order);
 		}
 
-		public Modifier<bool> Not(int priority = 0, int layer = 0)
+		public Modifier<bool> Not(int priority = 0, int layer = 0, int order = DefaultOrders.Not)
 		{
-			var mod = TemplateNot(priority, layer);
+			var mod = TemplateNot(priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -31,9 +31,9 @@ namespace ModifiedValues
 			return Modifier<bool>.NewFromLatest((latestValue) => latestValue && other, priority, layer, order);
 		}
 
-		public Modifier<bool> And(bool other, int priority = 0, int layer = 0)
+		public Modifier<bool> And(bool other, int priority = 0, int layer = 0, int order = DefaultOrders.And)
 		{
-			var mod = TemplateAnd(other, priority, layer);
+			var mod = TemplateAnd(other, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -43,9 +43,9 @@ namespace ModifiedValues
 			return Modifier<bool>.NewFromLatest((latestValue) => latestValue || other, priority, layer, order);
 		}
 
-		public Modifier<bool> Or(bool other, int priority = 0, int layer = 0)
+		public Modifier<bool> Or(bool other, int priority = 0, int layer = 0, int order = DefaultOrders.Or)
 		{
-			var mod = TemplateOr(other, priority, layer);
+			var mod = TemplateOr(other, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -55,9 +55,9 @@ namespace ModifiedValues
 			return Modifier<bool>.NewFromLatest((latestValue) => latestValue ^ other, priority, layer, order);
 		}
 
-		public Modifier<bool> Xor(bool other, int priority = 0, int layer = 0)
+		public Modifier<bool> Xor(bool other, int priority = 0, int layer = 0, int order = DefaultOrders.Xor)
 		{
-			var mod = TemplateXor(other, priority, layer);
+			var mod = TemplateXor(other, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
@@ -67,9 +67,9 @@ namespace ModifiedValues
 			return Modifier<bool>.NewFromLatest((latestValue) => !latestValue || other, priority, layer, order);
 		}
 
-		public Modifier<bool> Imply(bool other, int priority = 0, int layer = 0)
+		public Modifier<bool> Imply(bool other, int priority = 0, int layer = 0, int order = DefaultOrders.Imply)
 		{
-			var mod = TemplateImply(other, priority, layer);
+			var mod = TemplateImply(other, priority, layer, order);
 			Attach(mod);
 			return mod;
 		}
