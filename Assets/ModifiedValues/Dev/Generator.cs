@@ -21,8 +21,8 @@ namespace ModifiedValues.Dev
 		/// Continuous numbers are based on float
 		/// Discrete numbers based on uint (not int, because replacing the word
 		/// "int" would mess with method arguments)
-		/// bool and Enum not generated because they don't have enough
-		/// similarities, so those need to be updated manually.
+		/// ModifiedBool not generated because they don't have enough
+		/// similarities with other, so that needs to be updated manually.
 		/// </summary>
 		private static void GenerateClasses()
 		{
@@ -108,8 +108,6 @@ namespace ModifiedValues.Dev
 				"Uint",
 				"Ulong"
 			};
-			//Enum not included because ModifiedEnum<T> is a generic
-			//type, and Unity can't make generic drawers
 
 			string sourceFile = "Assets/ModifiedValues/Editor/ModifiedFloatPropertyDrawer.cs";
 			foreach (string type in types)
