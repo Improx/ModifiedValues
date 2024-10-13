@@ -6,6 +6,8 @@ ModifiedValues is a powerful C# library for Unity that enables modifying (numeri
 
 This can be especially useful in a buff / stat effects system, where different modifiers affect the value of different numbers, there can be many different modifiers per number, and it doesn't matter in which temporal order the modifiers were added.
 
+This system is designed to be as generic and extendable as possible, enabling a wide variety of use cases. Many out-of-the-box classes and function implementations are provided, to enable the most common use cases quickly.
+
 Minimum requirement is <strong>Unity 2021.2</strong> (for C# 9 and netstandard2.1).
 
 This can also be quite easily used as a non-Unity C# library by removing only a few things. See the last section for more info on this.
