@@ -1,6 +1,6 @@
 {
 	"name": "com.improxgames.modifiedvalues",
-	"version": "1.2",
+	"version": "1.1.5",
 	"displayName": "ModifiedValues",
 	"description": "A powerful C# library for Unity that enables modifying (numeric and other) values while keeping track and managing the modifiers affecting them.",
 	"unity": "2021.2",

@@ -13,7 +13,7 @@ namespace ModifiedValues
 	/// Note: if a Modifier is in a ModifierGroup, it does not automatically
 	/// mean that it is Attached to a ModifiedValue, or Active.
 	/// </summary>
-	public class ModifierGroup
+	public class ModifierGroup : IEnumerable
 	{
 		protected HashSet<Modifier> _modifiers = new HashSet<Modifier>();
 		public IReadOnlyList<Modifier> Modifiers => _modifiers.ToList().AsReadOnly();
@@ -21,13 +21,18 @@ namespace ModifiedValues
 		public IReadOnlyList<Modifier> InactiveModifiers => _modifiers.Where(m => !m.Active).ToList().AsReadOnly();
 		public bool IsEmpty => _modifiers.Count == 0;
 
-		public static ModifierGroup operator +(ModifierGroup group, Modifier mod)
+		public void Add(Modifier mod)
 		{
-			if (!group._modifiers.Contains(mod))
+			if (!_modifiers.Contains(mod))
 			{
 				//Duplicates not allowed
-				group._modifiers.Add(mod);
+				_modifiers.Add(mod);
 			}
+		}
+
+		public static ModifierGroup operator +(ModifierGroup group, Modifier mod)
+		{
+			group.Add(mod);
 			return group;
 		}
 
@@ -48,7 +53,7 @@ namespace ModifiedValues
 		}
 
 		/// <summary>
-		/// Enables foreach-statements for ParamModGroup
+		/// Enables foreach-statements for ModifierGroup
 		/// </summary>
 		/// <returns></returns>
 		public IEnumerator GetEnumerator()

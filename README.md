@@ -397,7 +397,26 @@ public class SwordBuff
 }
 ```
 
-If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is attached to anything. ModifierGroup is just a collection with the ability to do the same thing for multiple modifiers at once. You can call `modGroup.SetActive()` or `modGroup.SetInactive()` to toggle the Active status of all modifieres, `modGroup.Attach(modValue)` and `modGroup.Detach(modValue)`, and so on. You add and remove modifiers from a group with the `+=` and `-=` operators.
+If a modifier is in a ModifierGroup, it doesn't necessarily mean that it is attached to anything. ModifierGroup is just a collection with the ability to do the same thing for multiple modifiers at once. You can call `modGroup.SetActive()` or `modGroup.SetInactive()` to toggle the Active status of all modifieres, `modGroup.Attach(modValue)` and `modGroup.Detach(modValue)`, and so on. You add and remove modifiers from a group with the `+=` and `-=` operators, or add with an `Add()` method.
+
+`ModifierGroup` can be iterated through with an `foreach (Modifier mod in modGroup)` clause
+
+Some more convenient syntax for `ModifierGroup`:
+```C#
+
+//Can create a new ModifierGroup with elements inside curly brackets:
+ModifierGroup modGroup = new() {character.JumpCount.Add(1)};
+
+//Can iterate through ModifierGroup like this:
+foreach (Modifier mod in modGroup)
+{
+	//Do something
+}
+
+//ForEach method also exists:
+modGroup.ForEach(someAction);
+
+```
 
 ## ![][HeaderDecorator] Modifier Operations ![][HeaderDecorator]
 
@@ -554,7 +573,7 @@ If a ModifiedValue uses a `BaseValueGetter` function instead of a saved base val
 
 If you still want to delete the base value getter function in the inspector, you can click on the getter button. A saved value will be used (defaulting to the wrapped type's default value), and can be edited in the inspector again.
 
-⚠️ `ModifiedEnum<YourEnum>` does have a custom property drawer and will not appear in the inspector, because Unity property drawers do not support generic types.⚠️ However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
+⚠️ `ModifiedEnum<YourEnum>` does not have a custom property drawer and and will have limited visibility in the inspector (only the base value is shown and can be changed in the inspector). That's because Unity property drawers do not support generic types. However, for a specific YourEnum type, you can create your own property drawer by copying any other property drawer class and replacing the type with `ModifiedEnum<YourEnum>`, so that then you can also see the current value int he inspector in addition to the base value. The same applies for any other class derived from `ModifiedValue` - you can easily create your own drawers by copying from the existing ones.
 
 ## ![][HeaderDecorator] Other Notes ![][HeaderDecorator]
 
