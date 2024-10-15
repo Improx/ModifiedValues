@@ -2,7 +2,7 @@
 [![Unity 2021.2+](https://img.shields.io/badge/unity-2021.2%2B-blue.svg)](https://unity3d.com/get-unity/download)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/Improx/ModifiedValues/blob/main/LICENSE)
 
-ModifiedValues is a powerful C# library for Unity that enables modifying (numeric and other) values while keeping track and managing the modifiers affecting them.
+ModifiedValues is a powerful C# library for Unity that enables modifying (numeric and other) values while keeping track and managing the modifiers affecting them. Great for games with buffs/debuffs, stats, statuses, perks, equipment etc.
 
 This can be especially useful in a buff / stat effects system, where different modifiers affect the value of different numbers, there can be many different modifiers per number, and it doesn't matter in which temporal order the modifiers were added.
 
