@@ -32,11 +32,6 @@ namespace ModifiedValues
 
 		public void SetDirty()
 		{
-			if (IsDirty)
-			{
-				//Avoid extra invocations of the BecameDirty event.
-				return;
-			}
 			IsDirty = true;
 			BecameDirty?.Invoke(this, EventArgs.Empty);
 		}
