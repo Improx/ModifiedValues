@@ -189,6 +189,7 @@ namespace ModifiedValues
 			{
 				_baseValueGetter = value;
 				_usingSavedBaseValue = false;
+				SetDirty();
 			}
 		}
 
@@ -203,6 +204,7 @@ namespace ModifiedValues
 				_savedBaseValue = value;
 				_usingSavedBaseValue = true;
 				_baseValueGetter = () => _savedBaseValue;
+				SetDirty();
 			}
 		}
 
@@ -215,6 +217,8 @@ namespace ModifiedValues
 				if (!EqualityComparer<T>.Default.Equals(BaseValue, _prevBaseValue))
 				{
 					//Base value has changed since last time we checked for Value
+					//This is useful if using a BaseValueGetter function that
+					//has an external dependency.
 					_prevBaseValue = BaseValue;
 					SetDirty();
 				}
