@@ -93,7 +93,13 @@ namespace ModifiedValues
 
 	public class Modifier<T> : Modifier
 	{
-		private Func<T, T, T, T> _operation;
+		/// <summary>
+		/// Default operation is just returning the base value.
+		/// In case constructing a new Modifier<T> without specifying an operation
+		/// right away.
+		/// </summary>
+		/// <returns></returns>
+		private Func<T, T, T, T> _operation = (baseValue, _, _) => baseValue;
 
 		/// <summary>
 		/// Input values are: baseValue, layerStartValue, latestValue
@@ -105,6 +111,18 @@ namespace ModifiedValues
 			set
 			{
 				_operation = value;
+				OnChanged();
+			}
+		}
+
+		private T _amount;
+
+		public T Amount
+		{
+			get { return _amount; }
+			set
+			{
+				_amount = value;
 				OnChanged();
 			}
 		}
@@ -176,8 +194,10 @@ namespace ModifiedValues
 		/// <returns></returns>
 		public Modifier<T> Copy()
 		{
-			Modifier<T> mod = new Modifier<T>(Operation, Priority, Layer, Order);
-			mod.Active = Active;
+			Modifier<T> mod = new Modifier<T>(Operation, Priority, Layer, Order)
+			{
+				Active = Active
+			};
 			return mod;
 		}
 
